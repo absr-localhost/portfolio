@@ -1,98 +1,15 @@
 ---
 import Layout from '~/layouts/PageLayout.astro';
+import { wrap, card, stats, about, pages, EMAIL } from '~/data/profil';
 
 const metadata = {
   title: 'Agus Budiono, S.Pd. | System Administrator & Cybersecurity',
   ignoreTitleTemplate: true,
 };
-
-const stats = [
-  { n: '2017', t: 'Mulai menekuni dunia IT' },
-  { n: '57+', t: 'Proyek & pekerjaan yang telah diselesaikan' },
-  { n: '23+', t: 'Peran & bidang keahlian di bidang IT' },
-];
-
-const about = [
-  'Saya Agus Budiono, S.Pd., profesional teknologi informasi dari Sumatera Selatan yang menekuni dunia IT sejak 2017. Saya bekerja lintas disiplin: pengembangan full-stack, administrasi sistem dan jaringan, dukungan teknis, konsultasi IT, automasi (VBA dan Power Platform), multimedia, serta keamanan siber. Latar belakang pendidikan (S.Pd.) membuat saya terbiasa menjelaskan hal teknis dengan bahasa yang mudah dipahami oleh siapa pun.',
-  'Perjalanan saya dimulai dari rasa ingin tahu tentang bagaimana sebuah aplikasi dibangun dari nol. Dari aplikasi Android dan website pertama, saya berkembang ke automasi administrasi, sistem absensi dan rapor sekolah, lalu ke infrastruktur: server, jaringan, dan keamanan. Setiap proyek mengajarkan satu hal yang sama: teknologi yang baik adalah teknologi yang benar-benar dipakai, bukan yang berhenti di tahap demo.',
-  'Di bidang keamanan, saya berpegang pada prinsip etis: pengujian hanya dilakukan dengan izin tertulis, analisis malware hanya di sandbox terisolasi, dan simulasi edukasi hanya di lingkungan yang disetujui. Bagi saya keamanan bukan fitur tambahan yang ditempel di akhir, melainkan bagian dari desain sejak hari pertama.',
-  'Hingga kini saya telah menyelesaikan 57+ proyek dan pekerjaan, dan siap bergabung dalam tim sebagai IT Generalist, Full-Stack Developer, SysAdmin, maupun spesialis keamanan, atau bekerja mandiri sebagai konsultan dan pendiri produk.',
-];
-
-const services = [
-  'Pengembangan website & aplikasi (full-stack)',
-  'Administrasi server, jaringan & dukungan IT',
-  'Konsultasi IT & transformasi digital',
-  'Penetration testing berizin & keamanan defensif',
-  'Automasi VBA & Power Platform',
-  'Desain grafis & video',
-  'Solusi digital untuk pendidikan',
-  'Pengembangan produk digital & MVP',
-];
-
-const roles = [
-  ['IT Generalist', 'Menguasai berbagai area IT sekaligus sehingga masalah dapat ditangani dari akar sampai solusi.'],
-  ['Full-Stack Engineer / Developer', 'Membangun aplikasi web dan seluler dari basis data, backend, hingga antarmuka.'],
-  ['IT Jack-of-All-Trades', 'Fleksibel beralih antara pemrograman, jaringan, perangkat, dan dokumentasi sesuai kebutuhan.'],
-  ['IT Support Specialist', 'Menangani keluhan pengguna dengan cepat, jelas, dan terdokumentasi.'],
-  ['System Administrator (SysAdmin)', 'Mengelola server, akun, cadangan data, dan ketersediaan layanan.'],
-  ['IT Consultant', 'Menganalisis kebutuhan dan merekomendasikan solusi yang tepat guna dan sesuai anggaran.'],
-  ['Ethical Hacker / Penetration Tester', 'Menguji keamanan sistem secara legal dengan izin tertulis dan melaporkan temuan beserta perbaikannya.'],
-  ['Multimedia Specialist', 'Desain grafis, penyuntingan video, dan materi visual untuk komunikasi dan edukasi.'],
-  ['VBA / Macro Developer', 'Mengotomasi pekerjaan Excel dan Office agar pekerjaan berulang selesai dalam hitungan detik.'],
-  ['Power Platform Developer', 'Membangun Power Apps, Power Automate, dan Power BI untuk alur kerja dan pelaporan.'],
-  ['Solo Tech Founder / CTO', 'Memimpin produk dari ide, arsitektur teknis, pengembangan, hingga operasional.'],
-  ['IT Specialist', 'Spesialis lintas bidang yang merancang, membangun, dan merawat sistem digital secara menyeluruh.'],
-  ['Cybersecurity', 'Menanamkan keamanan sejak desain: pertahanan, pengujian berizin, kesadaran pengguna, dan respons insiden.'],
-  ['Mobile App Developer (Android)', 'Merancang dan membangun aplikasi Android yang ringan, mudah dipakai, dan terhubung ke backend.'],
-  ['UI/UX Designer', 'Merancang alur dan tampilan yang jelas, nyaman dipakai, dan konsisten di ponsel maupun komputer.'],
-  ['Database Administrator', 'Merancang skema data, menjaga performa kueri, serta mengatur cadangan dan pemulihan basis data.'],
-  ['Network Engineer', 'Merancang, memasang, dan memecahkan masalah jaringan LAN, Wi-Fi, dan segmentasi yang stabil dan aman.'],
-  ['DevOps & Cloud Engineer', 'Mengelola deployment, hosting, domain, dan otomasi rilis agar aplikasi tayang cepat dan mudah dirawat.'],
-  ['AI & Chatbot Integrator', 'Menghubungkan model AI dan chatbot ke aplikasi serta layanan pelanggan agar respons cepat dan konsisten.'],
-  ['IT Trainer & Technical Writer', 'Menyusun panduan, SOP, dan pelatihan IT dengan bahasa yang mudah dipahami, didukung latar belakang pendidikan.'],
-  ['Data Analyst & Business Intelligence', 'Mengolah data menjadi tabel, grafik, dan dashboard yang membantu keputusan, memakai Excel, SQL, dan Power BI.'],
-  ['Digital Forensics & Incident Response (Defensif)', 'Menelusuri jejak kejadian keamanan, mengamankan bukti, dan memulihkan sistem secara tertib dan berizin.'],
-  ['QA & Software Tester', 'Menguji fungsi, tampilan, dan ketahanan aplikasi sebelum rilis agar bug ditemukan lebih dulu oleh tim, bukan pengguna.'],
-  ['IT Project Manager', 'Mengatur ruang lingkup, jadwal, dan komunikasi proyek IT dari kesepakatan awal hingga serah terima.'],
-];
-
-const timeline = [
-  ['2017', 'Mulai belajar dasar pemrograman', 'Titik awal ketertarikan pada dunia IT.'],
-  ['2018', 'Aplikasi Android dan website pertama', 'Fokus pada logika dasar dan antarmuka pengguna.'],
-  ['2019', 'Automasi administrasi dengan VBA', 'Mulai membantu pekerjaan administratif berulang.'],
-  ['2020', 'Sistem absensi dan aplikasi pendidikan', 'Absensi murid dan guru, hingga aplikasi rapor sekolah.'],
-  ['2021', 'Jaringan, server, dan dukungan teknis', 'Menangani helpdesk, administrasi sistem, dan keamanan dasar.'],
-  ['2022', 'Full-stack, Power Platform, dan OSINT defensif', 'Aplikasi web terpadu, alur kerja low-code, dan pemantauan eksposur publik.'],
-  ['2023', 'Pengujian keamanan berizin dan analisis malware', 'Audit kerentanan serta riset pertahanan di sandbox terisolasi.'],
-  ['2024-2026', 'Konsultan IT dan pendiri produk mandiri', 'Menangani proyek menyeluruh dari kebutuhan hingga perawatan.'],
-];
-
-const projects = [
-  { title: 'Pengembangan Web & Aplikasi', items: ['Aplikasi Android', 'Pengembangan Website', 'Sistem Informasi Terpadu', 'REST API & Layanan Backend', 'Aplikasi Penjualan', 'Aplikasi Inventaris & Gudang', 'Company Profile & Landing Page', 'Dashboard Laporan Interaktif', 'Aplikasi Kasir (POS) & Struk', 'Aplikasi Booking & Reservasi', 'Portal Berita & Blog (CMS)'] },
-  { title: 'Aplikasi Pendidikan', items: ['Absensi Digital Murid', 'Absensi Guru', 'Aplikasi Sekolah', 'Aplikasi Rapor Sekolah', 'Aplikasi AI untuk Guru', 'Pendaftaran Online Sekolah', 'Ujian Online (CBT) Sederhana', 'Perpustakaan Digital Sekolah', 'Keuangan & SPP Sekolah', 'Penyusun Jadwal Pelajaran Otomatis'] },
-  { title: 'Automasi & Low-code', items: ['Automasi VBA', 'Macro Excel Rekap Laporan', 'Generator Dokumen Otomatis', 'Power Apps Formulir & Persetujuan', 'Power Automate Alur Kerja', 'Power BI Dashboard', 'Balasan Chat Otomatis AI', 'Automasi Administrasi', 'Bot Telegram Layanan Otomatis', 'Integrasi Google Sheets & Apps Script', 'Pengambilan & Rekap Data Terjadwal'] },
-  { title: 'Server, Jaringan & Dukungan IT', items: ['Administrasi Server Linux & Windows', 'Jaringan LAN & Wi-Fi Kantor', 'Helpdesk & Dukungan Teknis', 'Backup & Pemulihan Data', 'Manajemen Akun & Hak Akses', 'Monitoring Server & Uptime', 'Manajemen Aset & Inventaris IT'] },
-  { title: 'Keamanan Siber (Berizin & Defensif)', items: ['Audit Keamanan Website (Berizin)', 'Penilaian Kerentanan Jaringan', 'Hardening Server & Firewall', 'Dashboard OSINT Defensif', 'Rekayasa Jaringan', 'Simulasi Kesadaran Phishing', 'Analisis Malware Defensif', 'SOP Keamanan & Respons Insiden', 'Pelatihan Kesadaran Keamanan Siber', 'Pemantauan Log & Deteksi Anomali'] },
-  { title: 'Multimedia', items: ['Desain Grafis & Identitas Visual', 'Editing Video Promosi & Profil', 'Konten Edukasi Multimedia', 'Konten Media Sosial & Motion Graphic', 'Dokumentasi Foto & Video Kegiatan'] },
-  { title: 'Konsultasi & Produk Digital', items: ['Konsultasi Transformasi Digital', 'Produk Digital Mandiri', 'Prototipe & MVP Startup', 'Pelatihan & Workshop IT'] },
-];
-
-const socials = [
-  ['Telegram', 'https://t.me/hash4162tech'],
-  ['LinkedIn', 'https://www.linkedin.com/in/agusb-localhost'],
-  ['GitHub', 'https://github.com/absr-localhost'],
-  ['TikTok', 'https://www.tiktok.com/@silentforce2sf'],
-  ['YouTube', 'https://www.youtube.com/@sevencolors-id'],
-];
-
-const wrap = 'mx-auto w-full max-w-6xl px-4 sm:px-6';
-const card = 'border border-neutral-900 bg-white dark:border-neutral-300 dark:bg-neutral-900';
 ---
 
 <Layout metadata={metadata}>
-  <!-- HERO -->
-  <section class="bg-[#0B1F4B] pb-24 pt-16 text-white sm:pt-24">
+  <section class="bg-[#0B1F4B] pb-24 pt-14 text-white sm:pt-24">
     <div class={wrap}>
       <p class="text-xs font-medium uppercase tracking-[0.2em] text-slate-300">IT Specialist &middot; Full-Stack Developer</p>
       <h1 class="mt-4 text-4xl font-extrabold leading-tight tracking-tight sm:text-6xl">
@@ -104,13 +21,12 @@ const card = 'border border-neutral-900 bg-white dark:border-neutral-300 dark:bg
       </p>
       <p class="mt-3 text-sm text-slate-400">Sumatera Selatan, Indonesia &middot; Tersedia untuk proyek</p>
       <div class="mt-8 flex flex-wrap gap-3">
-        <a href="mailto:absecid@protonmail.com" class="bg-white px-6 py-3 text-sm font-semibold text-[#0B1F4B] hover:bg-slate-200">Hubungi Saya</a>
-        <a href="#proyek" class="border border-white/40 px-6 py-3 text-sm font-semibold text-white hover:bg-white/10">Lihat Proyek</a>
+        <a href={`mailto:${EMAIL}`} class="bg-white px-6 py-3 text-sm font-semibold text-[#0B1F4B] hover:bg-slate-200">Hubungi Saya</a>
+        <a href="/proyek" class="border border-white/40 px-6 py-3 text-sm font-semibold text-white hover:bg-white/10">Lihat Proyek</a>
       </div>
     </div>
   </section>
 
-  <!-- STATS: menumpang separuh di bawah hero -->
   <section class={`${wrap} relative z-10 -mt-12`}>
     <div class="grid grid-cols-3 gap-2 sm:gap-4">
       {
@@ -124,106 +40,24 @@ const card = 'border border-neutral-900 bg-white dark:border-neutral-300 dark:bg
     </div>
   </section>
 
-  <!-- TENTANG -->
-  <section id="tentang" class="py-16 sm:py-24">
+  <section class="py-14 sm:py-20">
     <div class={wrap}>
       <p class="text-xs font-semibold uppercase tracking-[0.2em] text-neutral-500">Profil</p>
-      <h2 class="mt-2 max-w-3xl text-2xl font-bold leading-snug sm:text-4xl">
-        23+ peran dan keahlian IT, satu pendekatan: pahami kebutuhan dulu, baru pilih alatnya.
-      </h2>
-      <div class="mt-8 max-w-3xl space-y-5 text-base leading-relaxed text-neutral-600 dark:text-neutral-300">
-        {about.map((p) => <p>{p}</p>)}
-      </div>
+      <p class="mt-3 max-w-3xl text-base leading-relaxed text-neutral-600 dark:text-neutral-300 sm:text-lg">{about[0]}</p>
+      <a href="/tentang" class="mt-6 inline-block border border-neutral-900 px-5 py-2.5 text-sm font-semibold hover:bg-neutral-100 dark:border-neutral-300 dark:hover:bg-neutral-800">Selengkapnya</a>
     </div>
   </section>
 
-  <!-- LAYANAN -->
-  <section id="layanan" class="bg-neutral-50 py-16 dark:bg-neutral-950 sm:py-24">
+  <section class="bg-neutral-50 py-14 dark:bg-neutral-950 sm:py-20">
     <div class={wrap}>
-      <h2 class="text-2xl font-bold sm:text-4xl">Yang Bisa Saya Bantu</h2>
-      <div class="mt-8 grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
-        {
-          services.map((s, i) => (
-            <div class={`${card} p-5`}>
-              <div class="text-sm font-bold text-neutral-400">{String(i + 1).padStart(2, '0')}</div>
-              <div class="mt-2 text-base font-semibold leading-snug">{s}</div>
-            </div>
-          ))
-        }
-      </div>
-    </div>
-  </section>
-
-  <!-- KEAHLIAN -->
-  <section id="keahlian" class="py-16 sm:py-24">
-    <div class={wrap}>
-      <h2 class="text-2xl font-bold sm:text-4xl">Peran &amp; Keahlian</h2>
+      <h2 class="text-2xl font-bold sm:text-3xl">Jelajahi</h2>
       <div class="mt-8 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
         {
-          roles.map(([t, d]) => (
-            <div class={`${card} p-5`}>
-              <h3 class="text-base font-bold leading-snug">{t}</h3>
-              <p class="mt-2 text-sm leading-relaxed text-neutral-600 dark:text-neutral-400">{d}</p>
-            </div>
-          ))
-        }
-      </div>
-    </div>
-  </section>
-
-  <!-- PERJALANAN -->
-  <section id="perjalanan" class="bg-neutral-50 py-16 dark:bg-neutral-950 sm:py-24">
-    <div class={wrap}>
-      <h2 class="text-2xl font-bold sm:text-4xl">Perjalanan</h2>
-      <ol class="mt-8 border-l-2 border-neutral-900 dark:border-neutral-300">
-        {
-          timeline.map(([y, t, d]) => (
-            <li class="relative pb-8 pl-6 last:pb-0 sm:pl-8">
-              <span class="absolute -left-[7px] top-1.5 h-3 w-3 bg-[#0B1F4B] dark:bg-white" />
-              <div class="text-sm font-bold text-neutral-500">{y}</div>
-              <div class="mt-0.5 text-base font-semibold sm:text-lg">{t}</div>
+          pages.map(([t, h, d]) => (
+            <a href={h} class={`${card} block p-5 hover:bg-neutral-50 dark:hover:bg-neutral-800`}>
+              <div class="text-lg font-bold">{t}</div>
               <div class="mt-1 text-sm text-neutral-600 dark:text-neutral-400">{d}</div>
-            </li>
-          ))
-        }
-      </ol>
-    </div>
-  </section>
-
-  <!-- PROYEK -->
-  <section id="proyek" class="py-16 sm:py-24">
-    <div class={wrap}>
-      <h2 class="text-2xl font-bold sm:text-4xl">Portofolio &amp; Proyek</h2>
-      <p class="mt-3 max-w-3xl text-neutral-600 dark:text-neutral-400">
-        Pilihan karya dari 57+ proyek dan pekerjaan yang telah saya selesaikan, mulai pengembangan full-stack, administrasi sistem, automasi, multimedia, hingga keamanan siber.
-      </p>
-      <div class="mt-8 grid gap-4 lg:grid-cols-2">
-        {
-          projects.map((g) => (
-            <div class={`${card} p-5 sm:p-6`}>
-              <h3 class="text-lg font-bold">{g.title}</h3>
-              <ul class="mt-4 flex flex-wrap gap-2">
-                {g.items.map((i) => (
-                  <li class="border border-neutral-300 px-3 py-1 text-xs text-neutral-700 dark:border-neutral-600 dark:text-neutral-300 sm:text-sm">{i}</li>
-                ))}
-              </ul>
-            </div>
-          ))
-        }
-      </div>
-    </div>
-  </section>
-
-  <!-- KONTAK -->
-  <section id="kontak" class="bg-[#0B1F4B] py-16 text-white sm:py-24">
-    <div class={wrap}>
-      <h2 class="text-2xl font-bold sm:text-4xl">Mari berdiskusi</h2>
-      <p class="mt-3 max-w-2xl text-slate-300">Ceritakan kebutuhan Anda. Saya akan membalas lewat email atau Telegram.</p>
-      <div class="mt-8 flex flex-wrap gap-3">
-        <a href="mailto:absecid@protonmail.com" class="bg-white px-6 py-3 text-sm font-semibold text-[#0B1F4B] hover:bg-slate-200">absecid@protonmail.com</a>
-        {
-          socials.map(([n, u]) => (
-            <a href={u} target="_blank" rel="noopener noreferrer" class="border border-white/40 px-5 py-3 text-sm font-semibold hover:bg-white/10">{n}</a>
+            </a>
           ))
         }
       </div>

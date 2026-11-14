@@ -1,0 +1,31 @@
+---
+import Layout from '~/layouts/PageLayout.astro';
+import { wrap, card, timeline } from '~/data/profil';
+
+const metadata = { title: 'Perjalanan' };
+---
+
+<Layout metadata={metadata}>
+  <section class="bg-[#0B1F4B] py-12 text-white sm:py-16">
+    <div class={wrap}>
+      <h1 class="text-3xl font-extrabold tracking-tight sm:text-5xl">Perjalanan</h1>
+      <p class="mt-3 max-w-2xl text-slate-300">Jejak karier dari tahun ke tahun.</p>
+    </div>
+  </section>
+  <section class="py-12 sm:py-16">
+    <div class={wrap}>
+      <ol class="border-l-2 border-neutral-900 dark:border-neutral-300">
+        {
+          timeline.map(([y, t, d]) => (
+            <li class="relative pb-8 pl-6 last:pb-0 sm:pl-8">
+              <span class="absolute -left-[7px] top-1.5 h-3 w-3 bg-[#0B1F4B] dark:bg-white" />
+              <div class="text-sm font-bold text-neutral-500">{y}</div>
+              <div class="mt-0.5 text-base font-semibold sm:text-lg">{t}</div>
+              <div class="mt-1 text-sm text-neutral-600 dark:text-neutral-400">{d}</div>
+            </li>
+          ))
+        }
+      </ol>
+    </div>
+  </section>
+</Layout>
