@@ -11,7 +11,7 @@ metadata:
   title:
     default: 'Agus Budiono, S.Pd.'
     template: '%s — Agus Budiono, S.Pd.'
-  description: "\U0001F680 Suitable for Startups, Small Business, Sass Websites, Professional Portfolios, Marketing Websites, Landing Pages & Blogs."
+  description: 'Profesional teknologi informasi dari Sumatera Selatan. Membangun aplikasi, mengelola sistem, dan menjaga keamanan digital.'
   robots:
     index: true
     follow: true
@@ -28,7 +28,7 @@ metadata:
     cardType: summary_large_image
 
 i18n:
-  language: en
+  language: id
   textDirection: ltr
 
 apps:
