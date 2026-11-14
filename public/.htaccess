@@ -1,0 +1,6 @@
+# Selalu cek versi terbaru untuk halaman web
+<IfModule mod_headers.c>
+  <FilesMatch "\.(html|htm)$">
+    Header set Cache-Control "no-cache, must-revalidate"
+  </FilesMatch>
+</IfModule>
