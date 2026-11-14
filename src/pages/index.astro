@@ -1,14 +1,16 @@
 ---
 import Layout from '~/layouts/PageLayout.astro';
-import { wrap, card, stats, about, pages, EMAIL } from '~/data/profil';
+import { wrap, stats, about, pages, EMAIL } from '~/data/profil';
 
 const metadata = {
   title: 'Beranda',
 };
+
+const card = 'rounded-lg border border-slate-200 bg-white shadow-sm';
 ---
 
 <Layout metadata={metadata}>
-  <section class="relative isolate overflow-hidden bg-neutral-950 text-white">
+  <section class="relative isolate overflow-hidden bg-primary text-white">
     <img
       src="/gedung-jakarta.jpg"
       alt=""
@@ -17,27 +19,27 @@ const metadata = {
       width="1224"
       height="816"
     />
-    <div class="absolute inset-0 -z-10 bg-neutral-950/75"></div>
+    <div class="absolute inset-0 -z-10 bg-primary/80"></div>
 
     <div class={`${wrap} grid items-end gap-6 pt-12 md:grid-cols-2 md:pt-20`}>
       <div class="pb-8 md:pb-20">
         <p class="mb-4 flex flex-wrap items-center gap-3 text-sm uppercase tracking-widest">
-          <b>IT Specialist</b>
-          <span class="text-neutral-300">Full-Stack Developer</span>
+          <b class="text-accent">IT Specialist</b>
+          <span class="text-slate-300">Full-Stack Developer</span>
         </p>
         <h1 class="text-4xl font-bold leading-tight tracking-tight sm:text-5xl">
           AGUS BUDIONO, S.Pd.
         </h1>
-        <p class="mt-4 max-w-xl text-neutral-200">
+        <p class="mt-4 max-w-xl text-slate-200">
           Profesional teknologi informasi dari Sumatera Selatan. Membangun aplikasi, mengelola sistem, dan
           menjaga keamanan digital.
         </p>
-        <p class="mt-4 inline-block border border-white/40 px-3 py-1 text-xs uppercase tracking-widest">
+        <p class="mt-4 inline-block rounded-sm border border-white/40 px-3 py-1 text-xs uppercase tracking-widest">
           Tersedia untuk proyek
         </p>
         <div class="mt-6 flex flex-wrap gap-3">
-          <a href="/proyek" class="bg-white px-5 py-3 text-sm font-semibold text-neutral-900">Lihat proyek</a>
-          <a href={`mailto:${EMAIL}`} class="border border-white px-5 py-3 text-sm font-semibold">Hubungi saya</a>
+          <a href="/proyek" class="rounded-md bg-accent px-5 py-3 text-sm font-semibold text-primary transition hover:brightness-95">Lihat proyek</a>
+          <a href={`mailto:${EMAIL}`} class="rounded-md border border-white px-5 py-3 text-sm font-semibold transition hover:bg-white/10">Hubungi saya</a>
         </div>
       </div>
 
@@ -54,38 +56,49 @@ const metadata = {
     </div>
   </section>
 
-  <section class={`${wrap} py-10`}>
+  <section class={`${wrap} py-14 sm:py-16`}>
     <div class="grid gap-4 sm:grid-cols-3">
       {
         stats.map((s) => (
-          <div class={`${card} p-6`}>
-            <p class="text-4xl font-bold">{s.n}</p>
-            <p class="mt-2 text-sm text-neutral-600 dark:text-neutral-300">{s.t}</p>
+          <div class={`${card} border-t-2 border-t-accent p-6`}>
+            <p class="text-4xl font-bold text-heading">{s.n}</p>
+            <p class="mt-2 text-sm text-muted">{s.t}</p>
           </div>
         ))
       }
     </div>
   </section>
 
-  <section class={`${wrap} pb-10`}>
-    <div class={`${card} p-6 sm:p-8`}>
-      <h2 class="mb-4 text-2xl font-bold">Tentang saya</h2>
-      <p class="leading-relaxed">{about[0]}</p>
-      <a href="/tentang" class="mt-4 inline-block text-sm font-semibold underline">Baca selengkapnya</a>
+  <section class={`${wrap} pb-14 sm:pb-16`}>
+    <div class={`${card} p-6 sm:p-10`}>
+      <h2 class="mb-4 text-2xl font-bold text-heading">Tentang saya</h2>
+      <p class="max-w-3xl leading-relaxed text-muted">{about[0]}</p>
+      <a href="/tentang" class="mt-5 inline-block text-sm font-semibold text-link underline underline-offset-4">Baca selengkapnya</a>
     </div>
   </section>
 
-  <section class={`${wrap} pb-16`}>
-    <h2 class="mb-4 text-2xl font-bold">Jelajahi</h2>
+  <section class={`${wrap} pb-16 sm:pb-20`}>
+    <h2 class="mb-6 text-2xl font-bold text-heading">Jelajahi</h2>
     <div class="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
       {
         pages.map(([t, h, d]) => (
-          <a href={h} class={`${card} block p-6 transition hover:-translate-y-1`}>
-            <p class="text-lg font-bold">{t}</p>
-            <p class="mt-2 text-sm text-neutral-600 dark:text-neutral-300">{d}</p>
+          <a href={h} class={`${card} block p-6 transition hover:-translate-y-1 hover:border-accent hover:shadow-md`}>
+            <p class="text-lg font-bold text-heading">{t}</p>
+            <p class="mt-2 text-sm text-muted">{d}</p>
+            <p class="mt-4 text-sm font-semibold text-link">Buka →</p>
           </a>
         ))
       }
+    </div>
+  </section>
+
+  <section class="bg-primary py-14 text-white sm:py-16">
+    <div class={`${wrap} flex flex-col items-start gap-6 md:flex-row md:items-center md:justify-between`}>
+      <div>
+        <h2 class="text-2xl font-bold sm:text-3xl">Punya proyek atau kebutuhan IT?</h2>
+        <p class="mt-2 max-w-xl text-slate-300">Ceritakan kebutuhan Anda lewat email.</p>
+      </div>
+      <a href={`mailto:${EMAIL}`} class="rounded-md bg-accent px-6 py-3 text-sm font-semibold text-primary transition hover:brightness-95">Hubungi saya</a>
     </div>
   </section>
 </Layout>
