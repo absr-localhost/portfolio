@@ -1,6 +1,6 @@
 site:
   name: 'Agus Budiono, S.Pd.'
-  site: 'https://absrlocalhost.rf.gd/'
+  site: 'https://absrenv.wuaze.com/'
   base: '/'
   trailingSlash: false
 
