@@ -84,9 +84,9 @@ export const socials = [
 
 export const pages = [
   ['Tentang', '/tentang', 'Profil singkat, latar belakang, dan prinsip kerja.'],
-  ['Layanan', '/layanan', 'Delapan layanan yang bisa saya bantu.'],
-  ['Keahlian', '/keahlian', '24 peran dan bidang keahlian di dunia IT.'],
+  ['Layanan', '/layanan', 'Delapan layanan dan keahlian di berbagai bidang IT.'],
   ['Perjalanan', '/perjalanan', 'Jejak karier dari 2017 sampai sekarang.'],
   ['Proyek', '/proyek', 'Pilihan dari 57+ proyek dan pekerjaan.'],
+  ['Produk', '/produk', 'Rekomendasi produk pilihan dari AGB STORE.'],
   ['Kontak', '/kontak', 'Email dan media sosial untuk berdiskusi.'],
 ];
