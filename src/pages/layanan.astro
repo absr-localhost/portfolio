@@ -1,29 +1,129 @@
 ---
 import Layout from '~/layouts/PageLayout.astro';
-import { wrap, card, services } from '~/data/profil';
+import { wrap, card, services, roles, EMAIL } from '~/data/profil';
 
-const metadata = { title: 'Layanan' };
+const metadata = { title: 'Layanan dan Keahlian' };
+
+const groups: [string, string[]][] = [
+  [
+    'Pengembangan',
+    [
+      'Full-Stack Engineer / Developer',
+      'Mobile App Developer (Android)',
+      'UI/UX Designer',
+      'Database Administrator',
+      'QA & Software Tester',
+      'VBA / Macro Developer',
+      'Power Platform Developer',
+      'AI & Chatbot Integrator',
+    ],
+  ],
+  [
+    'Infrastruktur dan dukungan',
+    [
+      'IT Generalist',
+      'IT Jack-of-All-Trades',
+      'IT Specialist',
+      'IT Support Specialist',
+      'System Administrator (SysAdmin)',
+      'Network Engineer',
+      'DevOps & Cloud Engineer',
+    ],
+  ],
+  [
+    'Keamanan',
+    [
+      'Cybersecurity',
+      'Ethical Hacker / Penetration Tester',
+      'Digital Forensics & Incident Response (Defensif)',
+    ],
+  ],
+  [
+    'Konsultasi dan manajemen',
+    [
+      'IT Consultant',
+      'IT Project Manager',
+      'Solo Tech Founder / CTO',
+      'Data Analyst & Business Intelligence',
+    ],
+  ],
+  ['Multimedia dan edukasi', ['Multimedia Specialist', 'IT Trainer & Technical Writer']],
+];
+
+const byName = new Map<string, string[]>(roles.map((r) => [r[0], r]));
+const used = new Set(groups.flatMap((g) => g[1]));
+const rest = roles.filter((r) => !used.has(r[0]));
+if (rest.length > 0) groups.push(['Lainnya', rest.map((r) => r[0])]);
+
+const grouped = groups.map(([title, names]) => ({
+  title,
+  items: names.map((n) => byName.get(n)).filter((r): r is string[] => Boolean(r)),
+}));
 ---
 
 <Layout metadata={metadata}>
-  <section class="bg-[#0B1F4B] py-12 text-white sm:py-16">
+  <section class="bg-primary py-12 text-white sm:py-16">
     <div class={wrap}>
-      <h1 class="text-3xl font-extrabold tracking-tight sm:text-5xl">Layanan</h1>
-      <p class="mt-3 max-w-2xl text-slate-300">Yang bisa saya bantu.</p>
+      <h1 class="text-3xl font-extrabold tracking-tight sm:text-5xl">Layanan dan Keahlian</h1>
+      <p class="mt-3 max-w-2xl text-slate-300">
+        {services.length} layanan yang bisa saya bantu, didukung {roles.length} peran dan bidang keahlian di dunia IT.
+      </p>
+      <div class="mt-6 flex flex-wrap gap-3">
+        <a href="#layanan" class="rounded-md bg-accent px-5 py-2.5 text-sm font-semibold text-primary transition hover:brightness-95">Layanan</a>
+        <a href="#keahlian" class="rounded-md border border-white px-5 py-2.5 text-sm font-semibold transition hover:bg-white/10">Keahlian</a>
+      </div>
     </div>
   </section>
-  <section class="py-12 sm:py-16">
+
+  <section id="layanan" class="scroll-mt-24 py-14 sm:py-16">
     <div class={wrap}>
-      <div class="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
+      <h2 class="mb-6 text-2xl font-bold text-heading">Layanan</h2>
+      <div class="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
         {
           services.map((s, i) => (
-            <div class={`${card} p-5`}>
-              <div class="text-sm font-bold text-neutral-400">{String(i + 1).padStart(2, "0")}</div>
-              <div class="mt-2 text-base font-semibold leading-snug">{s}</div>
+            <div class={`${card} border-t-2 border-t-accent p-6`}>
+              <p class="text-sm font-semibold text-link">{String(i + 1).padStart(2, '0')}</p>
+              <p class="mt-2 text-base font-bold leading-snug text-heading">{s}</p>
             </div>
           ))
         }
       </div>
+    </div>
+  </section>
+
+  <section id="keahlian" class="scroll-mt-24 bg-slate-50 py-14 sm:py-16">
+    <div class={wrap}>
+      <h2 class="mb-8 text-2xl font-bold text-heading">Keahlian</h2>
+      <div class="space-y-10">
+        {
+          grouped.map((g) => (
+            <div>
+              <h3 class="mb-4 border-b border-slate-200 pb-2 text-lg font-bold text-heading">
+                {g.title}
+                <span class="ml-2 text-sm font-medium text-muted">{g.items.length}</span>
+              </h3>
+              <div class="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+                {g.items.map((r) => (
+                  <div class={`${card} p-5`}>
+                    <p class="font-bold text-heading">{r[0]}</p>
+                    <p class="mt-2 text-sm leading-relaxed text-muted">{r[1]}</p>
+                  </div>
+                ))}
+              </div>
+            </div>
+          ))
+        }
+      </div>
+    </div>
+  </section>
+
+  <section class="bg-primary py-14 text-white sm:py-16">
+    <div class={`${wrap} flex flex-col items-start gap-6 md:flex-row md:items-center md:justify-between`}>
+      <div>
+        <h2 class="text-2xl font-bold sm:text-3xl">Butuh bantuan IT?</h2>
+        <p class="mt-2 max-w-xl text-slate-300">Ceritakan kebutuhan Anda lewat email.</p>
+      </div>
+      <a href={`mailto:${EMAIL}`} class="rounded-md bg-accent px-6 py-3 text-sm font-semibold text-primary transition hover:brightness-95">Hubungi saya</a>
     </div>
   </section>
 </Layout>
