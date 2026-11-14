@@ -59,33 +59,25 @@ const metadata = {
                   <p class="mt-4 leading-relaxed text-muted">{p.detail.gambaran}</p>
 
                   <h4 class="mt-8 text-sm font-semibold uppercase tracking-widest text-link">Yang dikerjakan</h4>
-                  <ul class="mt-3 space-y-2">
+                  <ol class="mt-3 list-decimal space-y-2 pl-6 text-muted marker:font-semibold marker:text-link">
                     {
                       p.detail.lingkup.map((x) => (
-                        <li class="flex gap-3 text-muted">
-                          <span class="mt-2 h-1.5 w-1.5 shrink-0 rotate-45 bg-accent" />
-                          <span>{x}</span>
-                        </li>
+                        <li class="pl-1">{x}</li>
                       ))
                     }
-                  </ul>
+                  </ol>
 
                   <h4 class="mt-8 text-sm font-semibold uppercase tracking-widest text-link">Manfaat</h4>
-                  <ul class="mt-3 space-y-2">
+                  <ol class="mt-3 list-decimal space-y-2 pl-6 text-muted marker:font-semibold marker:text-link">
                     {
                       p.detail.manfaat.map((x) => (
-                        <li class="flex gap-3 text-muted">
-                          <span class="mt-2 h-1.5 w-1.5 shrink-0 rotate-45 bg-accent" />
-                          <span>{x}</span>
-                        </li>
+                        <li class="pl-1">{x}</li>
                       ))
                     }
-                  </ul>
+                  </ol>
 
-                  <div class="mt-8 rounded-lg border border-slate-200 border-l-4 border-l-accent bg-slate-50 p-5">
-                    <p class="text-sm font-semibold uppercase tracking-widest text-link">Cocok untuk</p>
-                    <p class="mt-2 text-muted">{p.detail.cocok}</p>
-                  </div>
+                  <h4 class="mt-8 text-sm font-semibold uppercase tracking-widest text-link">Cocok untuk</h4>
+                  <p class="mt-3 text-muted">{p.detail.cocok}</p>
 
                   <div class="mt-8 flex flex-wrap items-center justify-between gap-4 border-t border-slate-200 pt-6">
                     <p class="max-w-sm text-sm text-muted">Butuh yang serupa? Ceritakan kebutuhan Anda, saya akan membalas lewat email atau Telegram.</p>
