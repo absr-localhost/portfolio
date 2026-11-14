@@ -1,5 +1,5 @@
 export const wrap = 'mx-auto w-full max-w-6xl px-4 sm:px-6';
-export const card = 'border border-neutral-900 bg-white dark:border-neutral-300 dark:bg-neutral-900';
+export const card = 'rounded-lg border border-slate-200 bg-white shadow-sm';
 export const EMAIL = 'absecid@protonmail.com';
 
 export const stats = [
