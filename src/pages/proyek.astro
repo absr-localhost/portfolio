@@ -6,77 +6,106 @@ import { projects, projectCats } from '~/data/proyek';
 const metadata = {
   title: 'Proyek',
 };
-
-const cats = Object.entries(projectCats);
 ---
 
 <Layout metadata={metadata}>
-  <section class={`${wrap} py-12`}>
-    <p class="text-sm font-semibold uppercase tracking-widest">Galeri karya</p>
-    <h1 class="mt-2 text-4xl font-bold tracking-tight">Portofolio &amp; Proyek</h1>
-    <p class="mt-4 max-w-3xl text-neutral-600 dark:text-neutral-300">
-      Pilihan karya dari 57+ proyek dan pekerjaan yang telah saya selesaikan, mulai pengembangan full-stack,
-      administrasi sistem, automasi, multimedia, hingga keamanan siber.
-    </p>
-
-    <div id="filter" class="mt-8 flex flex-wrap gap-2" role="group" aria-label="Filter bidang">
-      <button type="button" data-cat="all" class="filter-btn on border border-neutral-900 px-4 py-2 text-sm font-semibold dark:border-neutral-300">
-        Semua
-      </button>
-      {
-        cats.map(([key, label]) => (
-          <button type="button" data-cat={key} class="filter-btn border border-neutral-900 px-4 py-2 text-sm font-semibold dark:border-neutral-300">
-            {label}
-          </button>
-        ))
-      }
+  <section class="bg-primary py-12 text-white sm:py-16">
+    <div class={wrap}>
+      <p class="text-sm font-semibold uppercase tracking-widest text-accent">Galeri karya</p>
+      <h1 class="mt-2 text-3xl font-extrabold tracking-tight sm:text-5xl">Portofolio &amp; Proyek</h1>
+      <p class="mt-3 max-w-3xl text-slate-300">
+        Pilihan karya dari 57+ proyek dan pekerjaan yang telah saya selesaikan, mulai dari pengembangan
+        full-stack, administrasi sistem, automasi, multimedia, hingga keamanan siber.
+      </p>
     </div>
+  </section>
 
-    <div id="grid" class="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-      {
-        projects.map((p) => (
-          <article class={`${card} proj p-6`} data-cat={p.cat}>
-            <p class="text-xs uppercase tracking-widest text-neutral-500">
-              {projectCats[p.cat as keyof typeof projectCats]}
-            </p>
-            <h2 class="mt-2 text-lg font-bold">{p.title}</h2>
-            <p class="mt-2 text-sm text-neutral-600 dark:text-neutral-300">{p.desc}</p>
-            <details class="mt-3 text-sm">
-              <summary class="cursor-pointer font-semibold">Detail</summary>
-              <p class="mt-2 text-neutral-600 dark:text-neutral-300">{p.detail}</p>
-            </details>
-          </article>
-        ))
-      }
+  <section class="py-14 sm:py-16">
+    <div class={wrap}>
+      <div class="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+        {
+          projects.map((p, i) => (
+            <article class={`${card} flex flex-col border-t-2 border-t-accent p-6 transition hover:-translate-y-1 hover:border-accent hover:shadow-md`}>
+              <div class="flex items-center justify-between gap-3">
+                <p class="text-xs font-semibold uppercase tracking-widest text-link">
+                  {projectCats[p.cat as keyof typeof projectCats]}
+                </p>
+                <span class="text-sm font-bold text-slate-300">{String(i + 1).padStart(2, '0')}</span>
+              </div>
+              <h2 class="mt-3 text-lg font-bold text-heading">{p.title}</h2>
+              <p class="mt-2 text-sm text-muted">{p.desc}</p>
+              <button
+                type="button"
+                data-open={`proj-${i}`}
+                class="mt-5 self-start rounded-md border border-primary px-4 py-2 text-sm font-semibold text-primary transition hover:bg-primary hover:text-white"
+              >
+                Lihat detail
+              </button>
+
+              <dialog
+                id={`proj-${i}`}
+                class="proj-dialog m-auto max-h-[85vh] w-[calc(100%-2rem)] max-w-2xl overflow-y-auto rounded-lg border-0 p-0 shadow-xl backdrop:bg-primary/70"
+              >
+                <div class="bg-primary px-6 py-6 text-white sm:px-8">
+                  <p class="text-xs font-semibold uppercase tracking-widest text-accent">
+                    {projectCats[p.cat as keyof typeof projectCats]}
+                  </p>
+                  <h3 class="mt-2 text-2xl font-bold tracking-tight">{p.title}</h3>
+                </div>
+                <div class="bg-white px-6 py-6 sm:px-8">
+                  <p class="text-lg font-medium text-heading">{p.desc}</p>
+                  <span class="mt-4 block h-0.5 w-8 bg-accent" />
+                  <p class="mt-4 leading-relaxed text-muted">{p.detail}</p>
+
+                  <div class="mt-8 rounded-lg border border-slate-200 bg-slate-50 p-5">
+                    <p class="font-semibold text-heading">Butuh yang serupa untuk Anda</p>
+                    <p class="mt-1 text-sm text-muted">Ceritakan kebutuhan Anda, saya akan membalas lewat email atau Telegram.</p>
+                    <div class="mt-4 flex flex-wrap gap-3">
+                      <a href="/kontak" class="rounded-md bg-accent px-5 py-2.5 text-sm font-semibold text-primary hover:opacity-90">Hubungi saya</a>
+                      <button type="button" data-close class="rounded-md border border-slate-300 px-5 py-2.5 text-sm font-semibold text-heading hover:bg-white">Tutup</button>
+                    </div>
+                  </div>
+                </div>
+              </dialog>
+            </article>
+          ))
+        }
+      </div>
+    </div>
+  </section>
+
+  <section class="bg-primary py-12 text-white sm:py-14">
+    <div class={`${wrap} flex flex-col items-start justify-between gap-6 sm:flex-row sm:items-center`}>
+      <div>
+        <h2 class="text-2xl font-bold tracking-tight sm:text-3xl">Punya proyek atau kebutuhan IT</h2>
+        <p class="mt-2 max-w-xl text-slate-300">Ceritakan kebutuhan Anda, saya akan membalas lewat email atau Telegram.</p>
+      </div>
+      <a
+        href="/kontak"
+        class="inline-block rounded-md bg-accent px-6 py-3 text-sm font-semibold text-primary hover:opacity-90"
+      >
+        Hubungi saya
+      </a>
     </div>
   </section>
 </Layout>
 
-<style is:global>
-  .filter-btn.on {
-    background: #111;
-    color: #fff;
-  }
-  .dark .filter-btn.on {
-    background: #fff;
-    color: #111;
-  }
-</style>
-
 <script is:inline>
   (function () {
-    var bar = document.getElementById('filter');
-    var cards = document.querySelectorAll('.proj');
-    if (!bar) return;
-    bar.addEventListener('click', function (e) {
-      var b = e.target.closest('.filter-btn');
-      if (!b) return;
-      var k = b.getAttribute('data-cat');
-      bar.querySelectorAll('.filter-btn').forEach(function (x) {
-        x.classList.toggle('on', x === b);
+    document.querySelectorAll('[data-open]').forEach(function (b) {
+      b.addEventListener('click', function () {
+        var d = document.getElementById(b.getAttribute('data-open'));
+        if (d && d.showModal) d.showModal();
       });
-      cards.forEach(function (c) {
-        c.hidden = !(k === 'all' || c.getAttribute('data-cat') === k);
+    });
+    document.querySelectorAll('dialog.proj-dialog').forEach(function (d) {
+      d.addEventListener('click', function (e) {
+        if (e.target === d) d.close();
+      });
+      d.querySelectorAll('[data-close]').forEach(function (c) {
+        c.addEventListener('click', function () {
+          d.close();
+        });
       });
     });
   })();
