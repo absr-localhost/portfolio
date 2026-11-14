@@ -3,64 +3,89 @@ import Layout from '~/layouts/PageLayout.astro';
 import { wrap, card, stats, about, pages, EMAIL } from '~/data/profil';
 
 const metadata = {
-  title: 'Agus Budiono, S.Pd. | System Administrator & Cybersecurity',
-  ignoreTitleTemplate: true,
+  title: 'Beranda',
 };
 ---
 
 <Layout metadata={metadata}>
-  <section class="bg-[#0B1F4B] pb-24 pt-14 text-white sm:pt-24">
-    <div class={wrap}>
-      <p class="text-xs font-medium uppercase tracking-[0.2em] text-slate-300">IT Specialist &middot; Full-Stack Developer</p>
-      <h1 class="mt-4 text-4xl font-extrabold leading-tight tracking-tight sm:text-6xl">
-        Agus Budiono<span class="text-2xl font-semibold text-slate-300 sm:text-3xl">, S.Pd.</span>
-      </h1>
-      <p class="mt-3 text-sm font-semibold uppercase tracking-wide text-slate-200 sm:text-base">System Administrator &amp; Cybersecurity</p>
-      <p class="mt-6 max-w-2xl text-base leading-relaxed text-slate-300 sm:text-lg">
-        Dari kode, server, dan jaringan hingga keamanan dan automasi: ceritakan kebutuhan Anda, kita rancang sistem digital yang rapi, aman, dan benar-benar terpakai.
-      </p>
-      <p class="mt-3 text-sm text-slate-400">Sumatera Selatan, Indonesia &middot; Tersedia untuk proyek</p>
-      <div class="mt-8 flex flex-wrap gap-3">
-        <a href={`mailto:${EMAIL}`} class="bg-white px-6 py-3 text-sm font-semibold text-[#0B1F4B] hover:bg-slate-200">Hubungi Saya</a>
-        <a href="/proyek" class="border border-white/40 px-6 py-3 text-sm font-semibold text-white hover:bg-white/10">Lihat Proyek</a>
+  <section class="relative isolate overflow-hidden bg-neutral-950 text-white">
+    <img
+      src="/gedung-jakarta.jpg"
+      alt=""
+      aria-hidden="true"
+      class="absolute inset-0 -z-20 h-full w-full object-cover grayscale"
+      width="1224"
+      height="816"
+    />
+    <div class="absolute inset-0 -z-10 bg-neutral-950/75"></div>
+
+    <div class={`${wrap} grid items-end gap-6 pt-12 md:grid-cols-2 md:pt-20`}>
+      <div class="pb-8 md:pb-20">
+        <p class="mb-4 flex flex-wrap items-center gap-3 text-sm uppercase tracking-widest">
+          <b>IT Specialist</b>
+          <span class="text-neutral-300">Full-Stack Developer</span>
+        </p>
+        <h1 class="text-4xl font-bold leading-tight tracking-tight sm:text-5xl">
+          AGUS BUDIONO, S.Pd.
+        </h1>
+        <p class="mt-4 max-w-xl text-neutral-200">
+          Profesional teknologi informasi dari Sumatera Selatan. Membangun aplikasi, mengelola sistem, dan
+          menjaga keamanan digital.
+        </p>
+        <p class="mt-4 inline-block border border-white/40 px-3 py-1 text-xs uppercase tracking-widest">
+          Tersedia untuk proyek
+        </p>
+        <div class="mt-6 flex flex-wrap gap-3">
+          <a href="/proyek" class="bg-white px-5 py-3 text-sm font-semibold text-neutral-900">Lihat proyek</a>
+          <a href={`mailto:${EMAIL}`} class="border border-white px-5 py-3 text-sm font-semibold">Hubungi saya</a>
+        </div>
+      </div>
+
+      <div class="flex justify-center md:justify-end">
+        <img
+          src="/pk-3.webp"
+          alt="Foto profil AGUS BUDIONO, S.Pd."
+          class="max-h-[420px] w-auto object-contain md:max-h-[560px]"
+          width="860"
+          height="851"
+          fetchpriority="high"
+        />
       </div>
     </div>
   </section>
 
-  <section class={`${wrap} relative z-10 -mt-12`}>
-    <div class="grid grid-cols-3 gap-2 sm:gap-4">
+  <section class={`${wrap} py-10`}>
+    <div class="grid gap-4 sm:grid-cols-3">
       {
         stats.map((s) => (
-          <div class={`${card} px-2 py-4 text-center sm:px-4 sm:py-6`}>
-            <div class="text-2xl font-extrabold text-black dark:text-white sm:text-4xl">{s.n}</div>
-            <div class="mt-1.5 text-[11px] leading-snug text-neutral-600 dark:text-neutral-400 sm:text-sm">{s.t}</div>
+          <div class={`${card} p-6`}>
+            <p class="text-4xl font-bold">{s.n}</p>
+            <p class="mt-2 text-sm text-neutral-600 dark:text-neutral-300">{s.t}</p>
           </div>
         ))
       }
     </div>
   </section>
 
-  <section class="py-14 sm:py-20">
-    <div class={wrap}>
-      <p class="text-xs font-semibold uppercase tracking-[0.2em] text-neutral-500">Profil</p>
-      <p class="mt-3 max-w-3xl text-base leading-relaxed text-neutral-600 dark:text-neutral-300 sm:text-lg">{about[0]}</p>
-      <a href="/tentang" class="mt-6 inline-block border border-neutral-900 px-5 py-2.5 text-sm font-semibold hover:bg-neutral-100 dark:border-neutral-300 dark:hover:bg-neutral-800">Selengkapnya</a>
+  <section class={`${wrap} pb-10`}>
+    <div class={`${card} p-6 sm:p-8`}>
+      <h2 class="mb-4 text-2xl font-bold">Tentang saya</h2>
+      <p class="leading-relaxed">{about[0]}</p>
+      <a href="/tentang" class="mt-4 inline-block text-sm font-semibold underline">Baca selengkapnya</a>
     </div>
   </section>
 
-  <section class="bg-neutral-50 py-14 dark:bg-neutral-950 sm:py-20">
-    <div class={wrap}>
-      <h2 class="text-2xl font-bold sm:text-3xl">Jelajahi</h2>
-      <div class="mt-8 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
-        {
-          pages.map(([t, h, d]) => (
-            <a href={h} class={`${card} block p-5 hover:bg-neutral-50 dark:hover:bg-neutral-800`}>
-              <div class="text-lg font-bold">{t}</div>
-              <div class="mt-1 text-sm text-neutral-600 dark:text-neutral-400">{d}</div>
-            </a>
-          ))
-        }
-      </div>
+  <section class={`${wrap} pb-16`}>
+    <h2 class="mb-4 text-2xl font-bold">Jelajahi</h2>
+    <div class="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+      {
+        pages.map(([t, h, d]) => (
+          <a href={h} class={`${card} block p-6 transition hover:-translate-y-1`}>
+            <p class="text-lg font-bold">{t}</p>
+            <p class="mt-2 text-sm text-neutral-600 dark:text-neutral-300">{d}</p>
+          </a>
+        ))
+      }
     </div>
   </section>
 </Layout>
