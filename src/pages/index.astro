@@ -82,10 +82,10 @@ const card = 'rounded-lg border border-slate-200 bg-white shadow-sm';
     <div class="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
       {
         pages.map(([t, h, d]) => (
-          <a href={h} class={`${card} block p-6 transition hover:-translate-y-1 hover:border-accent hover:shadow-md`}>
+          <a href={h} class={`${card} group block p-6 transition hover:-translate-y-1 hover:border-accent hover:shadow-md`}>
             <p class="text-lg font-bold text-heading">{t}</p>
             <p class="mt-2 text-sm text-muted">{d}</p>
-            <p class="mt-4 text-sm font-semibold text-link">Buka →</p>
+            <span class="mt-5 block h-0.5 w-8 bg-accent transition-all duration-300 group-hover:w-14"></span>
           </a>
         ))
       }
