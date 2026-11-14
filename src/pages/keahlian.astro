@@ -1,29 +1,17 @@
 ---
 import Layout from '~/layouts/PageLayout.astro';
-import { wrap, card, roles } from '~/data/profil';
+import { wrap } from '~/data/profil';
 
-const metadata = { title: 'Peran & Keahlian' };
+const metadata = { title: 'Layanan dan Keahlian' };
 ---
 
 <Layout metadata={metadata}>
-  <section class="bg-[#0B1F4B] py-12 text-white sm:py-16">
+  <meta slot="head" http-equiv="refresh" content="0; url=/layanan#keahlian" />
+  <section class="py-20">
     <div class={wrap}>
-      <h1 class="text-3xl font-extrabold tracking-tight sm:text-5xl">Peran & Keahlian</h1>
-      <p class="mt-3 max-w-2xl text-slate-300">Satu orang, banyak peran: dari server dan jaringan sampai keamanan dan automasi.</p>
-    </div>
-  </section>
-  <section class="py-12 sm:py-16">
-    <div class={wrap}>
-      <div class="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
-        {
-          roles.map(([t, d]) => (
-            <div class={`${card} p-5`}>
-              <h3 class="text-base font-bold leading-snug">{t}</h3>
-              <p class="mt-2 text-sm leading-relaxed text-neutral-600 dark:text-neutral-400">{d}</p>
-            </div>
-          ))
-        }
-      </div>
+      <p class="text-muted">
+        Halaman ini sudah digabung. <a href="/layanan#keahlian" class="font-semibold text-link underline">Buka Layanan dan Keahlian</a>
+      </p>
     </div>
   </section>
 </Layout>
