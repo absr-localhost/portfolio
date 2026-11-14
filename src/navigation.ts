@@ -3,7 +3,6 @@ export const headerData = {
     { text: 'Beranda', href: '/' },
     { text: 'Tentang', href: '/tentang' },
     { text: 'Layanan', href: '/layanan' },
-    { text: 'Keahlian', href: '/keahlian' },
     { text: 'Perjalanan', href: '/perjalanan' },
     { text: 'Proyek', href: '/proyek' },
     { text: 'Produk', href: '/produk' },
@@ -19,7 +18,6 @@ export const footerData = {
       links: [
         { text: 'Tentang', href: '/tentang' },
         { text: 'Layanan', href: '/layanan' },
-        { text: 'Keahlian', href: '/keahlian' },
         { text: 'Perjalanan', href: '/perjalanan' },
         { text: 'Proyek', href: '/proyek' },
         { text: 'Produk', href: '/produk' },
