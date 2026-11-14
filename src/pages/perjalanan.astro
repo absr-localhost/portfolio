@@ -1,31 +1,49 @@
 ---
 import Layout from '~/layouts/PageLayout.astro';
-import { wrap, card, timeline } from '~/data/profil';
+import { wrap, timeline } from '~/data/profil';
 
 const metadata = { title: 'Perjalanan' };
 ---
 
 <Layout metadata={metadata}>
-  <section class="bg-[#0B1F4B] py-12 text-white sm:py-16">
+  <section class="bg-primary py-12 text-white sm:py-16">
     <div class={wrap}>
       <h1 class="text-3xl font-extrabold tracking-tight sm:text-5xl">Perjalanan</h1>
       <p class="mt-3 max-w-2xl text-slate-300">Jejak karier dari tahun ke tahun.</p>
     </div>
   </section>
-  <section class="py-12 sm:py-16">
+
+  <section class="py-14 sm:py-16">
     <div class={wrap}>
-      <ol class="border-l-2 border-neutral-900 dark:border-neutral-300">
+      <ol class="border-l-2 border-slate-200">
         {
           timeline.map(([y, t, d]) => (
             <li class="relative pb-8 pl-6 last:pb-0 sm:pl-8">
-              <span class="absolute -left-[7px] top-1.5 h-3 w-3 bg-[#0B1F4B] dark:bg-white" />
-              <div class="text-sm font-bold text-neutral-500">{y}</div>
-              <div class="mt-0.5 text-base font-semibold sm:text-lg">{t}</div>
-              <div class="mt-1 text-sm text-neutral-600 dark:text-neutral-400">{d}</div>
+              <span class="absolute -left-[7px] top-6 h-3 w-3 rounded-full bg-accent ring-4 ring-white" />
+              <div class="rounded-lg border border-slate-200 border-t-2 border-t-accent bg-white p-5 shadow-sm">
+                <div class="text-sm font-bold text-link">{y}</div>
+                <div class="mt-1 text-base font-semibold text-heading sm:text-lg">{t}</div>
+                <div class="mt-1 text-sm text-muted">{d}</div>
+              </div>
             </li>
           ))
         }
       </ol>
+    </div>
+  </section>
+
+  <section class="bg-primary py-12 text-white sm:py-14">
+    <div class={`${wrap} flex flex-col items-start justify-between gap-6 sm:flex-row sm:items-center`}>
+      <div>
+        <h2 class="text-2xl font-bold tracking-tight sm:text-3xl">Punya kebutuhan IT yang ingin dibahas</h2>
+        <p class="mt-2 max-w-xl text-slate-300">Ceritakan kebutuhan Anda, saya akan membalas lewat email atau Telegram.</p>
+      </div>
+      <a
+        href="/kontak"
+        class="inline-block rounded-md bg-accent px-6 py-3 text-sm font-semibold text-primary hover:opacity-90"
+      >
+        Hubungi saya
+      </a>
     </div>
   </section>
 </Layout>
