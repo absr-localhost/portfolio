@@ -1,13 +1,14 @@
 export const headerData = {
   links: [
     { text: 'Beranda', href: '/' },
-    { text: 'Tentang', href: '/#tentang' },
-    { text: 'Layanan', href: '/#layanan' },
-    { text: 'Keahlian', href: '/#keahlian' },
-    { text: 'Perjalanan', href: '/#perjalanan' },
-    { text: 'Kontak', href: '/#kontak' },
+    { text: 'Tentang', href: '/tentang' },
+    { text: 'Layanan', href: '/layanan' },
+    { text: 'Keahlian', href: '/keahlian' },
+    { text: 'Perjalanan', href: '/perjalanan' },
+    { text: 'Proyek', href: '/proyek' },
+    { text: 'Kontak', href: '/kontak' },
   ],
-  actions: [{ text: 'Hubungi Saya', href: 'mailto:absecid@protonmail.com' }],
+  actions: [],
 };
 
 export const footerData = {
@@ -15,9 +16,11 @@ export const footerData = {
     {
       title: 'Halaman',
       links: [
-        { text: 'Tentang', href: '/#tentang' },
-        { text: 'Layanan', href: '/#layanan' },
-        { text: 'Keahlian', href: '/#keahlian' },
+        { text: 'Tentang', href: '/tentang' },
+        { text: 'Layanan', href: '/layanan' },
+        { text: 'Keahlian', href: '/keahlian' },
+        { text: 'Perjalanan', href: '/perjalanan' },
+        { text: 'Proyek', href: '/proyek' },
       ],
     },
     {
@@ -37,5 +40,5 @@ export const footerData = {
     { ariaLabel: 'TikTok', icon: 'tabler:brand-tiktok', href: 'https://www.tiktok.com/@silentforce2sf' },
     { ariaLabel: 'YouTube', icon: 'tabler:brand-youtube', href: 'https://www.youtube.com/@sevencolors-id' },
   ],
-  footNote: `© 2026 Agus Budiono, S.Pd. · Sumatera Selatan, Indonesia`,
+  footNote: '© 2026 Agus Budiono, S.Pd. · Sumatera Selatan, Indonesia',
 };
