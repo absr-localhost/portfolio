@@ -6,6 +6,7 @@ export const headerData = {
     { text: 'Keahlian', href: '/keahlian' },
     { text: 'Perjalanan', href: '/perjalanan' },
     { text: 'Proyek', href: '/proyek' },
+    { text: 'Produk', href: '/produk' },
     { text: 'Kontak', href: '/kontak' },
   ],
   actions: [],
@@ -21,6 +22,7 @@ export const footerData = {
         { text: 'Keahlian', href: '/keahlian' },
         { text: 'Perjalanan', href: '/perjalanan' },
         { text: 'Proyek', href: '/proyek' },
+        { text: 'Produk', href: '/produk' },
       ],
     },
     {
