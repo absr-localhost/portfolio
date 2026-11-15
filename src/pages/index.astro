@@ -1,6 +1,6 @@
 ---
 import Layout from '~/layouts/PageLayout.astro';
-import { wrap, stats, about, pages, EMAIL } from '~/data/profil';
+import { wrap, stats, about, EMAIL } from '~/data/profil';
 
 const metadata = {
   title: 'Beranda',
@@ -60,7 +60,7 @@ const card = 'rounded-lg border border-slate-200 bg-white shadow-sm';
     <div class="grid gap-4 sm:grid-cols-3">
       {
         stats.map((s) => (
-          <div class={`${card} border-t-2 border-t-accent p-6`}>
+          <div class={`${card} p-6`}>
             <p class="text-4xl font-bold text-heading">{s.n}</p>
             <p class="mt-2 text-sm text-muted">{s.t}</p>
           </div>
@@ -75,22 +75,6 @@ const card = 'rounded-lg border border-slate-200 bg-white shadow-sm';
       <div class="max-w-3xl space-y-4 leading-relaxed text-muted">
         {about.map((p) => <p>{p}</p>)}
       </div>
-      <a href="/perjalanan" class="mt-5 inline-block text-sm font-semibold text-link underline underline-offset-4">Lihat perjalanan saya</a>
-    </div>
-  </section>
-
-  <section class={`${wrap} pb-16 sm:pb-20`}>
-    <h2 class="mb-6 text-2xl font-bold text-heading">Jelajahi</h2>
-    <div class="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-      {
-        pages.map(([t, h, d]) => (
-          <a href={h} class={`${card} group block p-6 transition hover:-translate-y-1 hover:border-accent hover:shadow-md`}>
-            <p class="text-lg font-bold text-heading">{t}</p>
-            <p class="mt-2 text-sm text-muted">{d}</p>
-            <span class="mt-5 block h-0.5 w-8 bg-accent transition-all duration-300 group-hover:w-14" />
-          </a>
-        ))
-      }
     </div>
   </section>
 
