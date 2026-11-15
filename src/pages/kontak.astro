@@ -1,24 +1,55 @@
 ---
+import { Icon } from 'astro-icon/components';
 import Layout from '~/layouts/PageLayout.astro';
 import { wrap, card, EMAIL, socials } from '~/data/profil';
 
 const metadata = { title: 'Kontak' };
+
+const known = ['Telegram', 'LinkedIn', 'GitHub', 'TikTok', 'YouTube'];
+
+const handle = (name: string, url: string) => {
+  const last = url.split('/').filter(Boolean).pop() ?? url;
+  return name === 'Telegram' ? `@${last}` : last;
+};
+
+const item = `${card} flex items-center gap-4 p-4 transition hover:-translate-y-1 hover:border-accent hover:shadow-md`;
+const box = 'flex h-11 w-11 shrink-0 items-center justify-center rounded-md bg-primary text-white';
 ---
 
 <Layout metadata={metadata}>
-  <section class="bg-[#0B1F4B] py-12 text-white sm:py-16">
+  <section class="bg-primary py-12 text-white sm:py-16">
     <div class={wrap}>
       <h1 class="text-3xl font-extrabold tracking-tight sm:text-5xl">Kontak</h1>
       <p class="mt-3 max-w-2xl text-slate-300">Ceritakan kebutuhan Anda. Saya akan membalas lewat email atau Telegram.</p>
     </div>
   </section>
+
   <section class="py-12 sm:py-16">
     <div class={wrap}>
-      <div class="flex flex-wrap gap-3">
-        <a href={`mailto:${EMAIL}`} class="bg-[#0B1F4B] px-6 py-3 text-sm font-semibold text-white hover:bg-[#13306e]">{EMAIL}</a>
+      <div class="grid gap-3 md:grid-cols-2">
+        <a href={`mailto:${EMAIL}`} class={item}>
+          <span class={box}><Icon name="tabler:mail" class="h-6 w-6" /></span>
+          <span class="min-w-0">
+            <span class="block font-bold text-heading">Email</span>
+            <span class="block truncate text-sm text-muted">{EMAIL}</span>
+          </span>
+        </a>
         {
           socials.map(([n, u]) => (
-            <a href={u} target="_blank" rel="noopener noreferrer" class="border border-neutral-900 px-5 py-3 text-sm font-semibold hover:bg-neutral-100 dark:border-neutral-300 dark:hover:bg-neutral-800">{n}</a>
+            <a href={u} target="_blank" rel="noopener noreferrer" class={item}>
+              <span class={box}>
+                {n === 'Telegram' && <Icon name="tabler:brand-telegram" class="h-6 w-6" />}
+                {n === 'LinkedIn' && <Icon name="tabler:brand-linkedin" class="h-6 w-6" />}
+                {n === 'GitHub' && <Icon name="tabler:brand-github" class="h-6 w-6" />}
+                {n === 'TikTok' && <Icon name="tabler:brand-tiktok" class="h-6 w-6" />}
+                {n === 'YouTube' && <Icon name="tabler:brand-youtube" class="h-6 w-6" />}
+                {!known.includes(n) && <Icon name="tabler:link" class="h-6 w-6" />}
+              </span>
+              <span class="min-w-0">
+                <span class="block font-bold text-heading">{n}</span>
+                <span class="block truncate text-sm text-muted">{handle(n, u)}</span>
+              </span>
+            </a>
           ))
         }
       </div>
