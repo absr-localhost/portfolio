@@ -8,7 +8,10 @@ export const headerData = {
     { text: 'Media Sosial', href: '/kontak' },
     {
       text: 'Lainnya',
-      links: [{ text: 'Aplikasi', href: '/aplikasi' }],
+      links: [
+        { text: 'Aplikasi', href: '/aplikasi' },
+        { text: 'Saham Lokal', href: '/saham' },
+      ],
     },
   ],
   actions: [],
@@ -24,6 +27,7 @@ export const footerData = {
         { text: 'Portofolio', href: '/proyek' },
         { text: 'Produk', href: '/produk' },
         { text: 'Aplikasi', href: '/aplikasi' },
+        { text: 'Saham Lokal', href: '/saham' },
       ],
     },
     {
