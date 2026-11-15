@@ -1,0 +1,185 @@
+---
+import Layout from '~/layouts/PageLayout.astro';
+import { wrap, EMAIL } from '~/data/profil';
+
+const metadata = { title: 'Aplikasi' };
+---
+
+<Layout metadata={metadata}>
+  <section class="bg-primary py-12 text-white sm:py-16">
+    <div class={wrap}>
+      <h1 class="text-3xl font-extrabold tracking-tight sm:text-5xl">Aplikasi</h1>
+      <p class="mt-3 max-w-2xl text-slate-300">
+        Aplikasi Android karya Agus Budiono, S.Pd. Pilih aplikasi yang Anda butuhkan, lalu unduh.
+      </p>
+    </div>
+  </section>
+
+  <section class="py-14 sm:py-16">
+    <div class={wrap}>
+      <p id="apk-status" class="text-sm text-muted" role="status">Memuat daftar aplikasi...</p>
+      <button
+        id="apk-retry"
+        type="button"
+        hidden
+        class="mt-3 rounded-md border border-primary px-4 py-2 text-sm font-semibold text-primary transition hover:bg-slate-50"
+      >
+        Coba lagi
+      </button>
+      <div id="apk-list" class="grid gap-4 sm:grid-cols-2 lg:grid-cols-3"></div>
+    </div>
+  </section>
+
+  <section class="bg-slate-50 py-14 sm:py-16">
+    <div class={wrap}>
+      <h2 class="mb-6 text-2xl font-bold text-heading">Cara memasang</h2>
+      <div class="grid gap-4 sm:grid-cols-3">
+        <div class="rounded-lg border border-slate-200 border-t-2 border-t-accent bg-white p-6 shadow-sm">
+          <p class="text-3xl font-bold text-accent">1</p>
+          <h3 class="mt-2 text-lg font-bold text-heading">Unduh</h3>
+          <p class="mt-2 text-sm leading-relaxed text-muted">
+            Tekan tombol Unduh APK pada aplikasi yang Anda pilih. Berkas tersimpan di folder Unduhan.
+          </p>
+        </div>
+        <div class="rounded-lg border border-slate-200 border-t-2 border-t-accent bg-white p-6 shadow-sm">
+          <p class="text-3xl font-bold text-accent">2</p>
+          <h3 class="mt-2 text-lg font-bold text-heading">Izinkan pemasangan</h3>
+          <p class="mt-2 text-sm leading-relaxed text-muted">
+            Bila Android meminta, aktifkan izin pasang aplikasi dari sumber tidak dikenal untuk browser yang Anda
+            pakai. Izin ini diperlukan karena aplikasi dipasang dari luar Play Store.
+          </p>
+        </div>
+        <div class="rounded-lg border border-slate-200 border-t-2 border-t-accent bg-white p-6 shadow-sm">
+          <p class="text-3xl font-bold text-accent">3</p>
+          <h3 class="mt-2 text-lg font-bold text-heading">Pasang</h3>
+          <p class="mt-2 text-sm leading-relaxed text-muted">
+            Buka berkas yang sudah diunduh, lalu ikuti petunjuk pemasangan di layar.
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="bg-primary py-14 text-white sm:py-16">
+    <div class={`${wrap} flex flex-col items-start gap-6 md:flex-row md:items-center md:justify-between`}>
+      <div>
+        <h2 class="text-2xl font-bold sm:text-3xl">Ada pertanyaan tentang aplikasi?</h2>
+        <p class="mt-2 max-w-xl text-slate-300">Sampaikan lewat email.</p>
+      </div>
+      <a
+        href={`mailto:${EMAIL}`}
+        class="rounded-md bg-accent px-6 py-3 text-sm font-semibold text-primary transition hover:opacity-90"
+      >
+        Hubungi saya
+      </a>
+    </div>
+  </section>
+</Layout>
+
+<script is:inline>
+  (function () {
+    var API = 'https://apk.extreamcollectiveofficial.workers.dev';
+    var list = document.getElementById('apk-list');
+    var status = document.getElementById('apk-status');
+    var retry = document.getElementById('apk-retry');
+
+    function el(tag, cls, text) {
+      var e = document.createElement(tag);
+      if (cls) e.className = cls;
+      if (text != null) e.textContent = text;
+      return e;
+    }
+
+    function ukuran(b) {
+      b = Number(b) || 0;
+      if (b >= 1048576) return (b / 1048576).toFixed(1).replace('.', ',') + ' MB';
+      return Math.max(1, Math.round(b / 1024)) + ' KB';
+    }
+
+    function tanggal(ms) {
+      var d = new Date(Number(ms));
+      if (isNaN(d.getTime())) return '';
+      return d.toLocaleDateString('id-ID', { day: 'numeric', month: 'long', year: 'numeric' });
+    }
+
+    function kartu(x) {
+      var nama = String(x.name || 'Aplikasi');
+      var card = el('div', 'flex flex-col rounded-lg border border-slate-200 border-t-2 border-t-accent bg-white p-6 shadow-sm');
+
+      var atas = el('div', 'flex items-center gap-4');
+      var kotak = el('div', 'flex h-14 w-14 shrink-0 items-center justify-center overflow-hidden rounded-lg border border-slate-200 bg-slate-100 text-xl font-bold text-primary');
+      if (x.icon) {
+        var img = document.createElement('img');
+        img.src = API + x.icon;
+        img.alt = '';
+        img.loading = 'lazy';
+        img.className = 'h-full w-full object-cover';
+        img.onerror = function () {
+          kotak.textContent = nama.charAt(0).toUpperCase();
+        };
+        kotak.appendChild(img);
+      } else {
+        kotak.textContent = nama.charAt(0).toUpperCase();
+      }
+      var judul = el('div');
+      judul.appendChild(el('h3', 'text-lg font-bold text-heading', nama));
+      var info = [];
+      if (x.version) info.push('Versi ' + x.version);
+      var tgl = tanggal(x.created);
+      if (tgl) info.push(tgl);
+      judul.appendChild(el('p', 'text-sm text-muted', info.join(' · ')));
+      atas.appendChild(kotak);
+      atas.appendChild(judul);
+      card.appendChild(atas);
+
+      card.appendChild(el('p', 'mt-4 flex-1 text-sm leading-relaxed text-muted', x.desc || ''));
+
+      var meta = el('div', 'mt-5 flex items-center justify-between border-t border-slate-200 pt-4 text-sm text-muted');
+      meta.appendChild(el('span', '', x.size ? ukuran(x.size) : ''));
+      meta.appendChild(el('span', '', (Number(x.downloads) || 0) + ' kali diunduh'));
+      card.appendChild(meta);
+
+      var tombol = el('a', 'mt-4 block rounded-md bg-primary px-5 py-3 text-center text-sm font-semibold text-white transition hover:bg-secondary', 'Unduh APK');
+      tombol.href = API + '/api/apk/' + encodeURIComponent(x.id);
+      tombol.rel = 'noopener';
+      tombol.setAttribute('download', '');
+      card.appendChild(tombol);
+
+      return card;
+    }
+
+    function muat() {
+      status.hidden = false;
+      status.textContent = 'Memuat daftar aplikasi...';
+      retry.hidden = true;
+      list.innerHTML = '';
+
+      fetch(API + '/api/apks?t=' + Date.now(), { cache: 'no-store' })
+        .then(function (r) {
+          if (!r.ok) throw new Error('HTTP ' + r.status);
+          return r.json();
+        })
+        .then(function (d) {
+          var a = (d.apks || []).filter(function (x) {
+            return x && x.ready !== false;
+          });
+          if (!a.length) {
+            status.textContent = 'Belum ada aplikasi yang tersedia.';
+            return;
+          }
+          status.hidden = true;
+          a.forEach(function (x) {
+            list.appendChild(kartu(x));
+          });
+        })
+        .catch(function (e) {
+          console.error('Daftar aplikasi gagal dimuat:', e);
+          status.textContent = 'Daftar aplikasi belum bisa dimuat. Periksa koneksi Anda, lalu coba lagi.';
+          retry.hidden = false;
+        });
+    }
+
+    retry.addEventListener('click', muat);
+    muat();
+  })();
+</script>
