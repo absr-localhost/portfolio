@@ -108,19 +108,17 @@ const metadata = { title: 'Aplikasi' };
 
       var atas = el('div', 'flex items-center gap-4');
       var kotak = el('div', 'flex h-14 w-14 shrink-0 items-center justify-center overflow-hidden rounded-lg border border-slate-200 bg-slate-100 text-xl font-bold text-primary');
-      if (x.icon) {
-        var img = document.createElement('img');
-        img.src = API + x.icon;
-        img.alt = '';
-        img.loading = 'lazy';
-        img.className = 'h-full w-full object-cover';
-        img.onerror = function () {
-          kotak.textContent = nama.charAt(0).toUpperCase();
-        };
-        kotak.appendChild(img);
-      } else {
+      var img = document.createElement('img');
+      img.src = '/apk-android.png';
+      img.alt = 'Android';
+      img.loading = 'lazy';
+      img.className = 'h-full w-full object-cover';
+      img.onerror = function () {
+        img.remove();
         kotak.textContent = nama.charAt(0).toUpperCase();
-      }
+      };
+      kotak.appendChild(img);
+
       var judul = el('div');
       judul.appendChild(el('h3', 'text-lg font-bold text-heading', nama));
       var info = [];
