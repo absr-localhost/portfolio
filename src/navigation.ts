@@ -6,6 +6,10 @@ export const headerData = {
     { text: 'Portofolio', href: '/proyek' },
     { text: 'Produk', href: '/produk' },
     { text: 'Media Sosial', href: '/kontak' },
+    {
+      text: 'Lainnya',
+      links: [{ text: 'Aplikasi', href: '/aplikasi' }],
+    },
   ],
   actions: [],
 };
@@ -19,6 +23,7 @@ export const footerData = {
         { text: 'Tentang saya', href: '/perjalanan' },
         { text: 'Portofolio', href: '/proyek' },
         { text: 'Produk', href: '/produk' },
+        { text: 'Aplikasi', href: '/aplikasi' },
       ],
     },
     {
