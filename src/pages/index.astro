@@ -38,7 +38,7 @@ const card = 'rounded-lg border border-slate-200 bg-white shadow-sm';
           Tersedia untuk proyek
         </p>
         <div class="mt-6 flex flex-wrap gap-3">
-          <a href="/proyek" class="rounded-md bg-accent px-5 py-3 text-sm font-semibold text-primary transition hover:brightness-95">Lihat proyek</a>
+          <a href="/proyek" class="rounded-md bg-accent px-5 py-3 text-sm font-semibold text-primary transition hover:brightness-95">Lihat portofolio</a>
           <a href={`mailto:${EMAIL}`} class="rounded-md border border-white px-5 py-3 text-sm font-semibold transition hover:bg-white/10">Hubungi saya</a>
         </div>
       </div>
@@ -72,8 +72,10 @@ const card = 'rounded-lg border border-slate-200 bg-white shadow-sm';
   <section class={`${wrap} pb-14 sm:pb-16`}>
     <div class={`${card} p-6 sm:p-10`}>
       <h2 class="mb-4 text-2xl font-bold text-heading">Tentang saya</h2>
-      <p class="max-w-3xl leading-relaxed text-muted">{about[0]}</p>
-      <a href="/tentang" class="mt-5 inline-block text-sm font-semibold text-link underline underline-offset-4">Baca selengkapnya</a>
+      <div class="max-w-3xl space-y-4 leading-relaxed text-muted">
+        {about.map((p) => <p>{p}</p>)}
+      </div>
+      <a href="/perjalanan" class="mt-5 inline-block text-sm font-semibold text-link underline underline-offset-4">Lihat perjalanan saya</a>
     </div>
   </section>
 
@@ -85,7 +87,7 @@ const card = 'rounded-lg border border-slate-200 bg-white shadow-sm';
           <a href={h} class={`${card} group block p-6 transition hover:-translate-y-1 hover:border-accent hover:shadow-md`}>
             <p class="text-lg font-bold text-heading">{t}</p>
             <p class="mt-2 text-sm text-muted">{d}</p>
-            <span class="mt-5 block h-0.5 w-8 bg-accent transition-all duration-300 group-hover:w-14"></span>
+            <span class="mt-5 block h-0.5 w-8 bg-accent transition-all duration-300 group-hover:w-14" />
           </a>
         ))
       }
