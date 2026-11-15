@@ -1,12 +1,11 @@
 export const headerData = {
   links: [
     { text: 'Beranda', href: '/' },
-    { text: 'Tentang', href: '/tentang' },
     { text: 'Layanan', href: '/layanan' },
-    { text: 'Perjalanan', href: '/perjalanan' },
-    { text: 'Proyek', href: '/proyek' },
+    { text: 'Tentang saya', href: '/perjalanan' },
+    { text: 'Portofolio', href: '/proyek' },
     { text: 'Produk', href: '/produk' },
-    { text: 'Kontak', href: '/kontak' },
+    { text: 'Media Sosial', href: '/kontak' },
   ],
   actions: [],
 };
@@ -16,10 +15,9 @@ export const footerData = {
     {
       title: 'Halaman',
       links: [
-        { text: 'Tentang', href: '/tentang' },
         { text: 'Layanan', href: '/layanan' },
-        { text: 'Perjalanan', href: '/perjalanan' },
-        { text: 'Proyek', href: '/proyek' },
+        { text: 'Tentang saya', href: '/perjalanan' },
+        { text: 'Portofolio', href: '/proyek' },
         { text: 'Produk', href: '/produk' },
       ],
     },
