@@ -1,109 +1,45 @@
 ---
 import Layout from '~/layouts/PageLayout.astro';
-import { wrap, EMAIL } from '~/data/profil';
+import { wrap } from '~/data/profil';
 
 const metadata = { title: 'Saham Lokal' };
 ---
 
 <Layout metadata={metadata}>
-  <section class="bg-primary py-12 text-white sm:py-16">
+  <section class="bg-primary py-8 text-white sm:py-10">
     <div class={wrap}>
-      <h1 class="text-3xl font-extrabold tracking-tight sm:text-5xl">Saham Lokal</h1>
-      <p class="mt-3 max-w-2xl text-slate-300">
-        IHSG dan saham-saham besar di Bursa Efek Indonesia, dari data server Agus Budiono.
-      </p>
+      <h1 class="text-2xl font-extrabold tracking-tight sm:text-4xl">Saham Lokal</h1>
     </div>
   </section>
 
-  <section id="sk-band" hidden class="border-b border-white/10 bg-secondary text-white">
-    <div class="flex items-stretch">
-      <div class="flex shrink-0 items-center px-4 text-xs font-semibold uppercase tracking-widest text-accent">
-        Saham Lokal
-      </div>
-      <div id="sk-box" class="relative min-w-0 flex-1 overflow-hidden">
-        <div id="sk-track" class="sk-track flex w-max items-center py-3 text-sm"></div>
-      </div>
-      <button
-        id="sk-pause"
-        type="button"
-        aria-pressed="false"
-        class="shrink-0 px-4 text-xs font-semibold uppercase tracking-widest text-slate-300 transition hover:text-white"
-      >
-        Jeda
-      </button>
-    </div>
-  </section>
-
-  <section class="py-14 sm:py-16">
+  <section class="py-8 sm:py-10">
     <div class={wrap}>
-      <p id="sk-status" class="text-sm text-muted" role="status">Memuat data saham...</p>
-      <p id="sk-warn" hidden class="mt-2 text-sm font-semibold text-amber-700"></p>
-      <button
-        id="sk-retry"
-        type="button"
-        hidden
-        class="mt-3 rounded-md border border-primary px-4 py-2 text-sm font-semibold text-primary transition hover:bg-slate-50"
-      >
-        Coba lagi
-      </button>
-      <div id="sk-grid" class="mt-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-3"></div>
-      <p class="mt-8 max-w-3xl text-sm leading-relaxed text-muted">
-        Data ini bukan data waktu nyata dan bisa terlambat dari harga di bursa. Halaman ini hanya informasi, bukan
-        saran investasi.
-      </p>
-    </div>
-  </section>
-
-  <section class="bg-primary py-14 text-white sm:py-16">
-    <div class={`${wrap} flex flex-col items-start gap-6 md:flex-row md:items-center md:justify-between`}>
-      <div>
-        <h2 class="text-2xl font-bold sm:text-3xl">Ada pertanyaan?</h2>
-        <p class="mt-2 max-w-xl text-slate-300">Sampaikan lewat email.</p>
+      <div class="mx-auto max-w-2xl">
+        <p id="sk-status" class="text-xs text-muted" role="status">Memuat data saham...</p>
+        <p id="sk-warn" hidden class="mt-1 text-xs font-semibold text-amber-700"></p>
+        <button
+          id="sk-retry"
+          type="button"
+          hidden
+          class="mt-3 rounded-md border border-primary px-4 py-2 text-sm font-semibold text-primary transition hover:bg-slate-50"
+        >
+          Coba lagi
+        </button>
+        <div
+          id="sk-list"
+          class="mt-3 divide-y divide-slate-200 overflow-hidden rounded-lg border border-slate-200 border-t-2 border-t-accent bg-white shadow-sm"
+        >
+        </div>
       </div>
-      <a
-        href={`mailto:${EMAIL}`}
-        class="rounded-md bg-accent px-6 py-3 text-sm font-semibold text-primary transition hover:opacity-90"
-      >
-        Hubungi saya
-      </a>
     </div>
   </section>
 </Layout>
-
-<style is:global>
-  .sk-track {
-    animation: sk-geser var(--sk-d, 60s) linear infinite;
-  }
-  .sk-paused .sk-track {
-    animation-play-state: paused;
-  }
-  @keyframes sk-geser {
-    from {
-      transform: translateX(0);
-    }
-    to {
-      transform: translateX(-50%);
-    }
-  }
-  @media (prefers-reduced-motion: reduce) {
-    .sk-track {
-      animation: none;
-    }
-    #sk-box {
-      overflow-x: auto;
-    }
-  }
-</style>
 
 <script is:inline>
   (function () {
     var SUMBER = 'https://raw.githubusercontent.com/absr-localhost/data-web/main/saham.json';
     var BATAS_USANG = 3 * 24 * 3600 * 1000;
-    var band = document.getElementById('sk-band');
-    var box = document.getElementById('sk-box');
-    var track = document.getElementById('sk-track');
-    var pause = document.getElementById('sk-pause');
-    var grid = document.getElementById('sk-grid');
+    var list = document.getElementById('sk-list');
     var status = document.getElementById('sk-status');
     var warn = document.getElementById('sk-warn');
     var retry = document.getElementById('sk-retry');
@@ -112,8 +48,7 @@ const metadata = { title: 'Saham Lokal' };
     var data = null;
     var sibuk = false;
 
-    var GELAP = { up: 'text-emerald-400', dn: 'text-red-400', nt: 'text-slate-300' };
-    var TERANG = { up: 'text-emerald-700', dn: 'text-red-700', nt: 'text-slate-500' };
+    var WARNA = { up: 'text-emerald-700', dn: 'text-red-700', nt: 'text-slate-500' };
 
     function el(tag, cls, text) {
       var e = document.createElement(tag);
@@ -126,16 +61,18 @@ const metadata = { title: 'Saham Lokal' };
       if (typeof c !== 'number' || !isFinite(c) || Math.abs(c) < 0.005) return 'nt';
       return c > 0 ? 'up' : 'dn';
     }
-    function tanda(a) {
-      return a === 'up' ? '▲' : a === 'dn' ? '▼' : '■';
-    }
+
     function harga(x) {
       return x.k === 'IHSG' ? f2.format(x.p) : 'Rp ' + f0.format(x.p);
     }
-    function persen(c) {
-      if (typeof c !== 'number' || !isFinite(c)) return '';
-      return (c > 0 ? '+' : '') + f2.format(c) + '%';
+
+    function persen(x) {
+      if (typeof x.c !== 'number' || !isFinite(x.c)) return '';
+      var a = arah(x.c);
+      var t = a === 'up' ? '▲ +' : a === 'dn' ? '▼ ' : '';
+      return t + f2.format(x.c) + '%';
     }
+
     function waktu(ms) {
       return (
         new Date(ms).toLocaleString('id-ID', {
@@ -150,73 +87,45 @@ const metadata = { title: 'Saham Lokal' };
       );
     }
 
-    function gambarPita(list) {
-      track.innerHTML = '';
-      function satu() {
-        var frag = document.createDocumentFragment();
-        list.forEach(function (x) {
-          var a = arah(x.c);
-          var i = el('span', 'inline-flex items-center gap-2 whitespace-nowrap pr-8');
-          i.appendChild(el('b', '', x.k));
-          if (x.k !== 'IHSG' && x.n) i.appendChild(el('span', 'text-slate-300', x.n));
-          i.appendChild(el('span', '', harga(x)));
-          var p = persen(x.c);
-          if (p) {
-            i.appendChild(el('span', GELAP[a], p));
-            i.appendChild(el('span', GELAP[a], tanda(a)));
-          }
-          frag.appendChild(i);
-        });
-        return frag;
-      }
-      track.appendChild(satu());
-      track.appendChild(satu());
-      band.hidden = false;
-      requestAnimationFrame(function () {
-        var w = track.scrollWidth / 2;
-        track.style.setProperty('--sk-d', Math.max(30, w / 50) + 's');
-      });
-    }
-
-    function gambarKartu(list) {
-      grid.innerHTML = '';
-      list.forEach(function (x) {
-        var a = arah(x.c);
-        var k = el('div', 'rounded-lg border border-slate-200 border-t-2 border-t-accent bg-white p-6 shadow-sm');
-        k.appendChild(el('p', 'text-sm font-semibold uppercase tracking-widest text-muted', x.k));
-        k.appendChild(el('h3', 'mt-1 text-lg font-bold text-heading', x.k === 'IHSG' ? 'Indeks Harga Saham Gabungan' : x.n || x.k));
-        k.appendChild(el('p', 'mt-4 text-3xl font-bold text-heading', harga(x)));
-        var p = persen(x.c);
-        k.appendChild(el('p', 'mt-2 text-sm font-semibold ' + TERANG[a], p ? tanda(a) + ' ' + p : 'Perubahan belum tersedia'));
-        grid.appendChild(k);
+    function gambar(items) {
+      list.innerHTML = '';
+      items.forEach(function (x) {
+        var baris = el('div', 'flex items-center justify-between gap-3 px-4 py-3' + (x.k === 'IHSG' ? ' bg-slate-50' : ''));
+        var kiri = el('div', 'min-w-0');
+        kiri.appendChild(el('p', 'text-sm font-bold text-heading', x.k));
+        kiri.appendChild(el('p', 'truncate text-xs text-muted', x.k === 'IHSG' ? 'Indeks Harga Saham Gabungan' : x.n || ''));
+        var kanan = el('div', 'shrink-0 text-right');
+        kanan.appendChild(el('p', 'text-sm font-semibold text-heading', harga(x)));
+        kanan.appendChild(el('p', 'text-xs font-semibold ' + WARNA[arah(x.c)], persen(x)));
+        baris.appendChild(kiri);
+        baris.appendChild(kanan);
+        list.appendChild(baris);
       });
     }
 
     function tampil() {
-      var list = (data.stocks || []).filter(function (x) {
+      var items = (data.stocks || []).filter(function (x) {
         return x && x.k && typeof x.p === 'number' && isFinite(x.p);
       });
-      if (!list.length) throw new Error('kosong');
+      if (!items.length) throw new Error('kosong');
       var ms = Number(data.updated) * 1000;
       var ada = isFinite(ms) && ms > 0;
       status.textContent = ada
-        ? 'Diperbarui ' + waktu(ms) + ' · sumber: server data Agus Budiono · bukan data waktu nyata'
-        : 'Waktu pembaruan data tidak diketahui · sumber: server data Agus Budiono';
+        ? 'Sumber: server data Agus Budiono · Diperbarui ' + waktu(ms)
+        : 'Sumber: server data Agus Budiono';
       if (ada && Date.now() - ms > BATAS_USANG) {
-        warn.textContent = 'Data belum diperbarui sejak ' + waktu(ms) + '. Angka di bawah mungkin sudah tidak sesuai.';
+        warn.textContent = 'Data belum diperbarui sejak ' + waktu(ms) + '.';
         warn.hidden = false;
       } else {
         warn.hidden = true;
       }
       retry.hidden = true;
-      gambarPita(list);
-      gambarKartu(list);
+      gambar(items);
     }
 
     function muat() {
       if (sibuk) return;
       sibuk = true;
-      if (!data) status.textContent = 'Memuat data saham...';
       fetch(SUMBER + '?t=' + Math.floor(Date.now() / 120000), { cache: 'no-store' })
         .then(function (r) {
           if (!r.ok) throw new Error('HTTP ' + r.status);
@@ -232,7 +141,7 @@ const metadata = { title: 'Saham Lokal' };
             warn.textContent = 'Pembaruan terbaru gagal. Yang tampil adalah data sebelumnya.';
             warn.hidden = false;
           } else {
-            status.textContent = 'Data saham belum bisa dimuat. Periksa koneksi Anda, lalu coba lagi.';
+            status.textContent = 'Data saham belum bisa dimuat.';
             retry.hidden = false;
           }
         })
@@ -241,11 +150,6 @@ const metadata = { title: 'Saham Lokal' };
         });
     }
 
-    pause.addEventListener('click', function () {
-      var j = box.parentNode.parentNode.classList.toggle('sk-paused');
-      pause.setAttribute('aria-pressed', String(j));
-      pause.textContent = j ? 'Lanjut' : 'Jeda';
-    });
     retry.addEventListener('click', muat);
     setInterval(function () {
       if (!document.hidden) muat();
