@@ -77,13 +77,12 @@ const grouped = groups.map(([title, names]) => ({
 
   <section id="layanan" class="scroll-mt-24 py-14 sm:py-16">
     <div class={wrap}>
-      <h2 class="mb-6 text-2xl font-bold text-heading">Layanan</h2>
+      <h2 class="mb-8 text-2xl font-bold text-heading">Layanan</h2>
       <div class="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
         {
-          services.map((s, i) => (
-            <div class={`${card} border-t-2 border-t-accent p-6`}>
-              <p class="text-sm font-semibold text-link">{String(i + 1).padStart(2, '0')}</p>
-              <p class="mt-2 text-base font-bold leading-snug text-heading">{s}</p>
+          services.map((s) => (
+            <div class={`${card} p-5`}>
+              <p class="font-bold text-heading">{s}</p>
             </div>
           ))
         }
