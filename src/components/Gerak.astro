@@ -1,0 +1,92 @@
+<style is:global>
+  /* Kartu muncul pelan saat digulir. Kelas .gerak hanya dipasang oleh skrip, dan dilepas lagi setelah selesai. */
+  .gerak {
+    opacity: 0;
+    transform: translateY(14px);
+    transition:
+      opacity 0.5s ease,
+      transform 0.5s ease;
+  }
+  .gerak.gerak-tampil {
+    opacity: 1;
+    transform: none;
+  }
+
+  /* Kartu biasa (tidak bisa diklik): bayangan halus saat disorot */
+  @media (hover: hover) {
+    main .rounded-lg.border.border-slate-200.bg-white.shadow-sm:not([class*='hover:']):not(:has(#uni-log)) {
+      transition: box-shadow 0.2s ease;
+    }
+    main .rounded-lg.border.border-slate-200.bg-white.shadow-sm:not([class*='hover:']):not(:has(#uni-log)):hover {
+      box-shadow: 0 10px 24px -14px rgb(11 37 69 / 0.28);
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .gerak {
+      opacity: 1 !important;
+      transform: none !important;
+      transition: none !important;
+    }
+  }
+</style>
+
+<script is:inline>
+  (function () {
+    function init() {
+      if (document.body.getAttribute('data-gerak')) return;
+      document.body.setAttribute('data-gerak', '1');
+      if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+      if (!('IntersectionObserver' in window)) return;
+
+      var sel = 'main .rounded-lg.border.border-slate-200.bg-white.shadow-sm';
+      var vh = window.innerHeight;
+      var items = Array.prototype.filter.call(document.querySelectorAll(sel), function (e) {
+        return e.offsetParent !== null && e.getBoundingClientRect().top > vh * 0.92;
+      });
+      if (!items.length) return;
+
+      function selesai(e) {
+        e.classList.remove('gerak', 'gerak-tampil');
+        e.style.transitionDelay = '';
+      }
+
+      var io = new IntersectionObserver(
+        function (entries) {
+          entries.forEach(function (en) {
+            if (!en.isIntersecting) return;
+            var e = en.target;
+            io.unobserve(e);
+            e.classList.add('gerak-tampil');
+            var d = parseFloat(e.style.transitionDelay) || 0;
+            var done = false;
+            function akhir() {
+              if (done) return;
+              done = true;
+              selesai(e);
+            }
+            e.addEventListener('transitionend', function (ev) {
+              if (ev.target === e && ev.propertyName === 'opacity') akhir();
+            });
+            setTimeout(akhir, 800 + d);
+          });
+        },
+        { rootMargin: '0px 0px -8% 0px', threshold: 0.05 }
+      );
+
+      var hitung = new Map();
+      items.forEach(function (e) {
+        var p = e.parentElement;
+        var n = hitung.get(p) || 0;
+        hitung.set(p, n + 1);
+        e.style.transitionDelay = Math.min(n % 4, 3) * 70 + 'ms';
+        e.classList.add('gerak');
+        io.observe(e);
+      });
+    }
+
+    if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', init);
+    else init();
+    document.addEventListener('astro:page-load', init);
+  })();
+</script>
