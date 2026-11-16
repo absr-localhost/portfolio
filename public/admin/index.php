@@ -6,6 +6,7 @@ const DATA = __DIR__ . '/data';
 const VID = __DIR__ . '/video';
 const MAXB = 19 * 1024 * 1024;
 const MAXD = 30.5;
+const MAXN = 12;
 
 $deny = "<IfModule mod_authz_core.c>\nRequire all denied\n</IfModule>\n<IfModule !mod_authz_core.c>\nDeny from all\n</IfModule>\n";
 $noexec = "<FilesMatch \"\\.(php|phtml|phar|pl|py|cgi|sh)\$\">\n" . $deny . "</FilesMatch>\n";
@@ -32,18 +33,37 @@ function simpan(string $f, array $a): void
 {
     file_put_contents($f, "<?php\nreturn " . var_export($a, true) . ";\n", LOCK_EX);
 }
-function baca_video(): array
+function baca_daftar(): array
 {
     $f = VID . '/video.json';
     if (!is_file($f)) {
         return [];
     }
     $j = json_decode((string)file_get_contents($f), true);
-    return is_array($j) ? $j : [];
+    if (!is_array($j)) {
+        return [];
+    }
+    if (isset($j['daftar']) && is_array($j['daftar'])) {
+        return array_values($j['daftar']);
+    }
+    if (!empty($j['video'])) {
+        $j['id'] = substr((string)$j['video'], 2, 16);
+        return [$j];
+    }
+    return [];
 }
-function tulis_video(array $a): void
+function tulis_daftar(array $d): void
 {
-    file_put_contents(VID . '/video.json', json_encode($a, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES), LOCK_EX);
+    file_put_contents(VID . '/video.json', json_encode(['daftar' => array_values($d)], JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES), LOCK_EX);
+}
+function cari(array $d, string $id): int
+{
+    foreach ($d as $i => $v) {
+        if (($v['id'] ?? '') === $id) {
+            return $i;
+        }
+    }
+    return -1;
 }
 function hapus_berkas(array $v): void
 {
@@ -73,6 +93,11 @@ function bersih_waktu(string $s): string
     $d = DateTime::createFromFormat('Y-m-d\TH:i', $s);
     return ($d && $d->format('Y-m-d\TH:i') === $s) ? $s : date('Y-m-d\TH:i');
 }
+function btn(string $csrf, string $act, string $id, string $label, string $cls = '', string $ask = ''): string
+{
+    $on = $ask !== '' ? ' onsubmit="return confirm(\'' . h($ask) . '\')"' : '';
+    return '<form method="post"' . $on . '><input type="hidden" name="csrf" value="' . h($csrf) . '"><input type="hidden" name="action" value="' . h($act) . '"><input type="hidden" name="id" value="' . h($id) . '"><button class="' . h($cls) . '" type="submit">' . h($label) . '</button></form>';
+}
 
 siapkan(DATA, $deny);
 siapkan(DATA . '/sess', $deny);
@@ -97,7 +122,6 @@ $auth = muat(DATA . '/auth.php');
 $belumAtur = empty($auth['hash']);
 $csrf = $_SESSION['csrf'] ??= bin2hex(random_bytes(16));
 $err = '';
-$info = '';
 $post = $_SERVER['REQUEST_METHOD'] === 'POST';
 
 if ($post && empty($_POST) && (int)($_SERVER['CONTENT_LENGTH'] ?? 0) > 0) {
@@ -159,6 +183,10 @@ if ($act === 'upload') {
     if (!$masuk) {
         json_out(['err' => 'Belum masuk.'], 401);
     }
+    $dl = baca_daftar();
+    if (count($dl) >= MAXN) {
+        json_out(['err' => 'Sudah ' . MAXN . ' video. Hapus salah satu dulu.'], 400);
+    }
     $v = $_FILES['video'] ?? null;
     $c = $_FILES['sampul'] ?? null;
     if (!$v || $v['error'] !== UPLOAD_ERR_OK || !is_uploaded_file($v['tmp_name'])) {
@@ -192,9 +220,9 @@ if ($act === 'upload') {
     if (!move_uploaded_file($v['tmp_name'], VID . '/' . $nv) || !move_uploaded_file($c['tmp_name'], VID . '/' . $nc)) {
         json_out(['err' => 'Gagal menyimpan berkas di server.'], 500);
     }
-    $lama = baca_video();
-    tulis_video([
-        'aktif' => $lama ? (bool)($lama['aktif'] ?? true) : true,
+    array_unshift($dl, [
+        'id' => $id,
+        'aktif' => true,
         'judul' => bersih_judul((string)($_POST['judul'] ?? '')),
         'deskripsi' => bersih_desk((string)($_POST['deskripsi'] ?? '')),
         'waktu' => bersih_waktu((string)($_POST['waktu'] ?? '')),
@@ -206,32 +234,40 @@ if ($act === 'upload') {
         'ukuran' => (int)filesize(VID . '/' . $nv),
         'diperbarui' => date('Y-m-d H:i'),
     ]);
-    hapus_berkas($lama);
+    tulis_daftar($dl);
     json_out(['ok' => true]);
 }
 
-if ($masuk && in_array($act, ['toggle', 'info', 'hapus'], true)) {
-    $vd = baca_video();
-    if ($vd) {
+if ($masuk && in_array($act, ['toggle', 'info', 'hapus', 'naik', 'turun'], true)) {
+    $id = (string)($_POST['id'] ?? '');
+    $dl = baca_daftar();
+    $i = preg_match('/^[a-f0-9]{16}$/', $id) ? cari($dl, $id) : -1;
+    if ($i >= 0) {
         if ($act === 'toggle') {
-            $vd['aktif'] = empty($vd['aktif']);
-            tulis_video($vd);
+            $dl[$i]['aktif'] = empty($dl[$i]['aktif']);
         } elseif ($act === 'info') {
-            $vd['judul'] = bersih_judul((string)($_POST['judul'] ?? ''));
-            $vd['deskripsi'] = bersih_desk((string)($_POST['deskripsi'] ?? ''));
-            $vd['waktu'] = bersih_waktu((string)($_POST['waktu'] ?? ''));
-            tulis_video($vd);
-        } else {
-            hapus_berkas($vd);
-            tulis_video([]);
+            $dl[$i]['judul'] = bersih_judul((string)($_POST['judul'] ?? ''));
+            $dl[$i]['deskripsi'] = bersih_desk((string)($_POST['deskripsi'] ?? ''));
+            $dl[$i]['waktu'] = bersih_waktu((string)($_POST['waktu'] ?? ''));
+        } elseif ($act === 'hapus') {
+            hapus_berkas($dl[$i]);
+            array_splice($dl, $i, 1);
+        } elseif ($act === 'naik' && $i > 0) {
+            [$dl[$i - 1], $dl[$i]] = [$dl[$i], $dl[$i - 1]];
+        } elseif ($act === 'turun' && $i < count($dl) - 1) {
+            [$dl[$i + 1], $dl[$i]] = [$dl[$i], $dl[$i + 1]];
         }
+        tulis_daftar($dl);
     }
     header('Location: ./');
     exit;
 }
 
-$vd = baca_video();
-$ada = !empty($vd['video']) && is_file(VID . '/' . $vd['video']);
+$daftar = baca_daftar();
+$total = 0;
+foreach ($daftar as $it) {
+    $total += (int)($it['ukuran'] ?? 0);
+}
 ?>
 <!doctype html>
 <html lang="id">
@@ -259,10 +295,12 @@ button.x{background:#fff;color:#b91c1c;border:1px solid #b91c1c}
 button.o{background:#fff;color:#0B2545;border:1px solid #0B2545}
 .row{display:flex;gap:8px;flex-wrap:wrap;margin-top:8px}
 .e{background:#fef2f2;color:#991b1b;border:1px solid #fecaca;border-radius:6px;padding:10px;margin-bottom:14px}
-video{display:block;max-width:100%;max-height:340px;margin:0 auto 10px;background:#000;border-radius:6px}
+video{display:block;max-width:100%;max-height:260px;margin:0 auto 10px;background:#000;border-radius:6px}
 progress{width:100%;height:10px}
 .st{font-size:13px;color:#4A5568;margin:0}
 .st b{color:#1f2937}
+.it{border:1px solid #e2e8f0;border-radius:8px;padding:10px;margin-bottom:10px}
+details summary{cursor:pointer;margin-top:10px;font-size:14px;color:#0B2545}
 </style>
 </head>
 <body>
@@ -302,43 +340,51 @@ progress{width:100%;height:10px}
 
 <?php else: ?>
 <div class="c">
-<h2>Video saat ini</h2>
-<?php if ($ada): ?>
-<video controls playsinline preload="metadata" poster="video/<?= h($vd['sampul']) ?>" src="video/<?= h($vd['video']) ?>"></video>
-<p class="st">
-<b><?= !empty($vd['aktif']) ? 'Tampil di beranda' : 'Disembunyikan' ?></b><br>
-Durasi <?= h($vd['durasi']) ?> detik, <?= ($vd['tinggi'] > $vd['lebar']) ? 'tegak' : 'mendatar' ?> (<?= h($vd['lebar']) ?>x<?= h($vd['tinggi']) ?>), <?= h(round(($vd['ukuran'] ?? 0) / 1048576, 1)) ?> MB<br>
-Diperbarui <?= h($vd['diperbarui'] ?? '-') ?>
-</p>
-<div class="row">
-<form method="post"><input type="hidden" name="csrf" value="<?= h($csrf) ?>"><input type="hidden" name="action" value="toggle"><button type="submit"><?= !empty($vd['aktif']) ? 'Nonaktifkan' : 'Aktifkan' ?></button></form>
-<form method="post" onsubmit="return confirm('Hapus video ini dari server?')"><input type="hidden" name="csrf" value="<?= h($csrf) ?>"><input type="hidden" name="action" value="hapus"><button class="x" type="submit">Hapus</button></form>
-</div>
-<?php else: ?>
+<h2>Daftar video (<?= count($daftar) ?> dari <?= MAXN ?>)</h2>
+<p class="st">Urutan di sini sama dengan urutan di beranda. Total <?= h(round($total / 1048576, 1)) ?> MB.</p>
+<?php if (!$daftar): ?>
 <p class="m">Belum ada video.</p>
 <?php endif; ?>
+<?php foreach ($daftar as $i => $it): ?>
+<div class="it" style="margin-top:10px">
+<video controls playsinline preload="none" poster="video/<?= h($it['sampul']) ?>" src="video/<?= h($it['video']) ?>"></video>
+<p class="st"><b><?= h(($it['judul'] ?? '') !== '' ? $it['judul'] : 'Tanpa judul') ?></b><br>
+<?= !empty($it['aktif']) ? 'Tampil di beranda' : 'Disembunyikan' ?><br>
+<?= h($it['durasi']) ?> detik, <?= ($it['tinggi'] > $it['lebar']) ? 'tegak' : 'mendatar' ?>, <?= h(round(($it['ukuran'] ?? 0) / 1048576, 1)) ?> MB, <?= h($it['diperbarui'] ?? '-') ?></p>
+<div class="row">
+<?= btn($csrf, 'toggle', $it['id'], !empty($it['aktif']) ? 'Nonaktifkan' : 'Aktifkan') ?>
+<?php if ($i > 0): ?><?= btn($csrf, 'naik', $it['id'], 'Naik', 'o') ?><?php endif; ?>
+<?php if ($i < count($daftar) - 1): ?><?= btn($csrf, 'turun', $it['id'], 'Turun', 'o') ?><?php endif; ?>
+<?= btn($csrf, 'hapus', $it['id'], 'Hapus', 'x', 'Hapus video ini dari server?') ?>
 </div>
-
-<div class="c">
-<h2>Detail video</h2>
-<form method="post">
-<input type="hidden" name="csrf" value="<?= h($csrf) ?>"><input type="hidden" name="action" value="info">
+<details>
+<summary>Ubah judul, deskripsi, tanggal</summary>
+<form method="post" style="margin-top:8px">
+<input type="hidden" name="csrf" value="<?= h($csrf) ?>"><input type="hidden" name="action" value="info"><input type="hidden" name="id" value="<?= h($it['id']) ?>">
 <label>Judul</label>
-<input type="text" name="judul" id="j" maxlength="80" value="<?= h($vd['judul'] ?? '') ?>">
+<input type="text" name="judul" maxlength="80" value="<?= h($it['judul'] ?? '') ?>">
 <label>Deskripsi singkat</label>
-<textarea name="deskripsi" id="ds" maxlength="200" rows="3"><?= h($vd['deskripsi'] ?? '') ?></textarea>
+<textarea name="deskripsi" maxlength="200" rows="3"><?= h($it['deskripsi'] ?? '') ?></textarea>
 <label>Tanggal dan waktu</label>
-<input type="datetime-local" name="waktu" id="wk" value="<?= h($vd['waktu'] ?? date('Y-m-d\TH:i')) ?>">
-<?php if ($ada): ?>
-<button class="o" type="submit">Simpan detail</button>
-<?php else: ?>
-<p class="m">Detail ini ikut tersimpan saat video diunggah.</p>
-<?php endif; ?>
+<input type="datetime-local" name="waktu" value="<?= h($it['waktu'] ?? date('Y-m-d\TH:i')) ?>">
+<button class="o" type="submit">Simpan</button>
 </form>
+</details>
+</div>
+<?php endforeach; ?>
 </div>
 
 <div class="c">
-<h2><?= $ada ? 'Ganti video' : 'Unggah video' ?></h2>
+<h2>Tambah video</h2>
+<?php if (count($daftar) >= MAXN): ?>
+<p class="m">Sudah <?= MAXN ?> video. Hapus salah satu dulu.</p>
+<?php else: ?>
+<label>Judul</label>
+<input type="text" id="j" maxlength="80">
+<label>Deskripsi singkat</label>
+<textarea id="ds" maxlength="200" rows="3"></textarea>
+<label>Tanggal dan waktu</label>
+<input type="datetime-local" id="wk" value="<?= h(date('Y-m-d\TH:i')) ?>">
 <p class="m">MP4, 30 detik atau kurang, maksimal 19 MB. Setelah dipilih, geser untuk menentukan bingkai yang jadi gambar sampul.</p>
 <input type="file" id="f" accept="video/mp4">
 <canvas id="cvs" hidden></canvas>
@@ -346,6 +392,7 @@ Diperbarui <?= h($vd['diperbarui'] ?? '-') ?>
 <p class="st" id="pesan"></p>
 <progress id="pg" value="0" max="100" hidden></progress>
 <div class="row"><button type="button" id="kirim" disabled>Unggah</button></div>
+<?php endif; ?>
 </div>
 
 <div class="c">
@@ -354,6 +401,7 @@ Diperbarui <?= h($vd['diperbarui'] ?? '-') ?>
 <p class="st">Pengecekan durasi dilakukan di browser. Cukup untuk pemilik, bukan penjaga ketat.</p>
 </div>
 
+<?php if (count($daftar) < MAXN): ?>
 <script>
 (function () {
   var CSRF = <?= json_encode($csrf) ?>;
@@ -366,7 +414,7 @@ Diperbarui <?= h($vd['diperbarui'] ?? '-') ?>
   function fail() { say('Video tidak bisa diperiksa browser. Coba MP4 H.264.'); }
 
   function draw() {
-    var w = Math.min(960, meta.w), h = Math.round(meta.h * w / meta.w);
+    var w = Math.min(720, meta.w), h = Math.round(meta.h * w / meta.w);
     cv.width = w; cv.height = h;
     cv.getContext('2d').drawImage(vid, 0, 0, w, h);
     cv.hidden = false; sl.hidden = false; b.disabled = false;
@@ -436,6 +484,7 @@ Diperbarui <?= h($vd['diperbarui'] ?? '-') ?>
   });
 })();
 </script>
+<?php endif; ?>
 <?php endif; ?>
 </main>
 </body>
