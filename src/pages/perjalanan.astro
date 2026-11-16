@@ -1,46 +1,132 @@
 ---
 import Layout from '~/layouts/PageLayout.astro';
-import { wrap, timeline } from '~/data/profil';
+import { Icon } from 'astro-icon/components';
+import { wrap, card, EMAIL, stats } from '~/data/profil';
 
-const metadata = { title: 'Perjalanan' };
+const metadata = { title: 'Tentang saya' };
+
+const jejak: [string, string, string][] = [
+  ['2017', 'Mulai belajar dasar pemrograman', 'Titik awal ketertarikan pada dunia IT.'],
+  ['2018', 'Aplikasi Android dan website pertama', 'Fokus pada logika dasar dan antarmuka pengguna.'],
+  ['2019', 'Otomasi administrasi dengan VBA', 'Mulai membantu pekerjaan administratif berulang.'],
+  ['2020', 'Sistem absensi dan aplikasi pendidikan', 'Absensi murid dan guru, hingga aplikasi rapor sekolah.'],
+  ['2021', 'Jaringan, server, dan dukungan teknis', 'Menangani helpdesk, administrasi sistem, dan keamanan dasar.'],
+  [
+    '2022',
+    'Full-stack, Power Platform, dan pemantauan keamanan',
+    'Aplikasi web terpadu, alur kerja dengan sedikit kode, dan pemantauan informasi yang terbuka untuk umum.',
+  ],
+  [
+    '2023',
+    'Pengujian keamanan berizin dan analisis malware',
+    'Audit celah keamanan serta riset pertahanan di lingkungan uji yang terisolasi.',
+  ],
+  ['2024-2026', 'Konsultan IT dan pendiri produk mandiri', 'Menangani proyek menyeluruh dari kebutuhan hingga perawatan.'],
+];
+
+const prinsip: [string, string][] = [
+  ['Bahasa yang mudah dipahami', 'Hal teknis dijelaskan dengan bahasa yang bisa dipahami siapa pun.'],
+  ['Keamanan dengan izin', 'Pengujian hanya dengan izin tertulis, dan analisis malware hanya di lingkungan uji yang terisolasi.'],
+  ['Teknologi yang benar-benar dipakai', 'Hasil kerja dirancang untuk dipakai sehari-hari, bukan berhenti di tahap demo.'],
+];
+
+const btnMain =
+  'inline-flex items-center justify-center gap-2 rounded-md bg-accent px-5 py-3 text-sm font-semibold text-primary shadow-sm transition hover:opacity-90 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white';
 ---
 
 <Layout metadata={metadata}>
   <section class="bg-primary py-12 text-white sm:py-16">
     <div class={wrap}>
-      <h1 class="text-3xl font-extrabold tracking-tight sm:text-5xl">Perjalanan</h1>
-      <p class="mt-3 max-w-2xl text-slate-300">Jejak karier dari tahun ke tahun.</p>
+      <h1 class="text-2xl font-bold tracking-tight">Tentang saya</h1>
     </div>
   </section>
 
-  <section class="py-14 sm:py-16">
-    <div class={wrap}>
-      <ol class="max-w-3xl divide-y divide-slate-200 border-y border-slate-200">
-        {
-          timeline.map(([y, t, d]) => (
-            <li class="grid gap-1 py-6 sm:grid-cols-[8rem_1fr] sm:gap-8">
-              <div class="text-2xl font-extrabold tracking-tight text-primary">{y}</div>
+  <section class="py-10 sm:py-12">
+    <div class={`${wrap} grid items-start gap-8 lg:grid-cols-5`}>
+      <div class="space-y-8 lg:col-span-2">
+        <div>
+          <h2 class="mb-5 text-xl font-bold text-heading">Profil</h2>
+          <div class={`${card} p-4`}>
+            <div class="flex items-center gap-4">
+              <img
+                src="/pk-3.webp"
+                alt="Agus Budiono"
+                width="80"
+                height="80"
+                loading="lazy"
+                class="h-20 w-20 shrink-0 rounded-lg object-cover object-top"
+              />
               <div>
-                <div class="text-lg font-semibold text-heading">{t}</div>
-                <div class="mt-1 text-muted">{d}</div>
+                <p class="text-base font-bold text-heading">Agus Budiono, S.Pd.</p>
+                <p class="mt-0.5 text-sm text-muted">IT Specialist dan Full-Stack Developer</p>
               </div>
-            </li>
-          ))
-        }
-      </ol>
+            </div>
+            <p class="mt-4 text-sm leading-relaxed text-default">
+              Profesional teknologi informasi dari Sumatera Selatan yang menekuni dunia IT sejak 2017. Saya bekerja lintas disiplin:
+              pengembangan full-stack, administrasi sistem dan jaringan, dukungan teknis, konsultasi IT, otomasi (VBA dan Power
+              Platform), multimedia, serta keamanan siber. Latar belakang pendidikan (S.Pd.) membuat saya terbiasa menjelaskan hal
+              teknis dengan bahasa yang mudah dipahami oleh siapa pun.
+            </p>
+            <p class="mt-3 text-sm leading-relaxed text-default">
+              Hingga kini saya telah menyelesaikan {stats[1].n} proyek dan pekerjaan, dan siap bergabung dalam tim sebagai Full-Stack
+              Developer, SysAdmin, maupun spesialis keamanan, atau bekerja mandiri sebagai konsultan dan pendiri produk.
+            </p>
+          </div>
+        </div>
+
+        <div>
+          <h2 class="mb-5 text-xl font-bold text-heading">Cara saya bekerja</h2>
+          <div class={`${card} overflow-hidden`}>
+            <ul class="divide-y divide-slate-200">
+              {
+                prinsip.map(([judul, isi], i) => (
+                  <li class="flex items-start gap-3 px-4 py-3">
+                    <span class="inline-flex h-9 w-9 shrink-0 items-center justify-center rounded-md bg-primary text-white">
+                      {i === 0 && <Icon name="tabler:message-circle" class="h-5 w-5" />}
+                      {i === 1 && <Icon name="tabler:shield-check" class="h-5 w-5" />}
+                      {i === 2 && <Icon name="tabler:rocket" class="h-5 w-5" />}
+                    </span>
+                    <div>
+                      <h3 class="text-sm font-semibold text-heading">{judul}</h3>
+                      <p class="mt-0.5 text-sm leading-relaxed text-muted">{isi}</p>
+                    </div>
+                  </li>
+                ))
+              }
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <div class="lg:col-span-3">
+        <h2 class="mb-5 text-xl font-bold text-heading">Perjalanan</h2>
+        <div class={`${card} overflow-hidden`}>
+          <ol class="divide-y divide-slate-200">
+            {
+              jejak.map(([tahun, judul, isi]) => (
+                <li class="flex gap-4 px-4 py-3">
+                  <div class="w-20 shrink-0 text-sm font-bold text-primary">{tahun}</div>
+                  <div>
+                    <h3 class="text-sm font-semibold text-heading">{judul}</h3>
+                    <p class="mt-0.5 text-sm leading-relaxed text-muted">{isi}</p>
+                  </div>
+                </li>
+              ))
+            }
+          </ol>
+        </div>
+      </div>
     </div>
   </section>
 
-  <section class="bg-primary py-12 text-white sm:py-14">
-    <div class={`${wrap} flex flex-col items-start justify-between gap-6 sm:flex-row sm:items-center`}>
+  <section class="bg-primary py-12 text-white sm:py-16">
+    <div class={`${wrap} flex flex-col items-start gap-6 md:flex-row md:items-center md:justify-between`}>
       <div>
-        <h2 class="text-2xl font-bold tracking-tight sm:text-3xl">Punya kebutuhan IT yang ingin dibahas</h2>
-        <p class="mt-2 max-w-xl text-slate-300">Ceritakan kebutuhan Anda, saya akan membalas lewat email atau Telegram.</p>
+        <h2 class="text-xl font-bold">Butuh bantuan IT?</h2>
+        <p class="mt-2 max-w-xl text-sm text-slate-300">Ceritakan kebutuhan Anda lewat email.</p>
       </div>
-      <a
-        href="/kontak"
-        class="inline-block rounded-md bg-accent px-6 py-3 text-sm font-semibold text-primary hover:opacity-90"
-      >
+      <a href={`mailto:${EMAIL}`} class={btnMain}>
+        <Icon name="tabler:mail" class="h-5 w-5" />
         Hubungi saya
       </a>
     </div>
