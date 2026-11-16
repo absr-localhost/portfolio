@@ -23,16 +23,18 @@ export interface Proyek {
 
 export const projects: Proyek[] = [
   {
-    judul: 'Sistem absensi digital berbasis kode QR',
+    judul: 'Sistem absensi digital dan kartu pelajar berkode QR',
     tahun: '2023',
     untuk: 'sebuah sekolah',
-    ringkasan: 'Kehadiran siswa tercatat otomatis hanya dengan memindai kartu pelajar.',
-    sebelum: 'Absensi dicatat manual di banyak buku, sehingga rekap kehadiran memakan waktu.',
-    sekarang: 'Siswa memindai kode QR pada kartu pelajar. Data kehadiran langsung masuk ke spreadsheet.',
+    ringkasan: 'Kartu pelajar berkode QR yang mencatat kehadiran siswa secara otomatis.',
+    sebelum:
+      'Sekolah belum memiliki kartu pelajar, dan absensi dicatat manual di banyak buku sehingga rekap kehadiran memakan waktu.',
+    sekarang:
+      'Setiap siswa memiliki kartu pelajar dengan kode QR sendiri. Cukup dipindai, kehadiran langsung masuk ke spreadsheet.',
     hasil: [
+      { judul: 'ID pribadi', isi: 'Setiap siswa memiliki kartu pelajar dengan ID sendiri.' },
       { judul: 'Data terpusat', isi: 'Kehadiran terkumpul otomatis di satu spreadsheet.' },
-      { judul: 'Rekap lebih cepat', isi: 'Rekap tidak perlu diinput ulang.' },
-      { judul: 'Siap cetak', isi: 'Laporan dapat dicetak kapan saja.' },
+      { judul: 'Rekap siap cetak', isi: 'Rekap tidak perlu diinput ulang dan laporan dapat dicetak kapan saja.' },
     ],
     alat: [
       {
@@ -55,19 +57,6 @@ export const projects: Proyek[] = [
         fungsi: 'Menyimpan data kehadiran sebagai dasar rekap.',
         gambar: '/gambar/absensi-sheets.webp',
       },
-    ],
-    status: 'Masih digunakan hingga sekarang.',
-  },
-  {
-    judul: 'Desain kartu pelajar dengan kode QR',
-    tahun: '2023',
-    untuk: 'sebuah sekolah',
-    ringkasan: 'Setiap siswa memiliki kartu dengan ID sendiri yang dapat dipakai untuk absensi digital.',
-    sebelum: 'Sekolah belum memiliki kartu pelajar.',
-    sekarang: 'Setiap kartu memuat kode QR yang menjadi bagian dari sistem absensi digital.',
-    hasil: [
-      { judul: 'ID pribadi', isi: 'Setiap siswa memiliki kartu dengan ID sendiri.' },
-      { judul: 'Terhubung ke absensi', isi: 'Kartu dapat langsung dipakai untuk absensi digital.' },
     ],
     status: 'Masih digunakan hingga sekarang.',
   },
