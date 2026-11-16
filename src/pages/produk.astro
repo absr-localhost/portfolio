@@ -8,32 +8,28 @@ const metadata = {
 ---
 
 <Layout metadata={metadata}>
-  <section class={`${wrap} py-12`}>
-    <p class="text-sm font-semibold uppercase tracking-widest">Rekomendasi</p>
-    <h1 class="mt-2 text-4xl font-bold tracking-tight">AGB STORE</h1>
-    <p class="mt-1 text-neutral-500">Agus Budiono – Produk Digital Marketing</p>
-    <p class="mt-4 max-w-3xl text-neutral-600 dark:text-neutral-300">
-      Rekomendasi &amp; inspirasi produk terbaik by AGB STORE. Produk berkualitas, viral, dan paling worth it untuk
-      kebutuhan Anda. Dapatkan info promo, diskon, dan link pembelian toko tepercaya di bawah ini.
-    </p>
+  <section class="bg-primary py-12 text-white sm:py-16">
+    <div class={wrap}>
+      <p class="text-sm font-semibold uppercase tracking-widest text-slate-300">Rekomendasi</p>
+      <h1 class="mt-2 text-2xl font-bold tracking-tight sm:text-4xl">AGB STORE</h1>
+      <p class="mt-1 text-slate-300">Agus Budiono - Produk Digital Marketing</p>
+    </div>
+  </section>
 
-    <div id="pFilters" class="mt-8 flex flex-wrap gap-2" role="group" aria-label="Filter platform"></div>
-    <div id="pGrid" class="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-      <p class="col-span-full text-neutral-500">Memuat produk…</p>
+  <section class="bg-slate-50 py-8 sm:py-10">
+    <div class={wrap}>
+      <p class="max-w-3xl text-sm text-muted">
+        Rekomendasi &amp; inspirasi produk terbaik by AGB STORE. Produk berkualitas, viral, dan paling worth it untuk
+        kebutuhan Anda. Dapatkan info promo, diskon, dan link pembelian toko tepercaya di bawah ini.
+      </p>
+
+      <div id="pFilters" class="mt-5 flex flex-wrap gap-2" role="group" aria-label="Filter platform"></div>
+      <div id="pGrid" class="mt-5 grid grid-cols-2 gap-3 lg:grid-cols-4">
+        <p class="col-span-full text-sm text-muted">Memuat produk…</p>
+      </div>
     </div>
   </section>
 </Layout>
-
-<style is:global>
-  .pf-btn.on {
-    background: #111;
-    color: #fff;
-  }
-  .dark .pf-btn.on {
-    background: #fff;
-    color: #111;
-  }
-</style>
 
 <script is:inline>
   (function () {
@@ -41,6 +37,8 @@ const metadata = {
     var API = 'https://produk-affiliate.extreamcollectiveofficial.workers.dev';
     var PL = { tiktok: 'TikTok Shop', tokopedia: 'Tokopedia', shopee: 'Shopee', lazada: 'Lazada' };
     var PC = { tiktok: '#111111', tokopedia: '#03AC0E', shopee: '#EE4D2D', lazada: '#000000' };
+    var CART =
+      '<svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 19m-2 0a2 2 0 1 0 4 0a2 2 0 1 0 -4 0" /><path d="M17 19m-2 0a2 2 0 1 0 4 0a2 2 0 1 0 -4 0" /><path d="M17 17h-11v-14h-2" /><path d="M6 5l14 1l-1 7h-13" /></svg>';
     var items = [];
     var cur = '';
     var failed = false;
@@ -71,6 +69,14 @@ const metadata = {
       if (n >= 1e3) return (n / 1e3).toFixed(1).replace('.0', '').replace('.', ',') + 'rb';
       return String(n);
     }
+    function stars(r) {
+      var n = Math.round(r);
+      var s = '';
+      for (var i = 1; i <= 5; i++) {
+        s += '<span class="' + (i <= n ? 'text-primary' : 'text-slate-300') + '">★</span>';
+      }
+      return s;
+    }
 
     function card(p) {
       var pr = num(p.price);
@@ -81,55 +87,58 @@ const metadata = {
       var img =
         p.image && (/^data:image\/(jpeg|png|webp);base64,/.test(p.image) || okUrl(p.image))
           ? '<img src="' + esc(p.image) + '" alt="' + esc(p.name) + '" loading="lazy" referrerpolicy="no-referrer" class="h-full w-full object-cover">'
-          : '<span class="text-sm text-neutral-500">Tanpa gambar</span>';
+          : '<span class="text-sm text-muted">Tanpa gambar</span>';
       var chip =
-        '<span class="absolute left-2 top-2 px-2 py-1 text-xs font-semibold text-white" style="background:' +
+        '<span class="absolute left-2 top-2 rounded px-2 py-1 text-xs font-semibold text-white" style="background:' +
         (PC[p.platform] || '#111111') +
         '">' +
         esc(PL[p.platform] || '') +
         '</span>';
       var badge = disc
-        ? '<span class="absolute right-2 top-2 bg-red-600 px-2 py-1 text-xs font-semibold text-white">-' + disc + '%</span>'
+        ? '<span class="absolute right-2 top-2 rounded bg-red-600 px-2 py-1 text-xs font-semibold text-white">-' + disc + '%</span>'
         : '';
       var rate = '';
       if (rt > 0 || sold > 0) {
         rate =
-          '<p class="mt-2 text-xs text-neutral-500">' +
-          (rt > 0 ? '★ ' + rt.toFixed(1).replace('.', ',') : '') +
-          (rt > 0 && sold > 0 ? ' · ' : '') +
-          (sold > 0 ? kfmt(sold) + (p.soldPlus ? '+' : '') + ' terjual' : '') +
+          '<p class="mt-2 flex flex-wrap items-center gap-x-1 text-xs text-muted">' +
+          (rt > 0
+            ? '<span class="tracking-tight">' + stars(rt) + '</span><span class="font-semibold text-heading">' + rt.toFixed(1).replace('.', ',') + '</span>'
+            : '') +
+          (rt > 0 && sold > 0 ? '<span>·</span>' : '') +
+          (sold > 0 ? '<span>' + kfmt(sold) + (p.soldPlus ? '+' : '') + ' terjual</span>' : '') +
           '</p>';
       }
       var store = p.store
-        ? '<p class="mt-1 text-xs text-neutral-500">' + esc(p.store) + (p.loc ? ' · ' + esc(p.loc) : '') + '</p>'
+        ? '<p class="mt-1 text-xs text-muted">' + esc(p.store) + (p.loc ? ' · ' + esc(p.loc) : '') + '</p>'
         : '';
       var free = p.free ? '<p class="mt-1 text-xs font-semibold text-green-700">Gratis ongkir</p>' : '';
       var href = okUrl(p.link) ? esc(p.link) : '#';
       return (
-        '<article class="flex flex-col border border-neutral-900 bg-white dark:border-neutral-300 dark:bg-neutral-900">' +
-        '<div class="relative flex aspect-square items-center justify-center overflow-hidden bg-neutral-100 dark:bg-neutral-800">' +
+        '<article class="flex flex-col overflow-hidden rounded-lg border border-slate-200 bg-white shadow-sm">' +
+        '<div class="relative flex aspect-square items-center justify-center overflow-hidden bg-slate-100">' +
         img +
         chip +
         badge +
         '</div>' +
-        '<div class="flex flex-1 flex-col p-4">' +
-        '<p class="text-sm font-semibold leading-snug">' +
+        '<div class="flex flex-1 flex-col p-3 sm:p-4">' +
+        '<p class="line-clamp-2 text-sm font-semibold leading-snug text-heading">' +
         esc(p.name) +
         '</p>' +
-        '<p class="mt-2"><b class="text-lg">' +
+        '<p class="mt-2"><b class="text-base text-heading sm:text-lg">' +
         rp(pr) +
         '</b>' +
-        (old > pr ? ' <s class="text-xs text-neutral-500">' + rp(old) + '</s>' : '') +
+        (old > pr ? ' <s class="text-xs text-muted">' + rp(old) + '</s>' : '') +
         '</p>' +
         rate +
         store +
         free +
-        '<a class="mt-auto inline-block bg-neutral-900 px-4 py-2 text-center text-sm font-semibold text-white dark:bg-white dark:text-neutral-900" style="margin-top:1rem" target="_blank" rel="noopener sponsored" href="' +
+        '<div class="mt-auto pt-4">' +
+        '<a class="flex w-full items-center justify-center gap-2 rounded-md bg-primary px-4 py-2.5 text-sm font-semibold text-white hover:opacity-90" target="_blank" rel="noopener sponsored" href="' +
         href +
-        '">Beli di ' +
-        esc(PL[p.platform] || 'toko') +
-        '</a>' +
-        '</div></article>'
+        '">' +
+        CART +
+        '<span>Beli</span></a>' +
+        '</div></div></article>'
       );
     }
 
@@ -141,9 +150,9 @@ const metadata = {
             k +
             '" aria-pressed="' +
             (cur === k) +
-            '" class="pf-btn' +
-            (cur === k ? ' on' : '') +
-            ' border border-neutral-900 px-4 py-2 text-sm font-semibold dark:border-neutral-300">' +
+            '" class="pf-btn rounded-md border border-slate-300 px-4 py-2 text-sm font-semibold ' +
+            (cur === k ? 'on bg-primary text-white' : 'bg-white text-heading') +
+            '">' +
             PL[k] +
             '</button>'
           );
@@ -152,12 +161,10 @@ const metadata = {
       var list = items.filter(function (p) {
         return !cur || p.platform === cur;
       });
-      var msg = failed
-        ? 'Produk belum dapat dimuat. Coba lagi nanti.'
-        : 'Belum ada produk.';
+      var msg = failed ? 'Produk belum dapat dimuat. Coba lagi nanti.' : 'Belum ada produk.';
       $('pGrid').innerHTML = list.length
         ? list.map(card).join('')
-        : '<p class="col-span-full text-neutral-500">' + msg + '</p>';
+        : '<p class="col-span-full text-sm text-muted">' + msg + '</p>';
     }
 
     $('pFilters').addEventListener('click', function (e) {
