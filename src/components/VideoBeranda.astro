@@ -1,0 +1,217 @@
+---
+import { wrap } from '~/data/profil';
+---
+
+<section id="vb" class="bg-slate-50 py-10 sm:py-12" hidden>
+  <div class={wrap}>
+    <div id="vb-wrap" class="mx-auto w-full max-w-[240px] sm:max-w-[280px]">
+      <div id="vb-box" class="vb-box relative overflow-hidden rounded-lg border border-slate-200 bg-black shadow-sm" role="group" aria-label="Video perkenalan">
+        <img id="vb-cover" class="absolute inset-0 h-full w-full object-cover" alt="" decoding="async" />
+        <video id="vb-video" class="absolute inset-0 h-full w-full bg-black object-contain" playsinline preload="none" hidden></video>
+        <button id="vb-big" type="button" class="absolute inset-0 flex items-center justify-center" aria-label="Putar video">
+          <span class="flex h-14 w-14 items-center justify-center rounded-full bg-primary/85 text-white"></span>
+        </button>
+        <span id="vb-dur" class="absolute bottom-2 left-2 rounded-sm bg-primary/85 px-1.5 py-0.5 text-xs text-white"></span>
+        <div id="vb-bar" class="absolute inset-x-0 bottom-0 flex items-center gap-1 bg-primary/90 px-1.5 py-1 text-white" hidden>
+          <button id="vb-pp" type="button" class="flex h-8 w-8 shrink-0 items-center justify-center rounded-md" aria-label="Putar"></button>
+          <input id="vb-rg" type="range" min="0" max="1000" step="1" value="0" class="h-6 min-w-0 flex-1 accent-white" aria-label="Posisi video" />
+          <button id="vb-mu" type="button" class="flex h-8 w-8 shrink-0 items-center justify-center rounded-md" aria-label="Suara"></button>
+          <button id="vb-fs" type="button" class="flex h-8 w-8 shrink-0 items-center justify-center rounded-md" aria-label="Layar penuh"></button>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<style is:global>
+  #vb[hidden],
+  .vb-box [hidden] {
+    display: none !important;
+  }
+  .vb-box:fullscreen {
+    aspect-ratio: auto !important;
+    width: 100% !important;
+    height: 100% !important;
+    border: 0 !important;
+    border-radius: 0 !important;
+  }
+  .vb-box:-webkit-full-screen {
+    aspect-ratio: auto !important;
+    width: 100% !important;
+    height: 100% !important;
+    border: 0 !important;
+    border-radius: 0 !important;
+  }
+  .vb-box.vb-fake {
+    position: fixed !important;
+    inset: 0;
+    z-index: 9999;
+    aspect-ratio: auto !important;
+    width: 100% !important;
+    height: 100% !important;
+    border: 0 !important;
+    border-radius: 0 !important;
+  }
+</style>
+
+<script is:inline>
+  (function () {
+    var sec = document.getElementById('vb');
+    if (!sec) return;
+    var $ = function (i) { return document.getElementById(i); };
+    var wrapEl = $('vb-wrap'), box = $('vb-box'), cover = $('vb-cover'), v = $('vb-video');
+    var big = $('vb-big'), dur = $('vb-dur'), bar = $('vb-bar'), pp = $('vb-pp');
+    var rg = $('vb-rg'), mu = $('vb-mu'), fs = $('vb-fs');
+    var BASE = '/admin/video/';
+    var landscape = false, drag = false;
+
+    var P = {
+      play: '<path d="M8 5v14l11-7z" fill="currentColor" stroke="none"/>',
+      pause: '<path d="M6 5h4v14H6zM14 5h4v14h-4z" fill="currentColor" stroke="none"/>',
+      vol: '<path d="M4 9v6h4l5 4V5L8 9z" fill="currentColor" stroke="none"/><path d="M16 9a4 4 0 0 1 0 6M18.5 6.5a8 8 0 0 1 0 11"/>',
+      mute: '<path d="M4 9v6h4l5 4V5L8 9z" fill="currentColor" stroke="none"/><path d="M16 9l5 6M21 9l-5 6"/>',
+      fs: '<path d="M4 8V6a2 2 0 0 1 2-2h2M4 16v2a2 2 0 0 0 2 2h2M16 4h2a2 2 0 0 1 2 2v2M16 20h2a2 2 0 0 0 2-2v-2"/>',
+      fsx: '<path d="M8 4v2a2 2 0 0 1-2 2H4M4 16h2a2 2 0 0 1 2 2v2M16 4v2a2 2 0 0 0 2 2h2M20 16h-2a2 2 0 0 0-2 2v2"/>',
+      replay: '<polyline points="1 4 1 10 7 10"/><path d="M3.51 15a9 9 0 1 0 2.13-9.36L1 10"/>'
+    };
+    function ic(n, c) {
+      return '<svg viewBox="0 0 24 24" class="' + c + '" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">' + P[n] + '</svg>';
+    }
+    function fmt(s) { s = Math.round(s); return Math.floor(s / 60) + ':' + ('0' + (s % 60)).slice(-2); }
+
+    function showCover(replay) {
+      cover.hidden = false; v.hidden = true; bar.hidden = true;
+      big.hidden = false; dur.hidden = false;
+      big.firstElementChild.innerHTML = ic(replay ? 'replay' : 'play', 'h-7 w-7');
+      big.setAttribute('aria-label', replay ? 'Putar ulang video' : 'Putar video');
+    }
+    function showPlayer() {
+      cover.hidden = true; v.hidden = false; bar.hidden = false;
+      big.hidden = true; dur.hidden = true;
+    }
+    function start() {
+      showPlayer();
+      var p = v.play();
+      if (p && p.catch) p.catch(function () { showCover(false); });
+    }
+    function toggle() {
+      if (v.paused) {
+        var p = v.play();
+        if (p && p.catch) p.catch(function () {});
+      } else {
+        v.pause();
+      }
+    }
+    function setPP() {
+      pp.innerHTML = ic(v.paused ? 'play' : 'pause', 'h-5 w-5');
+      pp.setAttribute('aria-label', v.paused ? 'Putar' : 'Jeda');
+    }
+    function setMu() {
+      var off = v.muted || v.volume === 0;
+      mu.innerHTML = ic(off ? 'mute' : 'vol', 'h-5 w-5');
+      mu.setAttribute('aria-label', off ? 'Nyalakan suara' : 'Matikan suara');
+    }
+
+    function isFS() {
+      return document.fullscreenElement === box || document.webkitFullscreenElement === box || box.classList.contains('vb-fake');
+    }
+    function unlock() {
+      try { if (screen.orientation && screen.orientation.unlock) screen.orientation.unlock(); } catch (e) {}
+    }
+    function lockLand() {
+      try {
+        if (landscape && screen.orientation && screen.orientation.lock) {
+          screen.orientation.lock('landscape').catch(function () {});
+        }
+      } catch (e) {}
+    }
+    function syncFS() {
+      var on = isFS();
+      fs.innerHTML = ic(on ? 'fsx' : 'fs', 'h-5 w-5');
+      fs.setAttribute('aria-label', on ? 'Keluar layar penuh' : 'Layar penuh');
+      if (!on) unlock();
+    }
+    function fallback() {
+      if (v.webkitEnterFullscreen && /iPhone|iPad|iPod/.test(navigator.userAgent)) {
+        try { v.webkitEnterFullscreen(); return; } catch (e) {}
+      }
+      box.classList.add('vb-fake');
+      document.documentElement.style.overflow = 'hidden';
+      syncFS();
+    }
+    function enterFS() {
+      var req = box.requestFullscreen || box.webkitRequestFullscreen;
+      if (!req) { fallback(); return; }
+      try {
+        var p = req.call(box);
+        if (p && p.then) { p.then(lockLand, fallback); } else { lockLand(); }
+      } catch (e) { fallback(); }
+    }
+    function exitFS() {
+      if (box.classList.contains('vb-fake')) {
+        box.classList.remove('vb-fake');
+        document.documentElement.style.overflow = '';
+        syncFS();
+        return;
+      }
+      var ex = document.exitFullscreen || document.webkitExitFullscreen;
+      if (ex && (document.fullscreenElement || document.webkitFullscreenElement)) {
+        try { var p = ex.call(document); if (p && p.catch) p.catch(function () {}); } catch (e) {}
+      }
+    }
+
+    big.addEventListener('click', start);
+    v.addEventListener('click', toggle);
+    pp.addEventListener('click', toggle);
+    mu.addEventListener('click', function () { v.muted = !v.muted; });
+    fs.addEventListener('click', function () { if (isFS()) { exitFS(); } else { enterFS(); } });
+    v.addEventListener('play', setPP);
+    v.addEventListener('pause', setPP);
+    v.addEventListener('volumechange', setMu);
+    v.addEventListener('timeupdate', function () {
+      if (!drag && v.duration) rg.value = String(Math.round(v.currentTime / v.duration * 1000));
+    });
+    v.addEventListener('ended', function () {
+      v.currentTime = 0;
+      rg.value = '0';
+      exitFS();
+      showCover(true);
+      setPP();
+    });
+    rg.addEventListener('pointerdown', function () { drag = true; });
+    rg.addEventListener('pointerup', function () { drag = false; });
+    rg.addEventListener('pointercancel', function () { drag = false; });
+    rg.addEventListener('change', function () { drag = false; });
+    rg.addEventListener('input', function () {
+      if (v.duration) v.currentTime = Number(rg.value) / 1000 * v.duration;
+    });
+    document.addEventListener('fullscreenchange', syncFS);
+    document.addEventListener('webkitfullscreenchange', syncFS);
+    document.addEventListener('visibilitychange', function () {
+      if (document.hidden && !v.paused) v.pause();
+    });
+    if ('IntersectionObserver' in window) {
+      new IntersectionObserver(function (e) {
+        if (!e[0].isIntersecting && !v.paused && !isFS()) v.pause();
+      }, { threshold: 0.25 }).observe(box);
+    }
+
+    fetch('/admin/video/video.json?t=' + Date.now(), { cache: 'no-store' })
+      .then(function (r) { return r.ok ? r.json() : null; })
+      .then(function (d) {
+        if (!d || !d.aktif || !d.video || !d.sampul) return;
+        var w = Number(d.lebar) || 9, h = Number(d.tinggi) || 16;
+        landscape = w >= h;
+        box.style.aspectRatio = w + ' / ' + h;
+        if (landscape) wrapEl.style.maxWidth = '720px';
+        if (d.judul) box.setAttribute('aria-label', d.judul);
+        cover.src = BASE + d.sampul;
+        v.src = BASE + d.video;
+        dur.textContent = fmt(Number(d.durasi) || 0);
+        setPP(); setMu(); syncFS();
+        showCover(false);
+        sec.hidden = false;
+      })
+      .catch(function () {});
+  })();
+</script>
