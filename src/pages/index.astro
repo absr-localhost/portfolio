@@ -1,6 +1,7 @@
 ---
 import Layout from '~/layouts/PageLayout.astro';
 import Ulasan from '~/components/Ulasan.astro';
+import VideoBeranda from '~/components/VideoBeranda.astro';
 import { Icon } from 'astro-icon/components';
 import { wrap, stats, about, EMAIL } from '~/data/profil';
 
@@ -70,6 +71,8 @@ const card = 'rounded-lg border border-slate-200 bg-white shadow-sm';
       }
     </div>
   </section>
+
+  <VideoBeranda />
 
   <section class={`${wrap} pb-14 sm:pb-16`}>
     <h2 class="mb-4 text-xl font-bold text-heading">Statistik situs</h2>
