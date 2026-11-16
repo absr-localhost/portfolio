@@ -4,14 +4,13 @@ import { wrap } from '~/data/profil';
 
 <section id="vb" class="bg-slate-50 py-10 sm:py-12" hidden>
   <div class={wrap}>
-    <div id="vb-wrap" class="mx-auto w-full max-w-[240px] sm:max-w-[280px]">
-      <div id="vb-box" class="vb-box relative overflow-hidden rounded-lg border border-slate-200 bg-black shadow-sm" role="group" aria-label="Video perkenalan">
+    <div id="vb-wrap" class="mx-auto grid w-full max-w-[280px] gap-4 sm:max-w-3xl sm:grid-cols-[280px_1fr] sm:items-center sm:gap-8">
+      <div id="vb-box" class="vb-box relative overflow-hidden rounded-xl border border-slate-200 bg-black shadow-md" role="group" aria-label="Video">
         <img id="vb-cover" class="absolute inset-0 h-full w-full object-cover" alt="" decoding="async" />
         <video id="vb-video" class="absolute inset-0 h-full w-full bg-black object-contain" playsinline preload="none" hidden></video>
-        <button id="vb-big" type="button" class="absolute inset-0 flex items-center justify-center" aria-label="Putar video">
-          <span class="flex h-14 w-14 items-center justify-center rounded-full bg-primary/85 text-white"></span>
+        <button id="vb-big" type="button" class="absolute inset-0" aria-label="Putar video">
+          <span id="vb-pill" class="vb-pill absolute bottom-2 left-2 flex items-center gap-1 rounded-full bg-primary/90 py-1 pl-2 pr-2.5 text-xs text-white"></span>
         </button>
-        <span id="vb-dur" class="absolute bottom-2 left-2 rounded-sm bg-primary/85 px-1.5 py-0.5 text-xs text-white"></span>
         <div id="vb-bar" class="absolute inset-x-0 bottom-0 flex items-center gap-1 bg-primary/90 px-1.5 py-1 text-white" hidden>
           <button id="vb-pp" type="button" class="flex h-8 w-8 shrink-0 items-center justify-center rounded-md" aria-label="Putar"></button>
           <input id="vb-rg" type="range" min="0" max="1000" step="1" value="0" class="h-6 min-w-0 flex-1 accent-white" aria-label="Posisi video" />
@@ -19,13 +18,18 @@ import { wrap } from '~/data/profil';
           <button id="vb-fs" type="button" class="flex h-8 w-8 shrink-0 items-center justify-center rounded-md" aria-label="Layar penuh"></button>
         </div>
       </div>
+      <div id="vb-info" class="min-w-0" hidden>
+        <h2 id="vb-t" class="text-lg font-bold text-heading sm:text-xl" hidden></h2>
+        <p id="vb-d" class="mt-1 text-sm text-muted sm:mt-2" hidden></p>
+        <p id="vb-w" class="mt-2 text-xs text-muted" hidden></p>
+      </div>
     </div>
   </div>
 </section>
 
 <style is:global>
   #vb[hidden],
-  .vb-box [hidden] {
+  #vb [hidden] {
     display: none !important;
   }
   .vb-box:fullscreen {
@@ -52,6 +56,13 @@ import { wrap } from '~/data/profil';
     border: 0 !important;
     border-radius: 0 !important;
   }
+  @keyframes vbp {
+    0% { box-shadow: 0 0 0 0 rgb(255 255 255 / 0.55); }
+    70%, 100% { box-shadow: 0 0 0 10px rgb(255 255 255 / 0); }
+  }
+  @media (prefers-reduced-motion: no-preference) {
+    .vb-pill { animation: vbp 2.4s ease-out infinite; }
+  }
 </style>
 
 <script is:inline>
@@ -60,10 +71,10 @@ import { wrap } from '~/data/profil';
     if (!sec) return;
     var $ = function (i) { return document.getElementById(i); };
     var wrapEl = $('vb-wrap'), box = $('vb-box'), cover = $('vb-cover'), v = $('vb-video');
-    var big = $('vb-big'), dur = $('vb-dur'), bar = $('vb-bar'), pp = $('vb-pp');
+    var big = $('vb-big'), pill = $('vb-pill'), bar = $('vb-bar'), pp = $('vb-pp');
     var rg = $('vb-rg'), mu = $('vb-mu'), fs = $('vb-fs');
     var BASE = '/admin/video/';
-    var landscape = false, drag = false;
+    var landscape = false, drag = false, dsec = 0;
 
     var P = {
       play: '<path d="M8 5v14l11-7z" fill="currentColor" stroke="none"/>',
@@ -78,16 +89,20 @@ import { wrap } from '~/data/profil';
       return '<svg viewBox="0 0 24 24" class="' + c + '" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">' + P[n] + '</svg>';
     }
     function fmt(s) { s = Math.round(s); return Math.floor(s / 60) + ':' + ('0' + (s % 60)).slice(-2); }
+    function txt(id, t) {
+      var e = $(id);
+      e.textContent = t || '';
+      e.hidden = !t;
+      return !!t;
+    }
 
     function showCover(replay) {
-      cover.hidden = false; v.hidden = true; bar.hidden = true;
-      big.hidden = false; dur.hidden = false;
-      big.firstElementChild.innerHTML = ic(replay ? 'replay' : 'play', 'h-7 w-7');
+      cover.hidden = false; v.hidden = true; bar.hidden = true; big.hidden = false;
+      pill.innerHTML = ic(replay ? 'replay' : 'play', 'h-4 w-4') + '<span>' + fmt(dsec) + '</span>';
       big.setAttribute('aria-label', replay ? 'Putar ulang video' : 'Putar video');
     }
     function showPlayer() {
-      cover.hidden = true; v.hidden = false; bar.hidden = false;
-      big.hidden = true; dur.hidden = true;
+      cover.hidden = true; v.hidden = false; bar.hidden = false; big.hidden = true;
     }
     function start() {
       showPlayer();
@@ -196,18 +211,39 @@ import { wrap } from '~/data/profil';
       }, { threshold: 0.25 }).observe(box);
     }
 
+    function tgl(w) {
+      if (!w) return '';
+      var d = new Date(w);
+      if (isNaN(d.getTime())) return '';
+      return d.toLocaleDateString('id-ID', { day: 'numeric', month: 'long', year: 'numeric' }) +
+        ', ' + d.toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit' });
+    }
+
     fetch('/admin/video/video.json?t=' + Date.now(), { cache: 'no-store' })
       .then(function (r) { return r.ok ? r.json() : null; })
       .then(function (d) {
         if (!d || !d.aktif || !d.video || !d.sampul) return;
         var w = Number(d.lebar) || 9, h = Number(d.tinggi) || 16;
         landscape = w >= h;
+        dsec = Number(d.durasi) || 0;
         box.style.aspectRatio = w + ' / ' + h;
-        if (landscape) wrapEl.style.maxWidth = '720px';
         if (d.judul) box.setAttribute('aria-label', d.judul);
+
+        var a = txt('vb-t', d.judul);
+        var b = txt('vb-d', d.deskripsi);
+        var c = txt('vb-w', tgl(d.waktu));
+        var teks = a || b || c;
+        $('vb-info').hidden = !teks;
+        if (landscape) {
+          wrapEl.style.maxWidth = '720px';
+          wrapEl.style.gridTemplateColumns = '1fr';
+        } else if (!teks) {
+          wrapEl.style.maxWidth = '280px';
+          wrapEl.style.gridTemplateColumns = '1fr';
+        }
+
         cover.src = BASE + d.sampul;
         v.src = BASE + d.video;
-        dur.textContent = fmt(Number(d.durasi) || 0);
         setPP(); setMu(); syncFS();
         showCover(false);
         sec.hidden = false;
