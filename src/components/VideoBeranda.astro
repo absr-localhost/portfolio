@@ -4,24 +4,25 @@ import { wrap } from '~/data/profil';
 
 <section id="vb" class="bg-slate-50 py-10 sm:py-12" hidden>
   <div class={wrap}>
-    <div id="vb-wrap" class="mx-auto grid w-full max-w-[280px] gap-4 sm:max-w-3xl sm:grid-cols-[280px_1fr] sm:items-center sm:gap-8">
-      <div id="vb-box" class="vb-box relative overflow-hidden rounded-xl border border-slate-200 bg-black shadow-md" role="group" aria-label="Video">
-        <img id="vb-cover" class="absolute inset-0 h-full w-full object-cover" alt="" decoding="async" />
-        <video id="vb-video" class="absolute inset-0 h-full w-full bg-black object-contain" playsinline preload="none" hidden></video>
-        <button id="vb-big" type="button" class="absolute inset-0" aria-label="Putar video">
-          <span id="vb-pill" class="vb-pill absolute bottom-2 left-2 flex items-center gap-1 rounded-full bg-primary/90 py-1 pl-2 pr-2.5 text-xs text-white"></span>
-        </button>
-        <div id="vb-bar" class="absolute inset-x-0 bottom-0 flex items-center gap-1 bg-primary/90 px-1.5 py-1 text-white" hidden>
+    <div id="vb-row" class="flex snap-x gap-3 overflow-x-auto pb-2 sm:gap-4"></div>
+  </div>
+
+  <div id="vb-modal" class="fixed inset-0 z-[9999] flex items-center justify-center bg-black/85 p-3" role="dialog" aria-modal="true" aria-label="Video" hidden>
+    <button id="vb-x" type="button" class="absolute right-3 top-3 z-10 flex h-10 w-10 items-center justify-center rounded-full bg-primary text-white" aria-label="Tutup"></button>
+    <div class="flex max-h-full w-full max-w-3xl flex-col items-center gap-3 overflow-y-auto">
+      <div id="vb-box" class="vb-box relative overflow-hidden rounded-xl bg-black" role="group" aria-label="Video">
+        <video id="vb-video" class="h-full w-full bg-black object-contain" playsinline preload="none"></video>
+        <div id="vb-bar" class="absolute inset-x-0 bottom-0 flex items-center gap-1 bg-primary/90 px-1.5 py-1 text-white">
           <button id="vb-pp" type="button" class="flex h-8 w-8 shrink-0 items-center justify-center rounded-md" aria-label="Putar"></button>
           <input id="vb-rg" type="range" min="0" max="1000" step="1" value="0" class="h-6 min-w-0 flex-1 accent-white" aria-label="Posisi video" />
           <button id="vb-mu" type="button" class="flex h-8 w-8 shrink-0 items-center justify-center rounded-md" aria-label="Suara"></button>
           <button id="vb-fs" type="button" class="flex h-8 w-8 shrink-0 items-center justify-center rounded-md" aria-label="Layar penuh"></button>
         </div>
       </div>
-      <div id="vb-info" class="min-w-0" hidden>
-        <h2 id="vb-t" class="text-lg font-bold text-heading sm:text-xl" hidden></h2>
-        <p id="vb-d" class="mt-1 text-sm text-muted sm:mt-2" hidden></p>
-        <p id="vb-w" class="mt-2 text-xs text-muted" hidden></p>
+      <div id="vb-info" class="w-full max-w-md text-center" hidden>
+        <h2 id="vb-t" class="text-lg font-bold text-white" hidden></h2>
+        <p id="vb-d" class="mt-1 text-sm text-slate-300" hidden></p>
+        <p id="vb-w" class="mt-2 text-xs text-slate-400" hidden></p>
       </div>
     </div>
   </div>
@@ -36,24 +37,21 @@ import { wrap } from '~/data/profil';
     aspect-ratio: auto !important;
     width: 100% !important;
     height: 100% !important;
-    border: 0 !important;
     border-radius: 0 !important;
   }
   .vb-box:-webkit-full-screen {
     aspect-ratio: auto !important;
     width: 100% !important;
     height: 100% !important;
-    border: 0 !important;
     border-radius: 0 !important;
   }
   .vb-box.vb-fake {
     position: fixed !important;
     inset: 0;
-    z-index: 9999;
+    z-index: 10000;
     aspect-ratio: auto !important;
     width: 100% !important;
     height: 100% !important;
-    border: 0 !important;
     border-radius: 0 !important;
   }
   @keyframes vbp {
@@ -61,7 +59,7 @@ import { wrap } from '~/data/profil';
     70%, 100% { box-shadow: 0 0 0 10px rgb(255 255 255 / 0); }
   }
   @media (prefers-reduced-motion: no-preference) {
-    .vb-pill { animation: vbp 2.4s ease-out infinite; }
+    .vb-pulse { animation: vbp 2.4s ease-out infinite; }
   }
 </style>
 
@@ -70,11 +68,10 @@ import { wrap } from '~/data/profil';
     var sec = document.getElementById('vb');
     if (!sec) return;
     var $ = function (i) { return document.getElementById(i); };
-    var wrapEl = $('vb-wrap'), box = $('vb-box'), cover = $('vb-cover'), v = $('vb-video');
-    var big = $('vb-big'), pill = $('vb-pill'), bar = $('vb-bar'), pp = $('vb-pp');
-    var rg = $('vb-rg'), mu = $('vb-mu'), fs = $('vb-fs');
+    var row = $('vb-row'), modal = $('vb-modal'), box = $('vb-box'), v = $('vb-video');
+    var bar = $('vb-bar'), pp = $('vb-pp'), rg = $('vb-rg'), mu = $('vb-mu'), fs = $('vb-fs'), xb = $('vb-x');
     var BASE = '/admin/video/';
-    var landscape = false, drag = false, dsec = 0;
+    var landscape = false, drag = false, opener = null;
 
     var P = {
       play: '<path d="M8 5v14l11-7z" fill="currentColor" stroke="none"/>',
@@ -83,7 +80,7 @@ import { wrap } from '~/data/profil';
       mute: '<path d="M4 9v6h4l5 4V5L8 9z" fill="currentColor" stroke="none"/><path d="M16 9l5 6M21 9l-5 6"/>',
       fs: '<path d="M4 8V6a2 2 0 0 1 2-2h2M4 16v2a2 2 0 0 0 2 2h2M16 4h2a2 2 0 0 1 2 2v2M16 20h2a2 2 0 0 0 2-2v-2"/>',
       fsx: '<path d="M8 4v2a2 2 0 0 1-2 2H4M4 16h2a2 2 0 0 1 2 2v2M16 4v2a2 2 0 0 0 2 2h2M20 16h-2a2 2 0 0 0-2 2v2"/>',
-      replay: '<polyline points="1 4 1 10 7 10"/><path d="M3.51 15a9 9 0 1 0 2.13-9.36L1 10"/>'
+      x: '<path d="M6 6l12 12M18 6L6 18"/>'
     };
     function ic(n, c) {
       return '<svg viewBox="0 0 24 24" class="' + c + '" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">' + P[n] + '</svg>';
@@ -95,28 +92,15 @@ import { wrap } from '~/data/profil';
       e.hidden = !t;
       return !!t;
     }
+    function tgl(w, pendek) {
+      if (!w) return '';
+      var d = new Date(w);
+      if (isNaN(d.getTime())) return '';
+      var s = d.toLocaleDateString('id-ID', { day: 'numeric', month: pendek ? 'short' : 'long', year: 'numeric' });
+      if (!pendek) s += ', ' + d.toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit' });
+      return s;
+    }
 
-    function showCover(replay) {
-      cover.hidden = false; v.hidden = true; bar.hidden = true; big.hidden = false;
-      pill.innerHTML = ic(replay ? 'replay' : 'play', 'h-4 w-4') + '<span>' + fmt(dsec) + '</span>';
-      big.setAttribute('aria-label', replay ? 'Putar ulang video' : 'Putar video');
-    }
-    function showPlayer() {
-      cover.hidden = true; v.hidden = false; bar.hidden = false; big.hidden = true;
-    }
-    function start() {
-      showPlayer();
-      var p = v.play();
-      if (p && p.catch) p.catch(function () { showCover(false); });
-    }
-    function toggle() {
-      if (v.paused) {
-        var p = v.play();
-        if (p && p.catch) p.catch(function () {});
-      } else {
-        v.pause();
-      }
-    }
     function setPP() {
       pp.innerHTML = ic(v.paused ? 'play' : 'pause', 'h-5 w-5');
       pp.setAttribute('aria-label', v.paused ? 'Putar' : 'Jeda');
@@ -125,6 +109,14 @@ import { wrap } from '~/data/profil';
       var off = v.muted || v.volume === 0;
       mu.innerHTML = ic(off ? 'mute' : 'vol', 'h-5 w-5');
       mu.setAttribute('aria-label', off ? 'Nyalakan suara' : 'Matikan suara');
+    }
+    function toggle() {
+      if (v.paused) {
+        var p = v.play();
+        if (p && p.catch) p.catch(function () {});
+      } else {
+        v.pause();
+      }
     }
 
     function isFS() {
@@ -151,7 +143,6 @@ import { wrap } from '~/data/profil';
         try { v.webkitEnterFullscreen(); return; } catch (e) {}
       }
       box.classList.add('vb-fake');
-      document.documentElement.style.overflow = 'hidden';
       syncFS();
     }
     function enterFS() {
@@ -165,7 +156,6 @@ import { wrap } from '~/data/profil';
     function exitFS() {
       if (box.classList.contains('vb-fake')) {
         box.classList.remove('vb-fake');
-        document.documentElement.style.overflow = '';
         syncFS();
         return;
       }
@@ -175,7 +165,43 @@ import { wrap } from '~/data/profil';
       }
     }
 
-    big.addEventListener('click', start);
+    function openV(it, from) {
+      var w = Number(it.lebar) || 9, h = Number(it.tinggi) || 16;
+      landscape = w >= h;
+      opener = from;
+      box.style.aspectRatio = w + ' / ' + h;
+      box.style.width = 'min(100%, calc(66dvh * ' + (w / h) + '))';
+      box.setAttribute('aria-label', it.judul || 'Video');
+      var a = txt('vb-t', it.judul);
+      var b = txt('vb-d', it.deskripsi);
+      var c = txt('vb-w', tgl(it.waktu, false));
+      $('vb-info').hidden = !(a || b || c);
+      v.poster = BASE + it.sampul;
+      v.src = BASE + it.video;
+      rg.value = '0';
+      modal.hidden = false;
+      document.documentElement.style.overflow = 'hidden';
+      setPP(); setMu(); syncFS();
+      var p = v.play();
+      if (p && p.catch) p.catch(function () {});
+      xb.focus();
+    }
+    function closeV() {
+      if (modal.hidden) return;
+      exitFS();
+      v.pause();
+      v.removeAttribute('src');
+      v.load();
+      modal.hidden = true;
+      document.documentElement.style.overflow = '';
+      unlock();
+      if (opener) opener.focus();
+    }
+
+    xb.innerHTML = ic('x', 'h-5 w-5');
+    xb.addEventListener('click', closeV);
+    modal.addEventListener('click', function (e) { if (e.target === modal) closeV(); });
+    document.addEventListener('keydown', function (e) { if (e.key === 'Escape') closeV(); });
     v.addEventListener('click', toggle);
     pp.addEventListener('click', toggle);
     mu.addEventListener('click', function () { v.muted = !v.muted; });
@@ -189,8 +215,6 @@ import { wrap } from '~/data/profil';
     v.addEventListener('ended', function () {
       v.currentTime = 0;
       rg.value = '0';
-      exitFS();
-      showCover(true);
       setPP();
     });
     rg.addEventListener('pointerdown', function () { drag = true; });
@@ -205,47 +229,56 @@ import { wrap } from '~/data/profil';
     document.addEventListener('visibilitychange', function () {
       if (document.hidden && !v.paused) v.pause();
     });
-    if ('IntersectionObserver' in window) {
-      new IntersectionObserver(function (e) {
-        if (!e[0].isIntersecting && !v.paused && !isFS()) v.pause();
-      }, { threshold: 0.25 }).observe(box);
-    }
 
-    function tgl(w) {
-      if (!w) return '';
-      var d = new Date(w);
-      if (isNaN(d.getTime())) return '';
-      return d.toLocaleDateString('id-ID', { day: 'numeric', month: 'long', year: 'numeric' }) +
-        ', ' + d.toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit' });
+    function kartu(it, i, tegak) {
+      var b = document.createElement('button');
+      b.type = 'button';
+      b.className = 'shrink-0 snap-start text-left ' + (tegak ? 'w-[140px] sm:w-[170px]' : 'w-[240px] sm:w-[280px]');
+      b.setAttribute('aria-label', (it.judul || 'Video') + ', putar');
+
+      var th = document.createElement('div');
+      th.className = 'relative overflow-hidden rounded-xl border border-slate-200 bg-black shadow-sm';
+      th.style.aspectRatio = tegak ? '9 / 16' : '16 / 9';
+      var im = document.createElement('img');
+      im.className = 'absolute inset-0 h-full w-full object-cover';
+      im.alt = '';
+      im.loading = 'lazy';
+      im.decoding = 'async';
+      im.src = BASE + it.sampul;
+      var pl = document.createElement('span');
+      pl.className = 'absolute bottom-2 left-2 flex items-center gap-1 rounded-full bg-primary/90 py-1 pl-2 pr-2.5 text-xs text-white' + (i === 0 ? ' vb-pulse' : '');
+      pl.innerHTML = ic('play', 'h-4 w-4') + '<span>' + fmt(Number(it.durasi) || 0) + '</span>';
+      th.appendChild(im);
+      th.appendChild(pl);
+      b.appendChild(th);
+
+      if (it.judul) {
+        var t = document.createElement('p');
+        t.className = 'mt-2 line-clamp-2 text-sm font-semibold text-heading';
+        t.textContent = it.judul;
+        b.appendChild(t);
+      }
+      var tg = tgl(it.waktu, true);
+      if (tg) {
+        var d = document.createElement('p');
+        d.className = 'mt-0.5 text-xs text-muted';
+        d.textContent = tg;
+        b.appendChild(d);
+      }
+      b.addEventListener('click', function () { openV(it, b); });
+      return b;
     }
 
     fetch('/admin/video/video.json?t=' + Date.now(), { cache: 'no-store' })
       .then(function (r) { return r.ok ? r.json() : null; })
       .then(function (d) {
-        if (!d || !d.aktif || !d.video || !d.sampul) return;
-        var w = Number(d.lebar) || 9, h = Number(d.tinggi) || 16;
-        landscape = w >= h;
-        dsec = Number(d.durasi) || 0;
-        box.style.aspectRatio = w + ' / ' + h;
-        if (d.judul) box.setAttribute('aria-label', d.judul);
-
-        var a = txt('vb-t', d.judul);
-        var b = txt('vb-d', d.deskripsi);
-        var c = txt('vb-w', tgl(d.waktu));
-        var teks = a || b || c;
-        $('vb-info').hidden = !teks;
-        if (landscape) {
-          wrapEl.style.maxWidth = '720px';
-          wrapEl.style.gridTemplateColumns = '1fr';
-        } else if (!teks) {
-          wrapEl.style.maxWidth = '280px';
-          wrapEl.style.gridTemplateColumns = '1fr';
-        }
-
-        cover.src = BASE + d.sampul;
-        v.src = BASE + d.video;
+        if (!d) return;
+        var arr = Array.isArray(d.daftar) ? d.daftar : (d.video ? [d] : []);
+        arr = arr.filter(function (it) { return it && it.aktif && it.video && it.sampul; });
+        if (!arr.length) return;
+        var tegak = (Number(arr[0].tinggi) || 16) > (Number(arr[0].lebar) || 9);
+        arr.forEach(function (it, i) { row.appendChild(kartu(it, i, tegak)); });
         setPP(); setMu(); syncFS();
-        showCover(false);
         sec.hidden = false;
       })
       .catch(function () {});
