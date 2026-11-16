@@ -1,6 +1,7 @@
 ---
 import Layout from '~/layouts/PageLayout.astro';
-import { wrap, card, services, roles, EMAIL } from '~/data/profil';
+import { Icon } from 'astro-icon/components';
+import { wrap, card, services, roles, stats, EMAIL } from '~/data/profil';
 
 const metadata = { title: 'Layanan dan Keahlian' };
 
@@ -59,6 +60,23 @@ const grouped = groups.map(([title, names]) => ({
   title,
   items: names.map((n) => byName.get(n)).filter((r): r is string[] => Boolean(r)),
 }));
+
+// Penjelasan singkat tiap layanan, diambil dari deskripsi peran yang sudah ada di profil.ts
+const desc: Record<string, string> = {
+  'Pengembangan website & aplikasi (full-stack)': 'Membangun aplikasi web dan seluler dari basis data, backend, hingga antarmuka.',
+  'Administrasi server, jaringan & dukungan IT': 'Mengelola server, akun, cadangan data, dan jaringan LAN serta Wi-Fi agar layanan tetap tersedia.',
+  'Konsultasi IT & transformasi digital': 'Menganalisis kebutuhan dan merekomendasikan solusi yang tepat guna dan sesuai anggaran.',
+  'Penetration testing berizin & keamanan defensif': 'Menguji keamanan sistem secara legal dengan izin tertulis, lalu melaporkan temuan beserta perbaikannya.',
+  'Automasi VBA & Power Platform': 'Mengotomasi pekerjaan Excel dan Office, serta membangun Power Apps, Power Automate, dan Power BI.',
+  'Desain grafis & video': 'Desain grafis, penyuntingan video, dan materi visual untuk komunikasi dan edukasi.',
+  'Solusi digital untuk pendidikan': 'Absensi digital, aplikasi rapor, dan sistem administrasi untuk sekolah.',
+  'Pengembangan produk digital & MVP': 'Memimpin produk dari ide, arsitektur teknis, pengembangan, hingga operasional.',
+};
+
+const btnMain =
+  'inline-flex items-center justify-center gap-2 rounded-md bg-accent px-5 py-3 text-sm font-semibold text-primary shadow-sm transition hover:opacity-90 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white';
+const btnSide =
+  'inline-flex items-center justify-center gap-2 rounded-md border border-white/40 px-5 py-3 text-sm font-semibold text-white transition hover:border-white hover:bg-white/10 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white';
 ---
 
 <Layout metadata={metadata}>
@@ -66,23 +84,40 @@ const grouped = groups.map(([title, names]) => ({
     <div class={wrap}>
       <h1 class="text-3xl font-extrabold tracking-tight sm:text-5xl">Layanan dan Keahlian</h1>
       <p class="mt-3 max-w-2xl text-slate-300">
-        {services.length} layanan yang bisa saya bantu, didukung {roles.length} peran dan bidang keahlian di dunia IT.
+        {services.length} layanan yang bisa saya bantu, didukung {stats[2].n} peran dan bidang keahlian di dunia IT.
       </p>
-      <div class="mt-6 flex flex-wrap gap-3">
-        <a href="#layanan" class="rounded-md bg-accent px-5 py-2.5 text-sm font-semibold text-primary transition hover:brightness-95">Layanan</a>
-        <a href="#keahlian" class="rounded-md border border-white px-5 py-2.5 text-sm font-semibold transition hover:bg-white/10">Keahlian</a>
+      <div class="mt-7 flex flex-wrap gap-3">
+        <a href={`mailto:${EMAIL}`} class={btnMain}>
+          <Icon name="tabler:mail" class="h-5 w-5" />
+          Hubungi saya
+        </a>
+        <a href="/asisten" class={btnSide}>
+          <Icon name="tabler:message-circle" class="h-5 w-5" />
+          Tanya asisten
+        </a>
       </div>
     </div>
   </section>
 
-  <section id="layanan" class="scroll-mt-24 py-14 sm:py-16">
+  <section id="layanan" class="scroll-mt-24 py-12 sm:py-16">
     <div class={wrap}>
       <h2 class="mb-8 text-2xl font-bold text-heading">Layanan</h2>
       <div class="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
         {
-          services.map((s) => (
-            <div class={`${card} p-5`}>
-              <p class="font-bold text-heading">{s}</p>
+          services.map((s, i) => (
+            <div class={`${card} flex flex-col border-t-2 border-t-primary p-5`}>
+              <span class="inline-flex h-11 w-11 items-center justify-center rounded-lg bg-primary text-white">
+                {i === 0 && <Icon name="tabler:code" class="h-6 w-6" />}
+                {i === 1 && <Icon name="tabler:server" class="h-6 w-6" />}
+                {i === 2 && <Icon name="tabler:bulb" class="h-6 w-6" />}
+                {i === 3 && <Icon name="tabler:shield-check" class="h-6 w-6" />}
+                {i === 4 && <Icon name="tabler:settings" class="h-6 w-6" />}
+                {i === 5 && <Icon name="tabler:brush" class="h-6 w-6" />}
+                {i === 6 && <Icon name="tabler:school" class="h-6 w-6" />}
+                {i === 7 && <Icon name="tabler:rocket" class="h-6 w-6" />}
+              </span>
+              <h3 class="mt-4 text-base font-bold leading-snug text-heading">{s}</h3>
+              <p class="mt-2 text-sm leading-relaxed text-muted">{desc[s] ?? ''}</p>
             </div>
           ))
         }
@@ -90,25 +125,33 @@ const grouped = groups.map(([title, names]) => ({
     </div>
   </section>
 
-  <section id="keahlian" class="scroll-mt-24 bg-slate-50 py-14 sm:py-16">
+  <section id="keahlian" class="scroll-mt-24 bg-slate-50 py-12 sm:py-16">
     <div class={wrap}>
       <h2 class="mb-8 text-2xl font-bold text-heading">Keahlian</h2>
-      <div class="space-y-10">
+      <div class="grid items-start gap-6 lg:grid-cols-2">
         {
-          grouped.map((g) => (
-            <div>
-              <h3 class="mb-4 border-b border-slate-200 pb-2 text-lg font-bold text-heading">
-                {g.title}
-                <span class="ml-2 text-sm font-medium text-muted">{g.items.length}</span>
-              </h3>
-              <div class="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-                {g.items.map((r) => (
-                  <div class={`${card} p-5`}>
-                    <p class="font-bold text-heading">{r[0]}</p>
-                    <p class="mt-2 text-sm leading-relaxed text-muted">{r[1]}</p>
-                  </div>
-                ))}
+          grouped.map((g, gi) => (
+            <div class={`${card} overflow-hidden`}>
+              <div class="flex items-center gap-3 border-b border-slate-200 px-4 py-3">
+                <span class="inline-flex h-9 w-9 shrink-0 items-center justify-center rounded-md bg-primary text-white">
+                  {gi === 0 && <Icon name="tabler:code" class="h-5 w-5" />}
+                  {gi === 1 && <Icon name="tabler:server" class="h-5 w-5" />}
+                  {gi === 2 && <Icon name="tabler:shield-lock" class="h-5 w-5" />}
+                  {gi === 3 && <Icon name="tabler:briefcase" class="h-5 w-5" />}
+                  {gi === 4 && <Icon name="tabler:palette" class="h-5 w-5" />}
+                  {gi === 5 && <Icon name="tabler:layout-grid" class="h-5 w-5" />}
+                </span>
+                <h3 class="flex-1 text-base font-bold text-heading">{g.title}</h3>
+                <span class="text-sm font-medium text-muted">{g.items.length}</span>
               </div>
+              <ul class="divide-y divide-slate-100">
+                {g.items.map((r) => (
+                  <li class="px-4 py-3">
+                    <p class="text-sm font-semibold text-heading">{r[0]}</p>
+                    <p class="mt-0.5 text-sm leading-relaxed text-muted">{r[1]}</p>
+                  </li>
+                ))}
+              </ul>
             </div>
           ))
         }
@@ -116,13 +159,16 @@ const grouped = groups.map(([title, names]) => ({
     </div>
   </section>
 
-  <section class="bg-primary py-14 text-white sm:py-16">
+  <section class="bg-primary py-12 text-white sm:py-16">
     <div class={`${wrap} flex flex-col items-start gap-6 md:flex-row md:items-center md:justify-between`}>
       <div>
         <h2 class="text-2xl font-bold sm:text-3xl">Butuh bantuan IT?</h2>
         <p class="mt-2 max-w-xl text-slate-300">Ceritakan kebutuhan Anda lewat email.</p>
       </div>
-      <a href={`mailto:${EMAIL}`} class="rounded-md bg-accent px-6 py-3 text-sm font-semibold text-primary transition hover:brightness-95">Hubungi saya</a>
+      <a href={`mailto:${EMAIL}`} class={btnMain}>
+        <Icon name="tabler:mail" class="h-5 w-5" />
+        Hubungi saya
+      </a>
     </div>
   </section>
 </Layout>
