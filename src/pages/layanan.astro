@@ -1,11 +1,29 @@
 ---
 import Layout from '~/layouts/PageLayout.astro';
 import { Icon } from 'astro-icon/components';
-import { wrap, card, services, roles, stats, EMAIL } from '~/data/profil';
+import { wrap, card, EMAIL } from '~/data/profil';
 
-const metadata = { title: 'Layanan dan Keahlian' };
+const metadata = { title: 'Layanan' };
 
-const groups: [string, string[]][] = [
+const layanan: [string, string][] = [
+  ['Pengembangan website dan aplikasi', 'Membangun aplikasi web dan seluler dari basis data, backend, hingga antarmuka.'],
+  ['Server, jaringan, dan dukungan IT', 'Mengelola server, akun, cadangan data, dan jaringan agar layanan tetap tersedia.'],
+  ['Konsultasi IT dan transformasi digital', 'Menganalisis kebutuhan dan merekomendasikan solusi yang tepat guna dan sesuai anggaran.'],
+  ['Keamanan sistem', 'Pengujian dengan izin tertulis, lalu laporan temuan beserta perbaikannya.'],
+  ['Otomasi VBA dan Power Platform', 'Mengotomasi pekerjaan Excel dan Office, serta membangun Power Apps, Power Automate, dan Power BI.'],
+  ['Desain grafis dan video', 'Materi visual dan penyuntingan video untuk komunikasi dan edukasi.'],
+  ['Solusi digital untuk pendidikan', 'Absensi digital, aplikasi rapor, dan sistem administrasi untuk sekolah.'],
+  ['Pengembangan produk digital dan MVP', 'Memimpin produk dari ide, arsitektur teknis, pengembangan, hingga operasional.'],
+];
+
+const langkah: [string, string][] = [
+  ['Analisis kebutuhan', 'Memahami masalah dan merekomendasikan solusi yang sesuai anggaran.'],
+  ['Rancangan', 'Menyusun ruang lingkup, jadwal, dan arsitektur teknis.'],
+  ['Pengerjaan', 'Membangun dan menguji sebelum rilis, supaya masalah ditemukan lebih dulu oleh tim.'],
+  ['Serah terima dan dukungan', 'Serah terima yang jelas, lalu perawatan agar layanan tetap berjalan.'],
+];
+
+const keahlian: [string, string[]][] = [
   [
     'Pengembangan',
     [
@@ -13,65 +31,20 @@ const groups: [string, string[]][] = [
       'Mobile App Developer (Android)',
       'UI/UX Designer',
       'Database Administrator',
-      'QA & Software Tester',
+      'QA dan Software Tester',
       'VBA / Macro Developer',
       'Power Platform Developer',
-      'AI & Chatbot Integrator',
+      'AI dan Chatbot Integrator',
     ],
   ],
   [
     'Infrastruktur dan dukungan',
-    [
-      'IT Generalist',
-      'IT Jack-of-All-Trades',
-      'IT Specialist',
-      'IT Support Specialist',
-      'System Administrator (SysAdmin)',
-      'Network Engineer',
-      'DevOps & Cloud Engineer',
-    ],
+    ['IT Specialist', 'IT Support Specialist', 'System Administrator (SysAdmin)', 'Network Engineer', 'DevOps dan Cloud Engineer'],
   ],
-  [
-    'Keamanan',
-    [
-      'Cybersecurity',
-      'Ethical Hacker / Penetration Tester',
-      'Digital Forensics & Incident Response (Defensif)',
-    ],
-  ],
-  [
-    'Konsultasi dan manajemen',
-    [
-      'IT Consultant',
-      'IT Project Manager',
-      'Solo Tech Founder / CTO',
-      'Data Analyst & Business Intelligence',
-    ],
-  ],
-  ['Multimedia dan edukasi', ['Multimedia Specialist', 'IT Trainer & Technical Writer']],
+  ['Keamanan', ['Cybersecurity', 'Ethical Hacker / Penetration Tester', 'Digital Forensics dan Incident Response (defensif)']],
+  ['Konsultasi dan manajemen', ['IT Consultant', 'Manajemen proyek IT', 'Solo Tech Founder / CTO', 'Data Analyst dan Business Intelligence']],
+  ['Multimedia dan edukasi', ['Multimedia Specialist', 'IT Trainer dan Technical Writer']],
 ];
-
-const byName = new Map<string, string[]>(roles.map((r) => [r[0], r]));
-const used = new Set(groups.flatMap((g) => g[1]));
-const rest = roles.filter((r) => !used.has(r[0]));
-if (rest.length > 0) groups.push(['Lainnya', rest.map((r) => r[0])]);
-
-const grouped = groups.map(([title, names]) => ({
-  title,
-  items: names.map((n) => byName.get(n)).filter((r): r is string[] => Boolean(r)),
-}));
-
-// Penjelasan singkat tiap layanan, diambil dari deskripsi peran yang sudah ada di profil.ts
-const desc: Record<string, string> = {
-  'Pengembangan website & aplikasi (full-stack)': 'Membangun aplikasi web dan seluler dari basis data, backend, hingga antarmuka.',
-  'Administrasi server, jaringan & dukungan IT': 'Mengelola server, akun, cadangan data, dan jaringan LAN serta Wi-Fi agar layanan tetap tersedia.',
-  'Konsultasi IT & transformasi digital': 'Menganalisis kebutuhan dan merekomendasikan solusi yang tepat guna dan sesuai anggaran.',
-  'Penetration testing berizin & keamanan defensif': 'Menguji keamanan sistem secara legal dengan izin tertulis, lalu melaporkan temuan beserta perbaikannya.',
-  'Automasi VBA & Power Platform': 'Mengotomasi pekerjaan Excel dan Office, serta membangun Power Apps, Power Automate, dan Power BI.',
-  'Desain grafis & video': 'Desain grafis, penyuntingan video, dan materi visual untuk komunikasi dan edukasi.',
-  'Solusi digital untuk pendidikan': 'Absensi digital, aplikasi rapor, dan sistem administrasi untuk sekolah.',
-  'Pengembangan produk digital & MVP': 'Memimpin produk dari ide, arsitektur teknis, pengembangan, hingga operasional.',
-};
 
 const btnMain =
   'inline-flex items-center justify-center gap-2 rounded-md bg-accent px-5 py-3 text-sm font-semibold text-primary shadow-sm transition hover:opacity-90 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white';
@@ -82,77 +55,103 @@ const btnSide =
 <Layout metadata={metadata}>
   <section class="bg-primary py-12 text-white sm:py-16">
     <div class={wrap}>
-      <h1 class="text-3xl font-extrabold tracking-tight sm:text-5xl">Layanan dan Keahlian</h1>
-      <p class="mt-3 max-w-2xl text-slate-300">
-        {services.length} layanan yang bisa saya bantu, didukung {stats[2].n} peran dan bidang keahlian di dunia IT.
+      <h1 class="text-2xl font-bold tracking-tight">Layanan</h1>
+      <p class="mt-3 max-w-2xl text-sm text-slate-300">
+        Solusi IT yang dirancang, dibangun, dan dirawat sampai berjalan stabil.
       </p>
-      <div class="mt-7 flex flex-wrap gap-3">
+      <div class="mt-6 flex flex-wrap gap-3">
         <a href={`mailto:${EMAIL}`} class={btnMain}>
           <Icon name="tabler:mail" class="h-5 w-5" />
           Hubungi saya
         </a>
-        <a href="/asisten" class={btnSide}>
-          <Icon name="tabler:message-circle" class="h-5 w-5" />
-          Tanya asisten
+        <a href="/proyek" class={btnSide}>
+          <Icon name="tabler:briefcase" class="h-5 w-5" />
+          Lihat portofolio
         </a>
       </div>
     </div>
   </section>
 
-  <section id="layanan" class="scroll-mt-24 py-12 sm:py-16">
+  <section id="layanan" class="scroll-mt-24 py-10 sm:py-12">
     <div class={wrap}>
-      <h2 class="mb-8 text-2xl font-bold text-heading">Layanan</h2>
-      <div class="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-        {
-          services.map((s, i) => (
-            <div class={`${card} flex flex-col border-t-2 border-t-primary p-5`}>
-              <span class="inline-flex h-11 w-11 items-center justify-center rounded-lg bg-primary text-white">
-                {i === 0 && <Icon name="tabler:code" class="h-6 w-6" />}
-                {i === 1 && <Icon name="tabler:server" class="h-6 w-6" />}
-                {i === 2 && <Icon name="tabler:bulb" class="h-6 w-6" />}
-                {i === 3 && <Icon name="tabler:shield-check" class="h-6 w-6" />}
-                {i === 4 && <Icon name="tabler:settings" class="h-6 w-6" />}
-                {i === 5 && <Icon name="tabler:brush" class="h-6 w-6" />}
-                {i === 6 && <Icon name="tabler:school" class="h-6 w-6" />}
-                {i === 7 && <Icon name="tabler:rocket" class="h-6 w-6" />}
-              </span>
-              <h3 class="mt-4 text-base font-bold leading-snug text-heading">{s}</h3>
-              <p class="mt-2 text-sm leading-relaxed text-muted">{desc[s] ?? ''}</p>
-            </div>
-          ))
-        }
+      <div class={`${card} overflow-hidden`}>
+        <ul class="grid gap-px bg-slate-200 sm:grid-cols-2">
+          {
+            layanan.map(([judul, isi], i) => (
+              <li class="flex items-start gap-3 bg-white px-4 py-3">
+                <span class="inline-flex h-9 w-9 shrink-0 items-center justify-center rounded-md bg-primary text-white">
+                  {i === 0 && <Icon name="tabler:code" class="h-5 w-5" />}
+                  {i === 1 && <Icon name="tabler:server" class="h-5 w-5" />}
+                  {i === 2 && <Icon name="tabler:bulb" class="h-5 w-5" />}
+                  {i === 3 && <Icon name="tabler:shield-check" class="h-5 w-5" />}
+                  {i === 4 && <Icon name="tabler:settings" class="h-5 w-5" />}
+                  {i === 5 && <Icon name="tabler:brush" class="h-5 w-5" />}
+                  {i === 6 && <Icon name="tabler:school" class="h-5 w-5" />}
+                  {i === 7 && <Icon name="tabler:rocket" class="h-5 w-5" />}
+                </span>
+                <div>
+                  <h3 class="text-sm font-semibold text-heading">{judul}</h3>
+                  <p class="mt-0.5 text-sm leading-relaxed text-muted">{isi}</p>
+                </div>
+              </li>
+            ))
+          }
+        </ul>
       </div>
     </div>
   </section>
 
-  <section id="keahlian" class="scroll-mt-24 bg-slate-50 py-12 sm:py-16">
+  <section class="bg-slate-50 py-10 sm:py-12">
     <div class={wrap}>
-      <h2 class="mb-8 text-2xl font-bold text-heading">Keahlian</h2>
-      <div class="grid items-start gap-6 lg:grid-cols-2">
+      <h2 class="mb-5 text-xl font-bold text-heading">Cara kerja</h2>
+      <div class={`${card} overflow-hidden`}>
+        <ul class="grid gap-px bg-slate-200 sm:grid-cols-2">
+          {
+            langkah.map(([judul, isi], i) => (
+              <li class="flex items-start gap-3 bg-white px-4 py-3">
+                <span class="inline-flex h-9 w-9 shrink-0 items-center justify-center rounded-md bg-primary text-white">
+                  {i === 0 && <Icon name="tabler:search" class="h-5 w-5" />}
+                  {i === 1 && <Icon name="tabler:layout-grid" class="h-5 w-5" />}
+                  {i === 2 && <Icon name="tabler:code" class="h-5 w-5" />}
+                  {i === 3 && <Icon name="tabler:settings" class="h-5 w-5" />}
+                </span>
+                <div>
+                  <h3 class="text-sm font-semibold text-heading">{judul}</h3>
+                  <p class="mt-0.5 text-sm leading-relaxed text-muted">{isi}</p>
+                </div>
+              </li>
+            ))
+          }
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <section id="keahlian" class="scroll-mt-24 py-10 sm:py-12">
+    <div class={wrap}>
+      <h2 class="mb-5 text-xl font-bold text-heading">Keahlian</h2>
+      <div class="grid items-start gap-3 lg:grid-cols-2">
         {
-          grouped.map((g, gi) => (
-            <div class={`${card} overflow-hidden`}>
-              <div class="flex items-center gap-3 border-b border-slate-200 px-4 py-3">
+          keahlian.map(([judul, peran], gi) => (
+            <details class={`group ${card} overflow-hidden`}>
+              <summary class="flex cursor-pointer list-none items-center gap-3 px-4 py-3 [&::-webkit-details-marker]:hidden">
                 <span class="inline-flex h-9 w-9 shrink-0 items-center justify-center rounded-md bg-primary text-white">
                   {gi === 0 && <Icon name="tabler:code" class="h-5 w-5" />}
                   {gi === 1 && <Icon name="tabler:server" class="h-5 w-5" />}
-                  {gi === 2 && <Icon name="tabler:shield-lock" class="h-5 w-5" />}
+                  {gi === 2 && <Icon name="tabler:shield-check" class="h-5 w-5" />}
                   {gi === 3 && <Icon name="tabler:briefcase" class="h-5 w-5" />}
                   {gi === 4 && <Icon name="tabler:palette" class="h-5 w-5" />}
-                  {gi === 5 && <Icon name="tabler:layout-grid" class="h-5 w-5" />}
                 </span>
-                <h3 class="flex-1 text-base font-bold text-heading">{g.title}</h3>
-                <span class="text-sm font-medium text-muted">{g.items.length}</span>
-              </div>
-              <ul class="divide-y divide-slate-100">
-                {g.items.map((r) => (
-                  <li class="px-4 py-3">
-                    <p class="text-sm font-semibold text-heading">{r[0]}</p>
-                    <p class="mt-0.5 text-sm leading-relaxed text-muted">{r[1]}</p>
-                  </li>
+                <span class="flex-1 text-sm font-semibold text-heading">{judul}</span>
+                <span class="text-sm text-muted">{peran.length}</span>
+                <Icon name="tabler:chevron-down" class="h-5 w-5 shrink-0 text-muted transition-transform group-open:rotate-180" />
+              </summary>
+              <div class="flex flex-wrap gap-2 border-t border-slate-200 px-4 py-3">
+                {peran.map((r) => (
+                  <span class="rounded-md border border-slate-200 bg-slate-50 px-2.5 py-1 text-sm text-default">{r}</span>
                 ))}
-              </ul>
-            </div>
+              </div>
+            </details>
           ))
         }
       </div>
@@ -162,8 +161,8 @@ const btnSide =
   <section class="bg-primary py-12 text-white sm:py-16">
     <div class={`${wrap} flex flex-col items-start gap-6 md:flex-row md:items-center md:justify-between`}>
       <div>
-        <h2 class="text-2xl font-bold sm:text-3xl">Butuh bantuan IT?</h2>
-        <p class="mt-2 max-w-xl text-slate-300">Ceritakan kebutuhan Anda lewat email.</p>
+        <h2 class="text-xl font-bold">Butuh bantuan IT?</h2>
+        <p class="mt-2 max-w-xl text-sm text-slate-300">Ceritakan kebutuhan Anda lewat email.</p>
       </div>
       <a href={`mailto:${EMAIL}`} class={btnMain}>
         <Icon name="tabler:mail" class="h-5 w-5" />
