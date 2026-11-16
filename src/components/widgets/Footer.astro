@@ -74,6 +74,18 @@ const { socialLinks = [], secondaryLinks = [], links = [], footNote = '', theme 
         ))
       }
     </div>
+
+    <div class="flex flex-wrap items-center gap-x-6 gap-y-1 border-t border-gray-200 py-4 text-sm text-muted">
+      <span class="inline-flex items-center gap-1.5">
+        <Icon name="tabler:eye" class="h-4 w-4" />
+        Total kunjungan <b class="font-semibold text-heading" data-stat="total">-</b>
+      </span>
+      <span class="inline-flex items-center gap-1.5">
+        <Icon name="tabler:calendar" class="h-4 w-4" />
+        Hari ini <b class="font-semibold text-heading" data-stat="hari">-</b>
+      </span>
+    </div>
+
     <div class="md:flex md:items-center md:justify-between py-6 md:py-8">
       {
         socialLinks?.length ? (
@@ -102,3 +114,42 @@ const { socialLinks = [], secondaryLinks = [], links = [], footNote = '', theme 
     </div>
   </div>
 </footer>
+
+<script>
+  const API = 'https://statistik-situs.extreamcollectiveofficial.workers.dev/api/statistik';
+  const KUNCI = 'kunjungan-tanggal';
+
+  function isi(data: Record<string, number> | null) {
+    document.querySelectorAll<HTMLElement>('[data-stat]').forEach((el) => {
+      const v = data ? data[el.dataset.stat || ''] : undefined;
+      el.textContent = typeof v === 'number' ? v.toLocaleString('id-ID') : '-';
+    });
+  }
+
+  async function muat() {
+    const tanggal = new Date().toLocaleDateString('sv-SE');
+    let hitung = false;
+    try {
+      hitung = localStorage.getItem(KUNCI) !== tanggal;
+    } catch (e) {
+      hitung = false;
+    }
+    try {
+      const r = await fetch(API, { method: hitung ? 'POST' : 'GET' });
+      if (!r.ok) throw new Error('gagal');
+      const data = await r.json();
+      if (hitung) {
+        try {
+          localStorage.setItem(KUNCI, tanggal);
+        } catch (e) {
+          /* abaikan */
+        }
+      }
+      isi(data);
+    } catch (e) {
+      isi(null);
+    }
+  }
+
+  document.addEventListener('astro:page-load', muat);
+</script>
