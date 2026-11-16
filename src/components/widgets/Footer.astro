@@ -126,6 +126,47 @@ const { socialLinks = [], secondaryLinks = [], links = [], footNote = '', theme 
     });
   }
 
+  function info() {
+    const ua = navigator.userAgent;
+    const w = window.innerWidth;
+    const dev = /Mobi|Android|iPhone/.test(ua) ? (w >= 768 ? 'Tablet' : 'Ponsel') : /iPad|Tablet/.test(ua) ? 'Tablet' : 'Komputer';
+    const br = /Instagram|FBAN|FBAV/.test(ua)
+      ? 'Aplikasi sosial'
+      : /Edg\//.test(ua)
+        ? 'Edge'
+        : /OPR\/|Opera/.test(ua)
+          ? 'Opera'
+          : /SamsungBrowser/.test(ua)
+            ? 'Samsung Internet'
+            : /Firefox|FxiOS/.test(ua)
+              ? 'Firefox'
+              : /Chrome|CriOS/.test(ua)
+                ? 'Chrome'
+                : /Safari/.test(ua)
+                  ? 'Safari'
+                  : 'Lainnya';
+    let src = 'Langsung';
+    try {
+      const u = new URL(document.referrer);
+      const host = u.hostname.replace(/^www\./, '');
+      if (host && host !== location.hostname.replace(/^www\./, '')) src = host;
+    } catch (e) {
+      /* tanpa perujuk */
+    }
+    let jn = 'Baru';
+    try {
+      if (localStorage.getItem('pernah-berkunjung')) jn = 'Kembali';
+    } catch (e) {
+      /* abaikan */
+    }
+    return { dev, br, src, pg: location.pathname.slice(0, 40), jn };
+  }
+
+  function bagikan(data: unknown) {
+    (window as any).__statistik = data;
+    document.dispatchEvent(new CustomEvent('statistik:data', { detail: data }));
+  }
+
   async function muat() {
     const tanggal = new Date().toLocaleDateString('sv-SE');
     let hitung = false;
@@ -135,19 +176,27 @@ const { socialLinks = [], secondaryLinks = [], links = [], footNote = '', theme 
       hitung = false;
     }
     try {
-      const r = await fetch(API, { method: hitung ? 'POST' : 'GET' });
+      const opsi: RequestInit = { method: hitung ? 'POST' : 'GET' };
+      if (hitung) {
+        opsi.headers = { 'Content-Type': 'application/json' };
+        opsi.body = JSON.stringify(info());
+      }
+      const r = await fetch(API, opsi);
       if (!r.ok) throw new Error('gagal');
       const data = await r.json();
       if (hitung) {
         try {
           localStorage.setItem(KUNCI, tanggal);
+          localStorage.setItem('pernah-berkunjung', '1');
         } catch (e) {
           /* abaikan */
         }
       }
       isi(data);
+      bagikan(data);
     } catch (e) {
       isi(null);
+      bagikan(null);
     }
   }
 
