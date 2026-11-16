@@ -1,43 +1,74 @@
+export interface Alat {
+  nama: string;
+  fungsi: string;
+  gambar: string;
+}
+
+export interface Hasil {
+  judul: string;
+  isi: string;
+}
+
 export interface Proyek {
   judul: string;
   tahun: string;
   untuk: string;
-  masalah: string;
-  dibuat: string;
-  hasil: string;
-  teknologi: string[];
+  ringkasan: string;
+  sebelum: string;
+  sekarang: string;
+  hasil: Hasil[];
+  alat?: Alat[];
   status: string;
-  gambar?: { src: string; alt: string; keterangan: string; lebar: number; tinggi: number };
 }
 
 export const projects: Proyek[] = [
   {
-    judul: 'Pembuatan absensi digital',
+    judul: 'Sistem absensi digital berbasis kode QR',
     tahun: '2023',
     untuk: 'sebuah sekolah',
-    masalah: 'Absensi masih dicatat manual, sehingga rekap memakan waktu dan datanya tersebar di banyak buku.',
-    dibuat:
-      'Sistem absensi digital otomatis. Kehadiran dipindai dari kode QR di kartu pelajar, lalu datanya langsung tersambung ke spreadsheet.',
-    hasil: 'Data kehadiran terkoneksi otomatis ke basis data dan dapat dicetak kapan saja.',
-    teknologi: ['Kartu pelajar digital', 'Scan IT to Office', 'QR Code', 'Google Spreadsheet', 'Microsoft Excel'],
-    status: 'Masih dipakai sebagai investasi jangka panjang.',
-    gambar: {
-      src: '/gambar/absensi-scan.webp',
-      alt: 'Tampilan aplikasi pemindai untuk data Kelas 11 dengan kolom kode, tanggal, dan jam',
-      keterangan: 'Aplikasi pemindai untuk data Kelas 11. Kolom kode, tanggal, dan jam terisi otomatis saat kartu dipindai.',
-      lebar: 640,
-      tinggi: 1281,
-    },
+    ringkasan: 'Kehadiran siswa tercatat otomatis hanya dengan memindai kartu pelajar.',
+    sebelum: 'Absensi dicatat manual di banyak buku, sehingga rekap kehadiran memakan waktu.',
+    sekarang: 'Siswa memindai kode QR pada kartu pelajar. Data kehadiran langsung masuk ke spreadsheet.',
+    hasil: [
+      { judul: 'Data terpusat', isi: 'Kehadiran terkumpul otomatis di satu spreadsheet.' },
+      { judul: 'Rekap lebih cepat', isi: 'Rekap tidak perlu diinput ulang.' },
+      { judul: 'Siap cetak', isi: 'Laporan dapat dicetak kapan saja.' },
+    ],
+    alat: [
+      {
+        nama: 'Pembuat kode QR',
+        fungsi: 'Membuat kode QR yang dicetak pada kartu pelajar.',
+        gambar: '/gambar/absensi-qr.webp',
+      },
+      {
+        nama: 'Kartu pelajar',
+        fungsi: 'Desain kartu pelajar lengkap dengan kode QR.',
+        gambar: '/gambar/absensi-kartu.webp',
+      },
+      {
+        nama: 'Scan-IT to Office',
+        fungsi: 'Memindai kartu dan mengisi kode, tanggal, dan jam secara otomatis.',
+        gambar: '/gambar/absensi-scanit.webp',
+      },
+      {
+        nama: 'Google Spreadsheet',
+        fungsi: 'Menyimpan data kehadiran sebagai dasar rekap.',
+        gambar: '/gambar/absensi-sheets.webp',
+      },
+    ],
+    status: 'Masih digunakan hingga sekarang.',
   },
   {
-    judul: 'Desain kartu pelajar dengan QR code',
+    judul: 'Desain kartu pelajar dengan kode QR',
     tahun: '2023',
     untuk: 'sebuah sekolah',
-    masalah: 'Sekolah belum memiliki kartu pelajar.',
-    dibuat:
-      'Desain kartu pelajar lengkap dengan kode QR pada tiap kartu. Kode itu menjadi bagian dari sistem absensi digital.',
-    hasil: 'Setiap murid memiliki kartu dengan ID sendiri yang bisa dipakai untuk absensi digital.',
-    teknologi: ['Kartu pelajar digital', 'Scan IT to Office', 'QR Code', 'Google Spreadsheet', 'Microsoft Excel'],
-    status: 'Masih dipakai sebagai investasi masa depan.',
+    ringkasan: 'Setiap siswa memiliki kartu dengan ID sendiri yang dapat dipakai untuk absensi digital.',
+    sebelum: 'Sekolah belum memiliki kartu pelajar.',
+    sekarang: 'Setiap kartu memuat kode QR yang menjadi bagian dari sistem absensi digital.',
+    hasil: [
+      { judul: 'ID pribadi', isi: 'Setiap siswa memiliki kartu dengan ID sendiri.' },
+      { judul: 'Terhubung ke absensi', isi: 'Kartu dapat langsung dipakai untuk absensi digital.' },
+    ],
+    status: 'Masih digunakan hingga sekarang.',
   },
 ];
