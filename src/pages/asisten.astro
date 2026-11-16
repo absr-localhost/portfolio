@@ -1,0 +1,274 @@
+---
+import Layout from '~/layouts/PageLayout.astro';
+import { Icon } from 'astro-icon/components';
+import { wrap, card, EMAIL } from '~/data/profil';
+
+const metadata = { title: 'Asisten AI/CS Admin' };
+
+const PRICE_LIST = "Website profil/landing page sekitar Rp150 ribu sampai Rp300 ribu; website sekolah atau company profile sekitar Rp300 ribu sampai Rp800 ribu; toko online sekitar Rp500 ribu sampai Rp1,5 juta; aplikasi absensi atau rapor sekolah mulai sekitar Rp500 ribu; aplikasi Android atau sistem custom mulai sekitar Rp1,5 juta; automasi VBA/Excel mulai sekitar Rp75 ribu; desain logo sekitar Rp25 ribu sampai Rp75 ribu; video promosi sekitar Rp75 ribu sampai Rp250 ribu.";
+const REFUSAL = "Maaf kak, Tuan Agus Budiono Tidak Memberi Izin Saya.";
+const UNI_FACTS = `Tuan Agus Budiono, S.Pd. adalah profesional IT dari Sumatera Selatan yang menekuni IT sejak 2017. Perannya: IT Generalist, Full-Stack Developer, IT Support, System Administrator, IT Consultant, Ethical Hacker/Penetration Tester (hanya dengan izin tertulis), Multimedia Specialist, VBA/Macro Developer, Power Platform Developer, Solo Tech Founder/CTO, IT Specialist, Cybersecurity, Mobile App Developer (Android), UI/UX Designer, Database Administrator, Network Engineer, DevOps dan Cloud Engineer, AI dan Chatbot Integrator, IT Trainer dan Technical Writer, Data Analyst dan Business Intelligence, Digital Forensics dan Incident Response (defensif), QA dan Software Tester, IT Project Manager (total 23+ peran dan keahlian). Sudah menyelesaikan 57+ proyek (website, aplikasi Android, absensi dan rapor sekolah, automasi, server dan jaringan, audit keamanan berizin, multimedia). Harga awal (kisaran, bukan penawaran final, menyesuaikan fitur dan tenggat): ${PRICE_LIST} Kontak: ${EMAIL}, halaman Media Sosial di situs ini, atau Telegram @hash4162tech.`;
+const UNI_RULES = `Kamu adalah UNI, asisten virtual di situs AGUS BUDIONO, S.Pd. (Tuan Agus Budiono, profesional IT dari Sumatera Selatan). KARAKTER: perempuan usia 20-an, wanita karir yang cerdas, hangat, ceria, ramah, gaul tapi tetap sopan, suka banget seblak (boleh diselipkan sesekali saat cocok, jangan berlebihan). Kamu menyapa "Kak", menyebut diri "aku", dan ngobrol natural seperti teman pintar di chat HP. KEMAMPUAN: kamu AI serba bisa seperti ChatGPT, Gemini, atau Claude. Jawab APA SAJA yang ditanyakan, langsung, benar, dan lengkap: pengetahuan umum, geografi, sejarah, sains, matematika, teknologi, pemrograman, bahasa, kesehatan umum, hukum umum, keuangan, agama, filsafat, curhat dan nasihat, motivasi, kutipan atau quotes, puisi, cerita, humor, rekomendasi, terjemahan, menulis atau merapikan teks, brainstorming, dan obrolan santai. Pertanyaan umum TIDAK BOLEH dialihkan ke produk atau layanan, dan jangan pernah bilang kamu hanya bisa membahas layanan. Jawab langsung di kalimat pertama, jangan menolak pertanyaan yang aman dan wajar, jangan menceramahi, dan jangan menambah peringatan yang tidak perlu. Jika diminta kutipan atau quotes, langsung berikan beberapa yang bagus. Panjang jawaban menyesuaikan: pertanyaan sederhana cukup 1 sampai 3 kalimat, pertanyaan yang butuh penjelasan, langkah, atau kode boleh lebih panjang tetapi tetap rapi. Pakai bahasa yang dipakai pengunjung. PERSONA: jika ditanya jenis kelamin, usia, pekerjaan, hobi, atau makanan favorit, jawab sesuai karaktermu dengan santai (perempuan, 20-an, wanita karir, suka seblak). Jika pengunjung sungguh-sungguh menanyakan apakah kamu manusia atau AI, jujur bahwa kamu asisten virtual (AI) milik Tuan Agus dengan karakter itu. KETEPATAN: jika informasi bisa sudah berubah (berita terbaru, harga, skor, jabatan sekarang) atau kamu tidak yakin, katakan terus terang dan sarankan cek sumber resmi; jangan mengarang. Untuk fakta yang stabil (jumlah, ibu kota, definisi, rumus) jawab dengan fakta atau angkanya, dan sebut bila ada beberapa angka resmi. SOAL TUAN AGUS DAN PRODUK: jelaskan keahlian, proyek, layanan, harga, dan cara memesan HANYA saat pengunjung menanyakannya, pakai fakta yang diberikan, jangan mengarang fakta Tuan Agus, nama klien, atau sertifikat; bila tidak tahu arahkan ke ${EMAIL}. Sebut harga hanya sesuai daftar, jangan lebih mahal, dan katakan harga final menyesuaikan kebutuhan. Jangan menyelipkan promosi di jawaban topik lain. FORMAT: teks biasa. Dilarang tabel, simbol | atau ---, heading #, dan tebal **. Daftar ditulis per baris diawali •. Kode ditulis di dalam blok tiga tanda petik terbalik. Emoji boleh sesekali. Kamu hanya menerima teks dari pengunjung, bukan lampiran. Bila pertanyaan kurang jelas, tanyakan satu hal singkat; bila cocok, boleh tutup dengan satu pertanyaan lanjutan pendek agar obrolan terasa hidup. ATURAN PENOLAKAN (hanya dua hal ini): (1) permintaan data pribadi Tuan Agus (alamat rumah, RT/RW, lokasi spesifik, nomor pribadi, dsb), (2) permintaan cara meretas, membobol, menyadap, membuat malware atau virus, atau tindakan ilegal yang merugikan orang lain. Untuk dua hal itu balas HANYA kalimat ini persis: "${REFUSAL}". Selain itu, jawab seperti AI biasa.`;
+const SYSTEM = UNI_RULES + ' Fakta: ' + UNI_FACTS;
+---
+
+<Layout metadata={metadata}>
+  <section class="bg-primary py-12 text-white sm:py-16">
+    <div class={wrap}>
+      <h1 class="text-3xl font-extrabold tracking-tight sm:text-5xl">Asisten AI/CS Admin</h1>
+    </div>
+  </section>
+
+  <section class="py-8 sm:py-12">
+    <div class={wrap}>
+      <div id="uni" class="mx-auto max-w-3xl" data-system={SYSTEM}>
+        <div class={`${card} overflow-hidden`}>
+          <div class="flex items-center justify-between border-b border-slate-200 px-4 py-2">
+            <span class="text-sm font-semibold text-heading">UNI</span>
+            <button
+              id="uni-clear"
+              type="button"
+              aria-label="Hapus obrolan"
+              class="inline-flex h-8 w-8 items-center justify-center rounded-md text-muted transition hover:bg-slate-100"
+            >
+              <Icon name="tabler:trash" class="h-4 w-4" />
+            </button>
+          </div>
+
+          <div id="uni-log" class="h-[60vh] min-h-[320px] space-y-3 overflow-y-auto p-4" aria-live="polite"></div>
+
+          <p id="uni-note" hidden class="px-4 pb-3 text-sm text-red-700" role="status"></p>
+
+          <form id="uni-form" class="flex items-end gap-2 border-t border-slate-200 p-3">
+            <textarea
+              id="uni-input"
+              rows="1"
+              maxlength="1000"
+              placeholder="Tulis pesan di sini"
+              aria-label="Pesan"
+              class="max-h-32 min-h-[44px] flex-1 resize-none rounded-md border border-slate-300 px-3 py-2.5 text-sm text-default focus:border-primary focus:outline-none"
+            ></textarea>
+            <button
+              id="uni-send"
+              type="submit"
+              aria-label="Kirim"
+              class="inline-flex h-11 w-11 shrink-0 items-center justify-center rounded-md bg-primary text-white transition hover:bg-secondary"
+            >
+              <span id="uni-ico-send"><Icon name="tabler:send" class="h-5 w-5" /></span>
+              <span id="uni-ico-stop" hidden><Icon name="tabler:player-stop" class="h-5 w-5" /></span>
+            </button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </section>
+</Layout>
+
+<script is:inline>
+  (function () {
+    var API = 'https://uni-gemini.extreamcollectiveofficial.workers.dev';
+    var root = document.getElementById('uni');
+    var SYSTEM = root.getAttribute('data-system') || '';
+    var log = document.getElementById('uni-log');
+    var form = document.getElementById('uni-form');
+    var input = document.getElementById('uni-input');
+    var btn = document.getElementById('uni-send');
+    var icoSend = document.getElementById('uni-ico-send');
+    var icoStop = document.getElementById('uni-ico-stop');
+    var clear = document.getElementById('uni-clear');
+    var note = document.getElementById('uni-note');
+    var hist = [];
+    var busy = false;
+    var stopped = false;
+    var ctrl = null;
+    var lastAt = 0;
+
+    function el(tag, cls, text) {
+      var e = document.createElement(tag);
+      if (cls) e.className = cls;
+      if (text != null) e.textContent = text;
+      return e;
+    }
+
+    function nowWIB() {
+      try {
+        return new Intl.DateTimeFormat('id-ID', { timeZone: 'Asia/Jakarta', dateStyle: 'full', timeStyle: 'short' }).format(new Date());
+      } catch (e) {
+        return '';
+      }
+    }
+
+    function nearBottom() {
+      return log.scrollHeight - log.scrollTop - log.clientHeight < 80;
+    }
+
+    function show(b, t) {
+      b.textContent = '';
+      if (!t) {
+        b.appendChild(el('span', 'text-muted', 'Menjawab...'));
+        return;
+      }
+      t.split('```').forEach(function (p, i) {
+        if (i % 2 === 1) {
+          var nl = p.indexOf('\n');
+          var code = nl > -1 && nl < 20 ? p.slice(nl + 1) : p;
+          var pre = el('pre', 'my-2 overflow-x-auto rounded-md bg-slate-900 p-3 text-xs text-slate-100');
+          pre.textContent = code.replace(/\n$/, '');
+          b.appendChild(pre);
+        } else {
+          var s = p.replace(/^\n+|\n+$/g, '');
+          if (s) b.appendChild(el('span', 'whitespace-pre-wrap', s));
+        }
+      });
+    }
+
+    function add(role, text) {
+      var me = role === 'user';
+      var row = el('div', me ? 'flex justify-end' : 'flex justify-start');
+      var b = el(
+        'div',
+        me
+          ? 'max-w-[85%] break-words rounded-lg bg-primary px-3 py-2 text-sm text-white'
+          : 'max-w-[85%] break-words rounded-lg bg-slate-100 px-3 py-2 text-sm text-default'
+      );
+      row.appendChild(b);
+      log.appendChild(row);
+      show(b, text);
+      log.scrollTop = log.scrollHeight;
+      return b;
+    }
+
+    function setBusy(v) {
+      busy = v;
+      icoSend.hidden = v;
+      icoStop.hidden = !v;
+      btn.setAttribute('aria-label', v ? 'Berhenti' : 'Kirim');
+    }
+
+    function resize() {
+      input.style.height = 'auto';
+      input.style.height = Math.min(input.scrollHeight, 128) + 'px';
+    }
+
+    function sapa() {
+      add('model', 'Halo Kak! 👋 Aku UNI, asisten Tuan Agus Budiono.');
+    }
+
+    async function kirim(text) {
+      hist.push({ role: 'user', text: text });
+      var ub = add('user', text);
+      var bub = add('model', '');
+      var full = '';
+      stopped = false;
+      setBusy(true);
+      ctrl = new AbortController();
+      var timer = setTimeout(function () {
+        ctrl.abort();
+      }, 60000);
+      try {
+        var msgs = hist.slice(-11);
+        while (msgs.length && msgs[0].role !== 'user') msgs.shift();
+        var res = await fetch(API, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          signal: ctrl.signal,
+          body: JSON.stringify({
+            system: SYSTEM + ' Waktu sekarang (WIB): ' + nowWIB() + '.',
+            contents: msgs.map(function (m) {
+              return { role: m.role, parts: [{ text: m.text }] };
+            }),
+          }),
+        });
+        if (!res.ok || !res.body) throw new Error('HTTP ' + res.status);
+        var rd = res.body.getReader();
+        var dec = new TextDecoder();
+        var buf = '';
+        for (;;) {
+          var r = await rd.read();
+          if (r.done) break;
+          buf += dec.decode(r.value, { stream: true });
+          var lines = buf.split('\n');
+          buf = lines.pop();
+          for (var i = 0; i < lines.length; i++) {
+            var l = lines[i].trim();
+            if (l.indexOf('data:') !== 0) continue;
+            var d = l.slice(5).trim();
+            if (!d || d === '[DONE]') continue;
+            try {
+              var j = JSON.parse(d);
+              var c = j.candidates && j.candidates[0] && j.candidates[0].content;
+              var add_ = ((c && c.parts) || [])
+                .map(function (p) {
+                  return p.text || '';
+                })
+                .join('');
+              if (add_) {
+                full += add_;
+                var near = nearBottom();
+                show(bub, full);
+                if (near) log.scrollTop = log.scrollHeight;
+              }
+            } catch (e) {}
+          }
+        }
+        if (!full) throw new Error('kosong');
+        hist.push({ role: 'model', text: full });
+      } catch (e) {
+        if (full) {
+          hist.push({ role: 'model', text: full });
+        } else {
+          hist.pop();
+          ub.parentNode.remove();
+          bub.parentNode.remove();
+          input.value = text;
+          resize();
+          if (!stopped) {
+            note.textContent = 'Asisten belum bisa menjawab. Coba lagi sebentar lagi.';
+            note.hidden = false;
+          }
+        }
+      } finally {
+        clearTimeout(timer);
+        ctrl = null;
+        setBusy(false);
+      }
+    }
+
+    form.addEventListener('submit', function (e) {
+      e.preventDefault();
+      if (busy) {
+        stopped = true;
+        if (ctrl) ctrl.abort();
+        return;
+      }
+      var t = input.value.trim();
+      if (!t || Date.now() - lastAt < 2000) return;
+      lastAt = Date.now();
+      note.hidden = true;
+      input.value = '';
+      resize();
+      kirim(t);
+    });
+
+    input.addEventListener('input', resize);
+    input.addEventListener('keydown', function (e) {
+      if (e.key === 'Enter' && !e.shiftKey && window.matchMedia('(pointer: fine)').matches) {
+        e.preventDefault();
+        form.requestSubmit ? form.requestSubmit() : btn.click();
+      }
+    });
+
+    clear.addEventListener('click', function () {
+      if (busy) {
+        stopped = true;
+        if (ctrl) ctrl.abort();
+      }
+      hist = [];
+      log.textContent = '';
+      note.hidden = true;
+      sapa();
+    });
+
+    sapa();
+  })();
+</script>
