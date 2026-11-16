@@ -2,6 +2,8 @@
 import { Icon } from 'astro-icon/components';
 import { wrap } from '~/data/profil';
 
+const { judul: judulHalaman = '' } = Astro.props;
+
 const card = 'rounded-xl border border-slate-200 bg-white shadow-sm';
 const label = 'text-xs font-medium text-muted';
 const angka = 'mt-3 text-3xl font-bold leading-none tabular-nums text-heading';
@@ -13,8 +15,9 @@ const baris = 'flex items-center justify-between gap-3 px-4 py-3';
 const tombol = 'rounded-md px-2.5 py-1 text-muted';
 ---
 
-<div class="bg-slate-50">
-  <section class={`${wrap} pb-14 pt-6 sm:pb-16 sm:pt-8`}>
+<div class={judulHalaman ? 'bg-white' : 'bg-slate-50'}>
+  <section class={`${wrap} pb-14 sm:pb-16 ${judulHalaman ? 'pt-10 sm:pt-12' : 'pt-6 sm:pt-8'}`}>
+    {judulHalaman && <h2 class="mb-4 text-xl font-bold text-heading">{judulHalaman}</h2>}
     <div class="grid grid-cols-2 gap-3 sm:gap-4 lg:grid-cols-4">
       <div class={`${card} p-4`}>
         <div class="flex items-start justify-between gap-2">
