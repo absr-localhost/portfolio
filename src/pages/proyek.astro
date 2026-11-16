@@ -4,97 +4,80 @@ import { wrap, card } from '~/data/profil';
 import { projects } from '~/data/proyek';
 
 const metadata = {
-  title: 'Proyek',
+  title: 'Portofolio',
 };
 ---
 
 <Layout metadata={metadata}>
-  <section class="bg-primary py-12 text-white sm:py-16">
+  <section class="bg-primary py-8 text-white">
     <div class={wrap}>
-      <p class="text-sm font-semibold uppercase tracking-widest text-accent">Galeri karya</p>
-      <h1 class="mt-2 text-3xl font-extrabold tracking-tight sm:text-5xl">Proyek</h1>
-      <p class="mt-3 max-w-3xl text-slate-300">
-        Pekerjaan yang sudah dikerjakan, dari masalah awal sampai hasilnya.
-      </p>
+      <h1 class="text-2xl font-bold tracking-tight">Portofolio</h1>
     </div>
   </section>
 
-  <section class="py-14 sm:py-16">
-    <div class={`${wrap} space-y-8`}>
+  <section class="bg-slate-50 py-8 sm:py-10">
+    <div class={`${wrap} space-y-6`}>
       {
         projects.map((p) => (
-          <article class={`${card} border-t-2 border-t-accent p-6 sm:p-8`}>
-            <div class:list={[p.gambar ? 'grid gap-8 lg:grid-cols-[1fr_15rem]' : '']}>
-              <div>
-                <p class="text-sm font-semibold text-link">
-                  {p.tahun} <span class="text-slate-300">/</span> <span class="text-muted">Untuk {p.untuk}</span>
-                </p>
-                <h2 class="mt-2 text-2xl font-bold tracking-tight text-heading">{p.judul}</h2>
+          <article class={`${card} p-5 sm:p-8`}>
+            <p class="text-xs text-muted">
+              {p.tahun} <span class="text-slate-300">/</span> Untuk {p.untuk}
+            </p>
+            <h2 class="mt-1 text-xl font-bold tracking-tight text-heading sm:text-2xl">{p.judul}</h2>
+            <p class="mt-3 text-base font-semibold text-heading sm:text-lg">{p.ringkasan}</p>
 
-                <dl class="mt-6 divide-y divide-slate-200 border-y border-slate-200">
-                  <div class="grid gap-1 py-4 sm:grid-cols-[9rem_1fr] sm:gap-6">
-                    <dt class="text-sm font-semibold text-heading">Masalah awal</dt>
-                    <dd class="text-muted">{p.masalah}</dd>
-                  </div>
-                  <div class="grid gap-1 py-4 sm:grid-cols-[9rem_1fr] sm:gap-6">
-                    <dt class="text-sm font-semibold text-heading">Yang saya buat</dt>
-                    <dd class="text-muted">{p.dibuat}</dd>
-                  </div>
-                  <div class="grid gap-1 py-4 sm:grid-cols-[9rem_1fr] sm:gap-6">
-                    <dt class="text-sm font-semibold text-heading">Hasil</dt>
-                    <dd class="text-muted">{p.hasil}</dd>
-                  </div>
-                  <div class="grid gap-2 py-4 sm:grid-cols-[9rem_1fr] sm:gap-6">
-                    <dt class="text-sm font-semibold text-heading">Teknologi</dt>
-                    <dd class="flex flex-wrap gap-2">
-                      {
-                        p.teknologi.map((t) => (
-                          <span class="rounded border border-slate-200 bg-slate-50 px-2.5 py-1 text-xs text-muted">{t}</span>
-                        ))
-                      }
-                    </dd>
-                  </div>
-                  <div class="grid gap-1 py-4 sm:grid-cols-[9rem_1fr] sm:gap-6">
-                    <dt class="text-sm font-semibold text-heading">Status</dt>
-                    <dd class="text-muted">{p.status}</dd>
-                  </div>
-                </dl>
+            <div class="mt-5 grid gap-3 sm:grid-cols-2">
+              <div class="rounded-md border border-slate-200 bg-white p-4">
+                <p class="text-xs font-semibold uppercase tracking-wide text-muted">Sebelum</p>
+                <p class="mt-1 text-sm text-default">{p.sebelum}</p>
               </div>
-
-              {
-                p.gambar && (
-                  <figure>
-                    <img
-                      src={p.gambar.src}
-                      alt={p.gambar.alt}
-                      width={p.gambar.lebar}
-                      height={p.gambar.tinggi}
-                      loading="lazy"
-                      class="mx-auto max-h-96 w-auto rounded-md border border-slate-200 lg:max-h-none lg:w-full"
-                    />
-                    <figcaption class="mt-3 text-xs text-muted">{p.gambar.keterangan}</figcaption>
-                  </figure>
-                )
-              }
+              <div class="rounded-md bg-primary p-4">
+                <p class="text-xs font-semibold uppercase tracking-wide text-slate-300">Sekarang</p>
+                <p class="mt-1 text-sm text-white">{p.sekarang}</p>
+              </div>
             </div>
+
+            <h3 class="mt-6 text-sm font-semibold text-heading">Hasil</h3>
+            <ul class="mt-2 divide-y divide-slate-200 border-y border-slate-200">
+              {p.hasil.map((h) => (
+                <li class="py-3 text-sm text-muted">
+                  <span class="font-semibold text-heading">{h.judul}.</span> {h.isi}
+                </li>
+              ))}
+            </ul>
+
+            {
+              p.alat && (
+                <>
+                  <h3 class="mt-6 text-sm font-semibold text-heading">Alat yang digunakan</h3>
+                  <div class="mt-3 grid grid-cols-2 gap-3 lg:grid-cols-4">
+                    {p.alat.map((a) => (
+                      <div class="overflow-hidden rounded-md border border-slate-200 bg-white">
+                        <img
+                          src={a.gambar}
+                          alt={a.nama}
+                          width="800"
+                          height="600"
+                          loading="lazy"
+                          class="aspect-[4/3] w-full border-b border-slate-200 bg-slate-50 object-contain"
+                        />
+                        <div class="p-3">
+                          <p class="text-sm font-semibold text-heading">{a.nama}</p>
+                          <p class="mt-1 text-xs text-muted">{a.fungsi}</p>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </>
+              )
+            }
+
+            <p class="mt-6 border-t border-slate-200 pt-4 text-xs text-muted">
+              <span class="font-semibold text-heading">Status</span> {p.status}
+            </p>
           </article>
         ))
       }
-    </div>
-  </section>
-
-  <section class="bg-primary py-12 text-white sm:py-14">
-    <div class={`${wrap} flex flex-col items-start justify-between gap-6 sm:flex-row sm:items-center`}>
-      <div>
-        <h2 class="text-2xl font-bold tracking-tight sm:text-3xl">Punya kebutuhan serupa</h2>
-        <p class="mt-2 max-w-xl text-slate-300">Ceritakan kebutuhan Anda, saya akan membalas lewat email atau Telegram.</p>
-      </div>
-      <a
-        href="/kontak"
-        class="inline-block rounded-md bg-accent px-6 py-3 text-sm font-semibold text-primary hover:opacity-90"
-      >
-        Hubungi saya
-      </a>
     </div>
   </section>
 </Layout>
