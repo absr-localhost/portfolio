@@ -1,0 +1,18 @@
+---
+import Layout from '~/layouts/PageLayout.astro';
+import StatistikPanel from '~/components/StatistikPanel.astro';
+import { wrap } from '~/data/profil';
+
+const metadata = {
+  title: 'Statistik situs',
+};
+---
+
+<Layout metadata={metadata}>
+  <section class="bg-primary text-white">
+    <div class={`${wrap} py-12 sm:py-16`}>
+      <h1 class="text-2xl font-bold">Statistik situs</h1>
+    </div>
+  </section>
+  <StatistikPanel />
+</Layout>

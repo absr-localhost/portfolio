@@ -74,38 +74,34 @@ const card = 'rounded-lg border border-slate-200 bg-white shadow-sm';
 
   <VideoBeranda />
 
-  <section class={`${wrap} pb-14 sm:pb-16`}>
-    <h2 class="mb-4 text-xl font-bold text-heading">Statistik situs</h2>
-    <div class="grid grid-cols-3 gap-3 sm:gap-4">
-      <div class={`${card} flex flex-col gap-3 p-4 sm:flex-row sm:items-center`}>
-        <span class="flex h-10 w-10 shrink-0 items-center justify-center rounded-md bg-primary text-white">
-          <Icon name="tabler:eye" class="h-5 w-5" />
-        </span>
-        <div>
-          <p class="text-xl font-bold text-heading sm:text-2xl" data-stat="total">-</p>
-          <p class="text-xs text-muted sm:text-sm">Total kunjungan</p>
+  <section class={`${wrap} py-10 sm:py-12`}>
+    <a
+      href="/statistik"
+      aria-label="Lihat statistik situs"
+      class={`${card} block p-4 transition hover:-translate-y-1 hover:border-accent hover:shadow-md sm:p-5`}
+    >
+      <div class="flex items-center justify-between gap-3">
+        <h2 class="text-sm font-semibold text-heading">Statistik situs</h2>
+        <Icon name="tabler:chart-line" class="h-5 w-5 text-primary" />
+      </div>
+      <div class="mt-3 grid grid-cols-3 divide-x divide-slate-200">
+        <div class="pr-3">
+          <p class="text-2xl font-bold tabular-nums text-heading" data-stat="total">-</p>
+          <p class="mt-1 text-xs text-muted">Total kunjungan</p>
+        </div>
+        <div class="px-3">
+          <p class="text-2xl font-bold tabular-nums text-heading" data-stat="hari">-</p>
+          <p class="mt-1 text-xs text-muted">Hari ini</p>
+        </div>
+        <div class="pl-3">
+          <p class="text-2xl font-bold tabular-nums text-heading" data-stat="bulan">-</p>
+          <p class="mt-1 text-xs text-muted">Bulan ini</p>
         </div>
       </div>
-      <div class={`${card} flex flex-col gap-3 p-4 sm:flex-row sm:items-center`}>
-        <span class="flex h-10 w-10 shrink-0 items-center justify-center rounded-md bg-primary text-white">
-          <Icon name="tabler:calendar" class="h-5 w-5" />
-        </span>
-        <div>
-          <p class="text-xl font-bold text-heading sm:text-2xl" data-stat="hari">-</p>
-          <p class="text-xs text-muted sm:text-sm">Hari ini</p>
-        </div>
-      </div>
-      <div class={`${card} flex flex-col gap-3 p-4 sm:flex-row sm:items-center`}>
-        <span class="flex h-10 w-10 shrink-0 items-center justify-center rounded-md bg-primary text-white">
-          <Icon name="tabler:chart-bar" class="h-5 w-5" />
-        </span>
-        <div>
-          <p class="text-xl font-bold text-heading sm:text-2xl" data-stat="bulan">-</p>
-          <p class="text-xs text-muted sm:text-sm">Bulan ini</p>
-        </div>
-      </div>
-    </div>
+      <div class="mt-4" data-spark></div>
+    </a>
   </section>
+
 
   <section class={`${wrap} pb-14 sm:pb-16`}>
     <div class={`${card} p-6 sm:p-10`}>
@@ -118,6 +114,7 @@ const card = 'rounded-lg border border-slate-200 bg-white shadow-sm';
 
   <Ulasan />
 
+
   <section class="bg-primary py-14 text-white sm:py-16">
     <div class={`${wrap} flex flex-col items-start gap-6 md:flex-row md:items-center md:justify-between`}>
       <div>
@@ -128,3 +125,27 @@ const card = 'rounded-lg border border-slate-200 bg-white shadow-sm';
     </div>
   </section>
 </Layout>
+
+<script>
+  function spark(d: any) {
+    const el = document.querySelector<HTMLElement>('[data-spark]');
+    if (!el || !d || !Array.isArray(d.harian) || d.harian.length < 2) return;
+    const s: number[] = d.harian.slice(-14).map((x: any) => x.n);
+    const W = 300;
+    const H = 40;
+    const m = Math.max(1, ...s);
+    const x = (i: number) => (i * W) / (s.length - 1);
+    const y = (v: number) => H - 4 - ((H - 8) * v) / m;
+    const g = s.map((v, i) => `${i ? 'L' : 'M'}${x(i).toFixed(1)} ${y(v).toFixed(1)}`).join(' ');
+    el.innerHTML =
+      `<svg viewBox="0 0 ${W} ${H}" preserveAspectRatio="none" class="h-10 w-full text-primary" aria-hidden="true">` +
+      `<defs><linearGradient id="gSpark" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="currentColor" stop-opacity="0.2" /><stop offset="1" stop-color="currentColor" stop-opacity="0" /></linearGradient></defs>` +
+      `<path d="${g} L${W} ${H} L0 ${H} Z" fill="url(#gSpark)" />` +
+      `<path d="${g}" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round" vector-effect="non-scaling-stroke" /></svg>`;
+  }
+  document.addEventListener('statistik:data', (e) => spark((e as CustomEvent).detail));
+  document.addEventListener('astro:page-load', () => {
+    const w = window as any;
+    if (w.__statistik) spark(w.__statistik);
+  });
+</script>
