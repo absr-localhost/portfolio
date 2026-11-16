@@ -94,14 +94,16 @@ import { wrap } from '~/data/profil';
       lagi.textContent = semua ? 'Tampilkan lebih sedikit' : 'Tampilkan semua ' + data.length + ' ulasan';
     };
 
-    fetch(API)
-      .then((r) => r.json())
-      .then((j) => {
-        data = Array.isArray(j.items) ? j.items : [];
-        avg = j.avg || 0;
-        render();
-      })
-      .catch(() => {});
+    const muat = () =>
+      fetch(API, { cache: 'no-store' })
+        .then((r) => r.json())
+        .then((j) => {
+          data = Array.isArray(j.items) ? j.items : [];
+          avg = j.avg || 0;
+          render();
+        })
+        .catch(() => {});
+    muat();
 
     lagi.addEventListener('click', () => {
       semua = !semua;
@@ -124,9 +126,10 @@ import { wrap } from '~/data/profil';
         const r = await fetch(API, { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify(body) });
         const j = await r.json().catch(() => ({}));
         if (r.ok) {
-          pesan.textContent = 'Terima kasih. Ulasan Anda akan tampil setelah ditinjau.';
+          pesan.textContent = 'Terima kasih, ulasan Anda sudah tampil.';
           form.reset();
-          setTimeout(() => dialog.close(), 2500);
+          muat();
+          setTimeout(() => dialog.close(), 1500);
         } else {
           pesan.textContent = j.error || 'Gagal mengirim, coba lagi.';
         }
