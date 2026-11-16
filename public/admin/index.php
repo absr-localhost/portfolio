@@ -64,6 +64,15 @@ function bersih_judul(string $s): string
 {
     return mb_substr(trim(strip_tags($s)), 0, 80);
 }
+function bersih_desk(string $s): string
+{
+    return mb_substr(trim((string)preg_replace('/\s+/', ' ', strip_tags($s))), 0, 200);
+}
+function bersih_waktu(string $s): string
+{
+    $d = DateTime::createFromFormat('Y-m-d\TH:i', $s);
+    return ($d && $d->format('Y-m-d\TH:i') === $s) ? $s : date('Y-m-d\TH:i');
+}
 
 siapkan(DATA, $deny);
 siapkan(DATA . '/sess', $deny);
@@ -187,6 +196,8 @@ if ($act === 'upload') {
     tulis_video([
         'aktif' => $lama ? (bool)($lama['aktif'] ?? true) : true,
         'judul' => bersih_judul((string)($_POST['judul'] ?? '')),
+        'deskripsi' => bersih_desk((string)($_POST['deskripsi'] ?? '')),
+        'waktu' => bersih_waktu((string)($_POST['waktu'] ?? '')),
         'video' => $nv,
         'sampul' => $nc,
         'lebar' => $lebar,
@@ -199,14 +210,16 @@ if ($act === 'upload') {
     json_out(['ok' => true]);
 }
 
-if ($masuk && in_array($act, ['toggle', 'judul', 'hapus'], true)) {
+if ($masuk && in_array($act, ['toggle', 'info', 'hapus'], true)) {
     $vd = baca_video();
     if ($vd) {
         if ($act === 'toggle') {
             $vd['aktif'] = empty($vd['aktif']);
             tulis_video($vd);
-        } elseif ($act === 'judul') {
+        } elseif ($act === 'info') {
             $vd['judul'] = bersih_judul((string)($_POST['judul'] ?? ''));
+            $vd['deskripsi'] = bersih_desk((string)($_POST['deskripsi'] ?? ''));
+            $vd['waktu'] = bersih_waktu((string)($_POST['waktu'] ?? ''));
             tulis_video($vd);
         } else {
             hapus_berkas($vd);
@@ -236,7 +249,10 @@ main{max-width:560px;margin:0 auto;padding:16px}
 .c{background:#fff;border:1px solid #e2e8f0;border-radius:8px;padding:14px;margin-bottom:14px}
 .c h2{margin:0 0 10px;font-size:16px}
 .m{color:#4A5568;font-size:13px}
-input[type=text],input[type=password],input[type=file]{width:100%;padding:10px;border:1px solid #cbd5e1;border-radius:6px;font-size:15px;margin:4px 0 10px;background:#fff}
+input[type=text],input[type=password],input[type=file],input[type=datetime-local],textarea{width:100%;padding:10px;border:1px solid #cbd5e1;border-radius:6px;font:inherit;margin:4px 0 10px;background:#fff}
+[hidden]{display:none!important}
+canvas{display:block;max-width:100%;max-height:300px;margin:0 auto 10px;border-radius:6px;background:#000}
+input[type=range]{width:100%;margin:0 0 10px}
 button{background:#0B2545;color:#fff;border:0;border-radius:6px;padding:10px 14px;font-size:15px;cursor:pointer}
 button:disabled{opacity:.45}
 button.x{background:#fff;color:#b91c1c;border:1px solid #b91c1c}
@@ -294,12 +310,6 @@ progress{width:100%;height:10px}
 Durasi <?= h($vd['durasi']) ?> detik, <?= ($vd['tinggi'] > $vd['lebar']) ? 'tegak' : 'mendatar' ?> (<?= h($vd['lebar']) ?>x<?= h($vd['tinggi']) ?>), <?= h(round(($vd['ukuran'] ?? 0) / 1048576, 1)) ?> MB<br>
 Diperbarui <?= h($vd['diperbarui'] ?? '-') ?>
 </p>
-<form method="post" style="margin-top:10px">
-<input type="hidden" name="csrf" value="<?= h($csrf) ?>"><input type="hidden" name="action" value="judul">
-<label>Judul singkat (opsional, untuk label aksesibilitas)</label>
-<input type="text" name="judul" maxlength="80" value="<?= h($vd['judul'] ?? '') ?>">
-<button class="o" type="submit">Simpan judul</button>
-</form>
 <div class="row">
 <form method="post"><input type="hidden" name="csrf" value="<?= h($csrf) ?>"><input type="hidden" name="action" value="toggle"><button type="submit"><?= !empty($vd['aktif']) ? 'Nonaktifkan' : 'Aktifkan' ?></button></form>
 <form method="post" onsubmit="return confirm('Hapus video ini dari server?')"><input type="hidden" name="csrf" value="<?= h($csrf) ?>"><input type="hidden" name="action" value="hapus"><button class="x" type="submit">Hapus</button></form>
@@ -310,13 +320,29 @@ Diperbarui <?= h($vd['diperbarui'] ?? '-') ?>
 </div>
 
 <div class="c">
-<h2><?= $ada ? 'Ganti video' : 'Unggah video' ?></h2>
-<p class="m">MP4, 30 detik atau kurang, maksimal 19 MB. Gambar sampul diambil otomatis dari detik pertama video.</p>
-<input type="file" id="f" accept="video/mp4">
-<?php if (!$ada): ?>
-<label>Judul singkat (opsional)</label>
-<input type="text" id="j" maxlength="80">
+<h2>Detail video</h2>
+<form method="post">
+<input type="hidden" name="csrf" value="<?= h($csrf) ?>"><input type="hidden" name="action" value="info">
+<label>Judul</label>
+<input type="text" name="judul" id="j" maxlength="80" value="<?= h($vd['judul'] ?? '') ?>">
+<label>Deskripsi singkat</label>
+<textarea name="deskripsi" id="ds" maxlength="200" rows="3"><?= h($vd['deskripsi'] ?? '') ?></textarea>
+<label>Tanggal dan waktu</label>
+<input type="datetime-local" name="waktu" id="wk" value="<?= h($vd['waktu'] ?? date('Y-m-d\TH:i')) ?>">
+<?php if ($ada): ?>
+<button class="o" type="submit">Simpan detail</button>
+<?php else: ?>
+<p class="m">Detail ini ikut tersimpan saat video diunggah.</p>
 <?php endif; ?>
+</form>
+</div>
+
+<div class="c">
+<h2><?= $ada ? 'Ganti video' : 'Unggah video' ?></h2>
+<p class="m">MP4, 30 detik atau kurang, maksimal 19 MB. Setelah dipilih, geser untuk menentukan bingkai yang jadi gambar sampul.</p>
+<input type="file" id="f" accept="video/mp4">
+<canvas id="cvs" hidden></canvas>
+<input type="range" id="sl" min="0" max="1000" value="0" hidden>
 <p class="st" id="pesan"></p>
 <progress id="pg" value="0" max="100" hidden></progress>
 <div class="row"><button type="button" id="kirim" disabled>Unggah</button></div>
@@ -332,66 +358,81 @@ Diperbarui <?= h($vd['diperbarui'] ?? '-') ?>
 (function () {
   var CSRF = <?= json_encode($csrf) ?>;
   var LIM = <?= MAXB ?>, MAXD = <?= MAXD ?>;
-  var f = document.getElementById('f'), p = document.getElementById('pesan');
-  var b = document.getElementById('kirim'), pg = document.getElementById('pg');
-  var j = document.getElementById('j');
-  var cover = null, meta = null;
+  var $ = function (i) { return document.getElementById(i); };
+  var f = $('f'), p = $('pesan'), b = $('kirim'), pg = $('pg'), cv = $('cvs'), sl = $('sl');
+  var j = $('j'), ds = $('ds'), wk = $('wk');
+  var vid = null, url = null, meta = null, timer = null;
   function say(t) { p.textContent = t; }
+  function fail() { say('Video tidak bisa diperiksa browser. Coba MP4 H.264.'); }
+
+  function draw() {
+    var w = Math.min(960, meta.w), h = Math.round(meta.h * w / meta.w);
+    cv.width = w; cv.height = h;
+    cv.getContext('2d').drawImage(vid, 0, 0, w, h);
+    cv.hidden = false; sl.hidden = false; b.disabled = false;
+    say('Siap: ' + meta.d.toFixed(1) + ' detik, ' + meta.w + 'x' + meta.h + ', ' + (f.files[0].size / 1048576).toFixed(1) + ' MB. Geser untuk memilih sampul.');
+  }
 
   f.addEventListener('change', function () {
-    cover = null; meta = null; b.disabled = true;
+    clearTimeout(timer);
+    if (url) { URL.revokeObjectURL(url); url = null; }
+    vid = null; meta = null; b.disabled = true; cv.hidden = true; sl.hidden = true;
     var file = f.files[0];
     if (!file) { say(''); return; }
     if (file.size > LIM) { say('Ukuran ' + (file.size / 1048576).toFixed(1) + ' MB melebihi batas 19 MB.'); return; }
     say('Memeriksa video...');
-    var url = URL.createObjectURL(file);
+    url = URL.createObjectURL(file);
     var v = document.createElement('video');
-    var timer = setTimeout(function () { say('Video tidak bisa diperiksa browser. Coba MP4 H.264.'); }, 10000);
-    v.muted = true; v.playsInline = true; v.preload = 'metadata';
-    v.onerror = function () { clearTimeout(timer); say('Video tidak bisa dibaca browser. Coba MP4 H.264.'); };
+    vid = v;
+    v.muted = true; v.playsInline = true; v.preload = 'auto';
+    timer = setTimeout(fail, 10000);
+    v.onerror = function () { clearTimeout(timer); fail(); };
     v.onloadedmetadata = function () {
       if (!isFinite(v.duration) || v.duration <= 0 || !v.videoWidth) { clearTimeout(timer); say('Video tidak valid.'); return; }
       if (v.duration > MAXD) { clearTimeout(timer); say('Durasi ' + v.duration.toFixed(1) + ' detik. Maksimal 30 detik.'); return; }
       meta = { d: v.duration, w: v.videoWidth, h: v.videoHeight };
-      v.currentTime = Math.min(1, v.duration / 2);
+      var t = Math.min(1, v.duration / 2);
+      sl.value = String(Math.round(t / v.duration * 1000));
+      v.currentTime = t;
     };
-    v.onseeked = function () {
-      clearTimeout(timer);
-      var w = Math.min(960, meta.w), h = Math.round(meta.h * w / meta.w);
-      var cv = document.createElement('canvas');
-      cv.width = w; cv.height = h;
-      cv.getContext('2d').drawImage(v, 0, 0, w, h);
-      cv.toBlob(function (bl) {
-        URL.revokeObjectURL(url);
-        if (!bl) { say('Gagal membuat gambar sampul.'); return; }
-        cover = bl; b.disabled = false;
-        say('Siap: ' + meta.d.toFixed(1) + ' detik, ' + meta.w + 'x' + meta.h + ', ' + (file.size / 1048576).toFixed(1) + ' MB.');
-      }, 'image/jpeg', 0.82);
-    };
+    v.onseeked = function () { clearTimeout(timer); if (meta) draw(); };
     v.src = url;
   });
 
+  sl.addEventListener('input', function () {
+    if (!vid || !meta) return;
+    var t = Math.min(meta.d - 0.05, Number(sl.value) / 1000 * meta.d);
+    vid.currentTime = Math.max(0, t);
+  });
+
   b.addEventListener('click', function () {
-    var fd = new FormData();
-    fd.append('action', 'upload');
-    fd.append('csrf', CSRF);
-    fd.append('video', f.files[0]);
-    fd.append('sampul', cover, 'sampul.jpg');
-    fd.append('durasi', meta.d);
-    fd.append('lebar', meta.w);
-    fd.append('tinggi', meta.h);
-    if (j) { fd.append('judul', j.value); }
-    b.disabled = true; pg.hidden = false; say('Mengunggah...');
-    var x = new XMLHttpRequest();
-    x.open('POST', 'index.php');
-    x.upload.onprogress = function (e) { if (e.lengthComputable) { pg.value = Math.round(e.loaded / e.total * 100); } };
-    x.onload = function () {
-      var r = {};
-      try { r = JSON.parse(x.responseText); } catch (e) { r = { err: 'Balasan server tidak dikenali (kode ' + x.status + ').' }; }
-      if (r.ok) { location.reload(); } else { say(r.err || 'Gagal.'); b.disabled = false; }
-    };
-    x.onerror = function () { say('Koneksi terputus.'); b.disabled = false; };
-    x.send(fd);
+    if (!meta) return;
+    b.disabled = true;
+    cv.toBlob(function (bl) {
+      if (!bl) { say('Gagal membuat gambar sampul.'); b.disabled = false; return; }
+      var fd = new FormData();
+      fd.append('action', 'upload');
+      fd.append('csrf', CSRF);
+      fd.append('video', f.files[0]);
+      fd.append('sampul', bl, 'sampul.jpg');
+      fd.append('durasi', meta.d);
+      fd.append('lebar', meta.w);
+      fd.append('tinggi', meta.h);
+      fd.append('judul', j.value);
+      fd.append('deskripsi', ds.value);
+      fd.append('waktu', wk.value);
+      pg.hidden = false; say('Mengunggah...');
+      var x = new XMLHttpRequest();
+      x.open('POST', 'index.php');
+      x.upload.onprogress = function (e) { if (e.lengthComputable) { pg.value = Math.round(e.loaded / e.total * 100); } };
+      x.onload = function () {
+        var r = {};
+        try { r = JSON.parse(x.responseText); } catch (e) { r = { err: 'Balasan server tidak dikenali (kode ' + x.status + ').' }; }
+        if (r.ok) { location.reload(); } else { say(r.err || 'Gagal.'); b.disabled = false; }
+      };
+      x.onerror = function () { say('Koneksi terputus.'); b.disabled = false; };
+      x.send(fd);
+    }, 'image/jpeg', 0.82);
   });
 })();
 </script>
