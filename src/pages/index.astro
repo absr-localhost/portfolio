@@ -1,6 +1,7 @@
 ---
 import Layout from '~/layouts/PageLayout.astro';
 import Ulasan from '~/components/Ulasan.astro';
+import { Icon } from 'astro-icon/components';
 import { wrap, stats, about, EMAIL } from '~/data/profil';
 
 const metadata = {
@@ -67,6 +68,39 @@ const card = 'rounded-lg border border-slate-200 bg-white shadow-sm';
           </div>
         ))
       }
+    </div>
+  </section>
+
+  <section class={`${wrap} pb-14 sm:pb-16`}>
+    <h2 class="mb-4 text-xl font-bold text-heading">Statistik situs</h2>
+    <div class="grid grid-cols-3 gap-3 sm:gap-4">
+      <div class={`${card} flex flex-col gap-3 p-4 sm:flex-row sm:items-center`}>
+        <span class="flex h-10 w-10 shrink-0 items-center justify-center rounded-md bg-primary text-white">
+          <Icon name="tabler:eye" class="h-5 w-5" />
+        </span>
+        <div>
+          <p class="text-xl font-bold text-heading sm:text-2xl" data-stat="total">-</p>
+          <p class="text-xs text-muted sm:text-sm">Total kunjungan</p>
+        </div>
+      </div>
+      <div class={`${card} flex flex-col gap-3 p-4 sm:flex-row sm:items-center`}>
+        <span class="flex h-10 w-10 shrink-0 items-center justify-center rounded-md bg-primary text-white">
+          <Icon name="tabler:calendar" class="h-5 w-5" />
+        </span>
+        <div>
+          <p class="text-xl font-bold text-heading sm:text-2xl" data-stat="hari">-</p>
+          <p class="text-xs text-muted sm:text-sm">Hari ini</p>
+        </div>
+      </div>
+      <div class={`${card} flex flex-col gap-3 p-4 sm:flex-row sm:items-center`}>
+        <span class="flex h-10 w-10 shrink-0 items-center justify-center rounded-md bg-primary text-white">
+          <Icon name="tabler:chart-bar" class="h-5 w-5" />
+        </span>
+        <div>
+          <p class="text-xl font-bold text-heading sm:text-2xl" data-stat="bulan">-</p>
+          <p class="text-xs text-muted sm:text-sm">Bulan ini</p>
+        </div>
+      </div>
     </div>
   </section>
 
