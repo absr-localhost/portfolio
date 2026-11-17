@@ -102,7 +102,8 @@ const bulat = 'flex h-9 w-9 shrink-0 items-center justify-center rounded-full te
         <div class={kepala}>
           <h3 class={judul}><Icon name="tabler:calendar-stats" class={ikonJudul} />Aktivitas 30 hari</h3>
         </div>
-        <div class="grid grid-cols-10 gap-1.5 p-4" data-k="heat"></div>
+        <p class="px-4 pt-3 text-xs text-muted">Satu kotak satu hari. Makin gelap, makin banyak kunjungan.</p>
+        <div class="grid grid-cols-10 gap-1.5 p-4 pt-2" data-k="heat"></div>
       </div>
     </div>
 
@@ -112,6 +113,7 @@ const bulat = 'flex h-9 w-9 shrink-0 items-center justify-center rounded-full te
         <p class="text-xs text-muted" data-k="jam-puncak"></p>
       </div>
       <div class="p-4">
+        <p class="mb-3 text-xs text-muted">Kapan pengunjung paling sering datang, dalam WIB.</p>
         <div data-k="jam"></div>
         <div class="mt-3 flex items-center justify-end gap-1.5 text-[11px] text-muted">
           <span>Sepi</span>
@@ -125,45 +127,79 @@ const bulat = 'flex h-9 w-9 shrink-0 items-center justify-center rounded-full te
       </div>
     </div>
 
-    <div class="mt-3 grid grid-cols-2 gap-3 sm:mt-4 sm:gap-4 lg:grid-cols-4">
+    <div class="mt-3 grid grid-cols-2 gap-3 sm:mt-4 sm:gap-4 lg:grid-cols-5">
       <div class={card}>
         <div class={kepala}><h3 class={judul}><Icon name="tabler:device-mobile" class={ikonJudul} />Perangkat</h3></div>
-        <div class="p-4" data-k="d-dev"></div>
+        <p class="px-4 pt-3 text-xs text-muted">Jenis perangkat yang dipakai pengunjung.</p>
+        <div class="p-4 pt-2" data-k="d-dev"></div>
       </div>
       <div class={card}>
         <div class={kepala}><h3 class={judul}><Icon name="tabler:browser" class={ikonJudul} />Browser</h3></div>
-        <div class="p-4" data-k="d-br"></div>
+        <p class="px-4 pt-3 text-xs text-muted">Aplikasi yang dipakai untuk membuka situs.</p>
+        <div class="p-4 pt-2" data-k="d-br"></div>
       </div>
       <div class={card}>
         <div class={kepala}><h3 class={judul}><Icon name="tabler:cpu" class={ikonJudul} />Sistem operasi</h3></div>
-        <div class="p-4" data-k="d-os"></div>
+        <p class="px-4 pt-3 text-xs text-muted">Sistem di perangkat pengunjung.</p>
+        <div class="p-4 pt-2" data-k="d-os"></div>
       </div>
       <div class={card}>
         <div class={kepala}><h3 class={judul}><Icon name="tabler:users" class={ikonJudul} />Pengunjung</h3></div>
-        <div class="p-4" data-k="d-jn"></div>
+        <p class="px-4 pt-3 text-xs text-muted">Kembali berarti browser itu pernah berkunjung sebelumnya.</p>
+        <div class="p-4 pt-2" data-k="d-jn"></div>
+      </div>
+      <div class={`${card} col-span-2 lg:col-span-1`}>
+        <div class={kepala}><h3 class={judul}><Icon name="tabler:wifi" class={ikonJudul} />Koneksi</h3></div>
+        <p class="px-4 pt-3 text-xs text-muted">Jenis dan kecepatan koneksi yang dilaporkan browser. Tidak semua browser mengirimnya.</p>
+        <div class="p-4 pt-2" data-k="d-kn"></div>
       </div>
     </div>
 
     <div class="mt-3 grid gap-3 sm:mt-4 sm:gap-4 lg:grid-cols-3">
       <div class={card}>
         <div class={kepala}><h3 class={judul}><Icon name="tabler:map-pin" class={ikonJudul} />Provinsi asal</h3></div>
-        <div class="p-4" data-k="l-prov"></div>
+        <p class="px-4 pt-3 text-xs text-muted">Perkiraan dari alamat IP. Pengguna kartu seluler kadang tercatat di provinsi lain.</p>
+        <div class="p-4 pt-2" data-k="l-prov"></div>
+      </div>
+      <div class={card}>
+        <div class={kepala}><h3 class={judul}><Icon name="tabler:map-pin" class={ikonJudul} />Kota</h3></div>
+        <p class="px-4 pt-3 text-xs text-muted">Perkiraan kota dari alamat IP.</p>
+        <div class="p-4 pt-2" data-k="l-kota"></div>
+      </div>
+      <div class={card}>
+        <div class={kepala}><h3 class={judul}><Icon name="tabler:network" class={ikonJudul} />Penyedia internet</h3></div>
+        <p class="px-4 pt-3 text-xs text-muted">Penyedia layanan internet (ISP) pengunjung, dibaca dari alamat IP.</p>
+        <div class="p-4 pt-2" data-k="l-isp"></div>
       </div>
       <div class={card}>
         <div class={kepala}><h3 class={judul}><Icon name="tabler:device-mobile" class={ikonJudul} />Model HP</h3></div>
-        <div class="p-4" data-k="l-model"></div>
+        <p class="px-4 pt-3 text-xs text-muted">Tipe HP yang terbaca dari browser. Sebagian hanya terbaca sebagai merek.</p>
+        <div class="p-4 pt-2" data-k="l-model"></div>
+      </div>
+      <div class={card}>
+        <div class={kepala}><h3 class={judul}><Icon name="tabler:language" class={ikonJudul} />Bahasa browser</h3></div>
+        <p class="px-4 pt-3 text-xs text-muted">Bahasa yang diatur di browser pengunjung.</p>
+        <div class="p-4 pt-2" data-k="l-bhs"></div>
+      </div>
+      <div class={card}>
+        <div class={kepala}><h3 class={judul}><Icon name="tabler:device-desktop" class={ikonJudul} />Ukuran layar</h3></div>
+        <p class="px-4 pt-3 text-xs text-muted">Ukuran layar perangkat pengunjung, dalam piksel.</p>
+        <div class="p-4 pt-2" data-k="l-lyr"></div>
       </div>
       <div class={card}>
         <div class={kepala}><h3 class={judul}><Icon name="tabler:world" class={ikonJudul} />Negara</h3></div>
-        <div class="p-4" data-k="l-neg"></div>
+        <p class="px-4 pt-3 text-xs text-muted">Perkiraan negara dari alamat IP.</p>
+        <div class="p-4 pt-2" data-k="l-neg"></div>
       </div>
       <div class={card}>
         <div class={kepala}><h3 class={judul}><Icon name="tabler:link" class={ikonJudul} />Sumber kunjungan</h3></div>
-        <div class="p-4" data-k="l-src"></div>
+        <p class="px-4 pt-3 text-xs text-muted">Dari mana pengunjung datang: langsung, media sosial, atau situs lain.</p>
+        <div class="p-4 pt-2" data-k="l-src"></div>
       </div>
       <div class={card}>
         <div class={kepala}><h3 class={judul}><Icon name="tabler:file-text" class={ikonJudul} />Halaman masuk</h3></div>
-        <div class="p-4" data-k="l-pg"></div>
+        <p class="px-4 pt-3 text-xs text-muted">Halaman pertama yang dibuka pengunjung saat tiba di situs.</p>
+        <div class="p-4 pt-2" data-k="l-pg"></div>
       </div>
     </div>
 
@@ -172,10 +208,11 @@ const bulat = 'flex h-9 w-9 shrink-0 items-center justify-center rounded-full te
         <h3 class={judul}><Icon name="tabler:users" class={ikonJudul} />Pengunjung terbaru</h3>
         <p class="text-xs text-muted">IP disamarkan</p>
       </div>
+      <p class="px-4 pt-3 text-xs text-muted">Kunjungan terakhir yang tercatat, satu per perangkat per hari.</p>
       <div data-k="t-baru"></div>
     </div>
 
-    <p class="mt-4 text-xs text-muted" data-k="sumber"></p>
+    <p class="mt-4 text-xs text-muted empty:hidden" data-k="sumber"></p>
   </section>
 </div>
 
@@ -222,6 +259,24 @@ const bulat = 'flex h-9 w-9 shrink-0 items-center justify-center rounded-full te
     'Samsung SM-A325F': 'Samsung Galaxy A32',
   };
   const namaHp = (s: string) => MODEL_NAMA[s] || s;
+  const HALAMAN: Record<string, string> = {
+    '/': 'Beranda',
+    '/proyek': 'Portofolio',
+    '/layanan': 'Layanan',
+    '/produk': 'Produk',
+    '/perjalanan': 'Tentang saya',
+    '/kontak': 'Media Sosial',
+    '/aplikasi': 'Aplikasi',
+    '/saham': 'Saham Lokal',
+    '/statistik': 'Statistik',
+  };
+  const BAHASA: Record<string, string> = { id: 'Indonesia', en: 'Inggris', ms: 'Melayu', jv: 'Jawa', su: 'Sunda', ar: 'Arab', zh: 'Mandarin', ja: 'Jepang', ko: 'Korea', es: 'Spanyol', fr: 'Prancis', de: 'Jerman', ru: 'Rusia', hi: 'Hindi' };
+  const namaBahasa = (s: string) => (BAHASA[s.slice(0, 2).toLowerCase()] ? `${BAHASA[s.slice(0, 2).toLowerCase()]} (${s})` : s);
+  const namaLayar = (s: string) => s.replace('x', ' x ');
+  const namaHalaman = (s: string) => {
+    const p = s.length > 1 ? s.replace(/\/+$/, '') : s;
+    return HALAMAN[p] || s;
+  };
   const fmt = (n: number) => n.toLocaleString('id-ID');
   const naik = (m: number) => Math.max(4, Math.ceil(m / 4) * 4);
   const jml = (a: Titik[]) => a.reduce((s, x) => s + x.n, 0);
@@ -235,10 +290,6 @@ const bulat = 'flex h-9 w-9 shrink-0 items-center justify-center rounded-full te
     return `${Number(p[2])} ${BLN[Number(p[1]) - 1]}`;
   };
   const blnPendek = (t: string) => BLN[Number(t.split('-')[1]) - 1];
-  const waktuFmt = (w: string) => {
-    const m = /^(\d{4})-(\d{2})-(\d{2}) (\d{2}):(\d{2})$/.exec(w || '');
-    return m ? `${Number(m[3])} ${BLN[Number(m[2]) - 1]} ${m[1]}, ${m[4]}.${m[5]} WIB` : '';
-  };
   const waktuPendek = (w: string) => {
     const m = /^(\d{4})-(\d{2})-(\d{2}) (\d{2}):(\d{2})/.exec(w || '');
     return m ? `${Number(m[3])} ${BLN[Number(m[2]) - 1]}, ${m[4]}.${m[5]}` : '-';
@@ -489,7 +540,7 @@ const bulat = 'flex h-9 w-9 shrink-0 items-center justify-center rounded-full te
         .map((v: any, i: number) => {
           const nama = namaHp(String(v.hp || v.dev || '-'));
           const awal = (nama.trim().charAt(0) || '?').toUpperCase();
-          return `<li class="flex items-center gap-3 px-4 py-3"><span class="flex h-9 w-9 shrink-0 items-center justify-center rounded-full text-sm font-bold text-white" style="background:${warna(i % 5)}">${esc(awal)}</span><div class="min-w-0 flex-1"><p class="truncate text-sm font-semibold text-heading">${esc(nama)}</p><p class="flex gap-3 truncate text-xs text-muted"><span class="tabular-nums">${esc(topeng(v.ip))}</span><span class="truncate">${esc(v.pg || '/')}</span></p></div><div class="shrink-0 text-right"><p class="text-xs font-medium text-heading">${esc(v.prov || '-')}</p><p class="text-xs text-muted">${esc(waktuPendek(v.w))}</p></div></li>`;
+          return `<li class="flex items-center gap-3 px-4 py-3"><span class="flex h-9 w-9 shrink-0 items-center justify-center rounded-full text-sm font-bold text-white" style="background:${warna(i % 5)}">${esc(awal)}</span><div class="min-w-0 flex-1"><p class="truncate text-sm font-semibold text-heading">${esc(nama)}</p><p class="flex gap-3 truncate text-xs text-muted"><span class="tabular-nums">${esc(topeng(v.ip))}</span>${v.isp ? `<span class="truncate">${esc(v.isp)}</span>` : ''}</p><p class="flex gap-3 truncate text-xs text-muted"><span class="truncate">${esc(namaHalaman(String(v.pg || '/')))}</span><span class="shrink-0">${esc(waktuPendek(v.w))}</span></p></div><div class="shrink-0 text-right"><p class="text-xs font-medium text-heading">${esc(v.prov || '-')}</p><p class="text-xs text-muted">${esc(v.kota || '')}</p></div></li>`;
         })
         .join('') +
       '</ul>';
@@ -500,11 +551,11 @@ const bulat = 'flex h-9 w-9 shrink-0 items-center justify-center rounded-full te
       const el = q(k);
       if (el) el.innerHTML = `<p class="col-span-10 text-sm text-slate-400">${teks}</p>`;
     });
-    ['d-dev', 'd-br', 'd-os', 'd-jn'].forEach((k) => {
+    ['d-dev', 'd-br', 'd-os', 'd-jn', 'd-kn'].forEach((k) => {
       const el = q(k);
       if (el) el.innerHTML = cincinKosong;
     });
-    ['l-prov', 'l-model', 'l-neg', 'l-src', 'l-pg'].forEach((k) => {
+    ['l-prov', 'l-kota', 'l-isp', 'l-model', 'l-bhs', 'l-lyr', 'l-neg', 'l-src', 'l-pg'].forEach((k) => {
       const el = q(k);
       if (el) el.innerHTML = kosongDaftar;
     });
@@ -579,16 +630,21 @@ const bulat = 'flex h-9 w-9 shrink-0 items-center justify-center rounded-full te
         jn: mulai([['Baru', 64], ['Kembali', 36]]),
         prov: mulai([['Jambi', 120], ['Sumatera Selatan', 88], ['DKI Jakarta', 64], ['Jawa Barat', 41], ['Riau', 28], ['Jawa Timur', 22], ['Lampung', 14], ['Lainnya', 9]]),
         model: mulai([['Oppo CPH2591', 74], ['Samsung SM-A155F', 52], ['Xiaomi 23129RAA4G', 41], ['iPhone', 33], ['vivo V2312', 24], ['Lainnya', 18]]),
+        kota: mulai([['Bandar Lampung', 70], ['Jambi', 66], ['Palembang', 52], ['Jakarta', 48], ['Pekanbaru', 20], ['Bandung', 16]]),
+        isp: mulai([['Telkomsel', 160], ['Indosat', 82], ['XL Axiata', 64], ['Telkom', 52], ['Biznet', 18], ['Lainnya', 14]]),
+        kon: mulai([['Seluler 4G', 58], ['WiFi 4G', 30], ['4G', 8], ['Seluler 3G', 4]]),
+        bhs: mulai([['id-ID', 310], ['en-US', 54], ['id', 20], ['ms-MY', 6]]),
+        lyr: mulai([['412x915', 88], ['393x873', 70], ['360x800', 64], ['1920x1080', 40], ['390x844', 33]]),
         neg: mulai([['Indonesia', 372], ['Malaysia', 14], ['Singapura', 7]]),
         src: mulai([['Langsung', 190], ['instagram.com', 96], ['tiktok.com', 58], ['google.com', 41], ['wa.me', 22], ['Lainnya', 9]]),
         pg: mulai([['/', 240], ['/proyek', 120], ['/layanan', 70], ['/produk', 44], ['/kontak', 26], ['/perjalanan', 12]]),
       },
       terbaru: [
-        { w: sekarang, ip: '36.79.xx.xx', hp: 'Samsung SM-A155F', dev: 'Ponsel', prov: 'Jambi', pg: '/' },
-        { w: sekarang, ip: '114.122.xx.xx', hp: 'Oppo CPH2591', dev: 'Ponsel', prov: 'Sumatera Selatan', pg: '/proyek' },
-        { w: sekarang, ip: '180.254.xx.xx', hp: 'Windows 11', dev: 'Komputer', prov: 'DKI Jakarta', pg: '/layanan' },
-        { w: sekarang, ip: '112.215.xx.xx', hp: 'iPhone', dev: 'Ponsel', prov: 'Jawa Barat', pg: '/produk' },
-        { w: sekarang, ip: '125.160.xx.xx', hp: 'Xiaomi 23129RAA4G', dev: 'Ponsel', prov: 'Riau', pg: '/' },
+        { w: sekarang, ip: '36.79.xx.xx', hp: 'Samsung SM-A155F', dev: 'Ponsel', prov: 'Jambi', kota: 'Jambi', isp: 'Telkomsel', pg: '/' },
+        { w: sekarang, ip: '114.122.xx.xx', hp: 'Oppo CPH2591', dev: 'Ponsel', prov: 'Sumatera Selatan', kota: 'Palembang', isp: 'Indosat', pg: '/proyek' },
+        { w: sekarang, ip: '180.254.xx.xx', hp: 'Windows 11', dev: 'Komputer', prov: 'DKI Jakarta', kota: 'Jakarta', isp: 'Biznet', pg: '/layanan' },
+        { w: sekarang, ip: '112.215.xx.xx', hp: 'iPhone', dev: 'Ponsel', prov: 'Jawa Barat', kota: 'Bandung', isp: 'XL Axiata', pg: '/produk' },
+        { w: sekarang, ip: '125.160.xx.xx', hp: 'Xiaomi 23129RAA4G', dev: 'Ponsel', prov: 'Riau', kota: 'Pekanbaru', isp: 'Telkomsel', pg: '/' },
       ],
     };
   }
@@ -640,11 +696,10 @@ const bulat = 'flex h-9 w-9 shrink-0 items-center justify-center rounded-full te
     isiTeks('puncak', puncak.n > 0 ? fmt(puncak.n) : '-');
     isiTeks('s-puncak', puncak.n > 0 ? tglPendek(puncak.t) : '');
     isiTeks('r-aktif', `${aktif} dari ${h.length}`);
-    isiTeks('s-aktif', 'hari');
+    isiTeks('s-aktif', 'hari terakhir');
     isiTeks('kembali', totJn > 0 ? `${Math.round(((kembali ? kembali.n : 0) / totJn) * 100)}%` : '-');
     isiTeks('s-kembali', totJn > 0 ? `dari ${fmt(totJn)} kunjungan` : '');
-    const w = waktuFmt(d.waktu);
-    isiTeks('sumber', demo ? 'Contoh tampilan.' : `Sumber: penghitung kunjungan situs, satu hitungan per perangkat per hari.${w ? ' Diperbarui ' + w + '.' : ''}`);
+    isiTeks('sumber', '');
 
     gambarHarian(h);
     gambarBulanan(d.bulanan);
@@ -654,11 +709,16 @@ const bulat = 'flex h-9 w-9 shrink-0 items-center justify-center rounded-full te
     donat('d-br', dm.br);
     donat('d-os', dm.os);
     donat('d-jn', dm.jn);
+    donat('d-kn', dm.kon);
     daftar('l-prov', dm.prov, '#eb6834');
+    daftar('l-kota', dm.kota, '#1baf7a');
+    daftar('l-isp', dm.isp, '#2a78d6');
     daftar('l-model', dm.model, '#6250d6', namaHp);
+    daftar('l-bhs', dm.bhs, '#e87ba4', namaBahasa);
+    daftar('l-lyr', dm.lyr, '#eb6834', namaLayar);
     daftar('l-neg', dm.neg, '#1baf7a');
     daftar('l-src', dm.src, '#e87ba4');
-    daftar('l-pg', dm.pg, '#2a78d6');
+    daftar('l-pg', dm.pg, '#2a78d6', namaHalaman);
     pengunjungBaru(d.terbaru);
   }
 
