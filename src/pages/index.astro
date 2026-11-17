@@ -97,55 +97,98 @@ const card = 'rounded-lg border border-slate-200 bg-white shadow-sm';
 
   <script is:inline>
     (function () {
-      var box = document.getElementById('ab');
-      var list = document.getElementById('ab-list');
-      var tp = document.getElementById('tp');
-      if (!box || !list || !tp) return;
+      if (window.__abSiap) return;
+      window.__abSiap = true;
+
+      var JEDA = [1000, 2000, 4000];
+
       function el(tag, cls, text) {
         var e = document.createElement(tag);
         if (cls) e.className = cls;
         if (text) e.textContent = text;
         return e;
       }
-      fetch('/artikel/terbaru.php?t=' + Date.now(), { cache: 'no-store' })
-        .then(function (r) { return r.ok ? r.json() : null; })
-        .then(function (d) {
-          var arr = d && d.artikel ? d.artikel.slice(0, 5) : [];
-          if (!arr.length) {
-            tp.classList.remove('lg:col-span-3');
-            tp.classList.add('lg:col-span-5');
-            return;
+
+      function lebar(tp) {
+        tp.classList.remove('lg:col-span-3');
+        tp.classList.add('lg:col-span-5');
+      }
+
+      function ambil(url, ms) {
+        var c = new AbortController();
+        var t = setTimeout(function () { c.abort(); }, ms);
+        return fetch(url, { cache: 'no-store', signal: c.signal }).then(
+          function (r) {
+            clearTimeout(t);
+            if (!r.ok) throw new Error('http');
+            return r.json();
+          },
+          function (e) {
+            clearTimeout(t);
+            throw e;
           }
-          arr.forEach(function (it) {
-            var a = el('a', 'group flex gap-3 border-t border-slate-200 py-3 first:border-t-0 first:pt-0');
-            a.href = '/artikel/' + it.slug;
-            var th;
-            if (it.foto) {
-              th = el('img', 'h-16 w-24 shrink-0 rounded-md bg-slate-200 object-cover');
-              th.src = it.foto;
-              th.alt = '';
-              th.loading = 'lazy';
-              th.width = 96;
-              th.height = 64;
-            } else {
-              th = el('div', 'h-16 w-24 shrink-0 rounded-md bg-slate-200');
-            }
-            var tx = el('div', 'min-w-0');
-            var meta = el('p', 'text-xs text-muted');
-            if (it.kategori) meta.appendChild(el('span', 'mr-2 font-semibold text-primary', it.kategori));
-            meta.appendChild(el('span', '', it.tanggal));
-            tx.appendChild(meta);
-            tx.appendChild(el('p', 'mt-0.5 text-sm font-semibold leading-snug text-heading group-hover:underline', it.judul));
-            a.appendChild(th);
-            a.appendChild(tx);
-            list.appendChild(a);
+        );
+      }
+
+      function coba(n, box) {
+        return ambil('/artikel/terbaru.php?t=' + Date.now(), 8000).catch(function (e) {
+          if (n >= JEDA.length || !box.isConnected) throw e;
+          return new Promise(function (ok) { setTimeout(ok, JEDA[n]); }).then(function () {
+            return coba(n + 1, box);
           });
-          box.hidden = false;
-        })
-        .catch(function () {
-          tp.classList.remove('lg:col-span-3');
-          tp.classList.add('lg:col-span-5');
         });
+      }
+
+      function siap() {
+        var box = document.getElementById('ab');
+        var list = document.getElementById('ab-list');
+        var tp = document.getElementById('tp');
+        if (!box || !list || !tp || box.dataset.siap) return;
+        box.dataset.siap = '1';
+
+        coba(0, box)
+          .then(function (d) {
+            if (!box.isConnected) return;
+            var arr = d && d.artikel ? d.artikel.slice(0, 5) : [];
+            if (!arr.length) {
+              lebar(tp);
+              return;
+            }
+            list.textContent = '';
+            arr.forEach(function (it) {
+              var a = el('a', 'group flex gap-3 border-t border-slate-200 py-3 first:border-t-0 first:pt-0');
+              a.href = '/artikel/' + it.slug;
+              var th;
+              if (it.foto) {
+                th = el('img', 'h-16 w-24 shrink-0 rounded-md bg-slate-200 object-cover');
+                th.src = it.foto;
+                th.alt = '';
+                th.loading = 'lazy';
+                th.width = 96;
+                th.height = 64;
+              } else {
+                th = el('div', 'h-16 w-24 shrink-0 rounded-md bg-slate-200');
+              }
+              var tx = el('div', 'min-w-0');
+              var meta = el('p', 'text-xs text-muted');
+              if (it.kategori) meta.appendChild(el('span', 'mr-2 font-semibold text-primary', it.kategori));
+              meta.appendChild(el('span', '', it.tanggal));
+              tx.appendChild(meta);
+              tx.appendChild(el('p', 'mt-0.5 text-sm font-semibold leading-snug text-heading group-hover:underline', it.judul));
+              a.appendChild(th);
+              a.appendChild(tx);
+              list.appendChild(a);
+            });
+            tp.classList.remove('lg:col-span-5');
+            tp.classList.add('lg:col-span-3');
+            box.hidden = false;
+          })
+          .catch(function () {
+            if (box.isConnected) lebar(tp);
+          });
+      }
+
+      document.addEventListener('astro:page-load', siap);
     })();
   </script>
 
