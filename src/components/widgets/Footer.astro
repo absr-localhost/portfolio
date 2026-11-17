@@ -199,7 +199,16 @@ const { socialLinks = [], secondaryLinks = [], links = [], footNote = '', theme 
       /* abaikan */
     }
     const ekstra = await petunjuk(ua);
-    return { dev, br, src, pg: location.pathname.slice(0, 40), jn, md: ekstra.md, os: ekstra.os };
+    const c = (navigator as any).connection;
+    let kn = '';
+    if (c) {
+      const jenis = c.type === 'wifi' ? 'WiFi' : c.type === 'cellular' ? 'Seluler' : '';
+      const cepat = String(c.effectiveType || '').toUpperCase();
+      kn = [jenis, cepat].filter(Boolean).join(' ');
+    }
+    const bhs = String(navigator.language || '').slice(0, 10);
+    const lyr = `${Math.round(screen.width)}x${Math.round(screen.height)}`;
+    return { dev, br, src, pg: location.pathname.slice(0, 40), jn, md: ekstra.md, os: ekstra.os, kn, bhs, lyr };
   }
 
   function bagikan(data: unknown) {
