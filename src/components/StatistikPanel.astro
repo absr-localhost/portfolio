@@ -8,115 +8,83 @@ const card = 'sp-in rounded-xl border border-slate-200 bg-white shadow-sm';
 const kepala = 'flex items-center justify-between gap-3 border-b border-slate-100 px-4 py-3';
 const judul = 'flex items-center gap-2 text-sm font-semibold text-heading';
 const ikonJudul = 'h-4 w-4 text-primary';
-const tombol = 'rounded-md px-2.5 py-1 text-muted';
-const baris = 'flex items-center justify-between gap-3 px-4 py-3';
 const tile = 'sp-in rounded-xl p-4';
 const bulat = 'flex h-9 w-9 shrink-0 items-center justify-center rounded-full text-white';
-const subTile = 'mt-2 flex min-h-4 flex-wrap items-center gap-x-2 gap-y-1 text-xs';
 ---
 
 <div class={judulHalaman ? 'bg-white' : 'bg-slate-50'}>
   <section class={`${wrap} pb-14 sm:pb-16 ${judulHalaman ? 'pt-10 sm:pt-12' : 'pt-6 sm:pt-8'}`}>
     {judulHalaman && <h2 class="mb-4 text-xl font-bold text-heading">{judulHalaman}</h2>}
+    <p class="mb-3 hidden rounded-lg bg-sky-50 px-3 py-2 text-xs text-sky-900" data-k="demo">Mode contoh: semua angka dan nama di halaman ini hanya contoh, bukan data nyata.</p>
 
     <div class="sp-in overflow-hidden rounded-2xl bg-primary p-5 text-white sm:p-6">
       <div class="flex items-start justify-between gap-3">
         <div class="min-w-0">
           <p class="text-xs font-medium text-slate-300">Total kunjungan</p>
           <p class="mt-1 text-4xl font-bold leading-none tabular-nums sm:text-5xl" data-k="total">-</p>
-          <p class="mt-3 flex flex-wrap items-center gap-2 text-xs text-slate-300">
-            <span class="hidden" data-k="d-minggu"></span>
-            <span data-k="s-total"></span>
-          </p>
+          <p class="mt-2 text-xs text-slate-300" data-k="s-total"></p>
         </div>
         <span class="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-white/15">
           <Icon name="tabler:eye" class="h-5 w-5" />
         </span>
       </div>
-      <svg data-k="sp-total" viewBox="0 0 300 56" preserveAspectRatio="none" class="mt-4 h-14 w-full" aria-hidden="true"></svg>
+
+      <div class="mt-5 grid grid-cols-3 divide-x divide-white/10 rounded-xl bg-white/5 py-3 text-center">
+        <div class="px-2">
+          <p class="text-[11px] text-slate-300">Hari ini</p>
+          <p class="mt-1 text-xl font-bold tabular-nums" data-k="hari">-</p>
+          <p class="mt-0.5 min-h-4 text-[11px] text-slate-400" data-k="s-hari"></p>
+        </div>
+        <div class="px-2">
+          <p class="text-[11px] text-slate-300">Bulan ini</p>
+          <p class="mt-1 text-xl font-bold tabular-nums" data-k="bulan">-</p>
+          <p class="mt-0.5 min-h-4 text-[11px] text-slate-400" data-k="s-bulan"></p>
+        </div>
+        <div class="px-2">
+          <p class="text-[11px] text-slate-300">7 hari terakhir</p>
+          <p class="mt-1 text-xl font-bold tabular-nums" data-k="r-minggu">-</p>
+          <p class="mt-0.5 flex min-h-4 justify-center"><span class="hidden" data-k="d-minggu"></span></p>
+        </div>
+      </div>
+
+      <div class="mt-5 flex items-center justify-between gap-3">
+        <div class="min-w-0">
+          <p class="flex items-center gap-2 text-sm font-semibold"><Icon name="tabler:chart-area-line" class="h-4 w-4 text-sky-300" />Kunjungan harian</p>
+          <p class="mt-0.5 truncate text-xs text-slate-300" data-k="sub-harian">14 hari terakhir</p>
+        </div>
+        <div class="flex shrink-0 rounded-lg bg-white/10 p-0.5 text-xs font-semibold">
+          <button type="button" data-r="7">7</button>
+          <button type="button" data-r="14">14</button>
+          <button type="button" data-r="30">30</button>
+        </div>
+      </div>
+      <div class="mt-3 min-h-[190px] w-full" data-k="grafik-harian"></div>
     </div>
 
     <div class="mt-3 grid grid-cols-2 gap-3 sm:mt-4 sm:gap-4 lg:grid-cols-4">
-      <div class={`${tile} bg-sky-50 text-sky-900`}>
-        <div class="flex items-start justify-between gap-2">
-          <span class={`${bulat} bg-sky-600`}><Icon name="tabler:calendar" class="h-5 w-5" /></span>
-          <svg data-k="sp-hari" viewBox="0 0 60 26" class="h-6 w-14" aria-hidden="true"></svg>
-        </div>
-        <p class="mt-3 text-xs font-medium">Hari ini</p>
-        <p class="mt-1 text-2xl font-bold leading-none tabular-nums" data-k="hari">-</p>
-        <p class={subTile} data-k="s-hari"></p>
-      </div>
-      <div class={`${tile} bg-violet-50 text-violet-900`}>
-        <div class="flex items-start justify-between gap-2">
-          <span class={`${bulat} bg-violet-600`}><Icon name="tabler:chart-bar" class="h-5 w-5" /></span>
-          <svg data-k="sp-bulan" viewBox="0 0 60 26" class="h-6 w-14" aria-hidden="true"></svg>
-        </div>
-        <p class="mt-3 text-xs font-medium">Bulan ini</p>
-        <p class="mt-1 text-2xl font-bold leading-none tabular-nums" data-k="bulan">-</p>
-        <p class={subTile} data-k="s-bulan"></p>
-      </div>
       <div class={`${tile} bg-emerald-50 text-emerald-900`}>
-        <div class="flex items-start justify-between gap-2">
-          <span class={`${bulat} bg-emerald-600`}><Icon name="tabler:chart-line" class="h-5 w-5" /></span>
-          <svg data-k="sp-rata" viewBox="0 0 60 26" class="h-6 w-14" aria-hidden="true"></svg>
-        </div>
+        <span class={`${bulat} bg-emerald-600`}><Icon name="tabler:chart-line" class="h-5 w-5" /></span>
         <p class="mt-3 text-xs font-medium">Rata-rata harian</p>
         <p class="mt-1 text-2xl font-bold leading-none tabular-nums" data-k="rata">-</p>
-        <p class={subTile} data-k="s-rata"></p>
+        <p class="mt-2 min-h-4 text-xs" data-k="s-rata"></p>
       </div>
       <div class={`${tile} bg-orange-50 text-orange-900`}>
-        <div class="flex items-start justify-between gap-2">
-          <span class={`${bulat} bg-orange-600`}><Icon name="tabler:trophy" class="h-5 w-5" /></span>
-          <svg data-k="sp-puncak" viewBox="0 0 60 26" class="h-6 w-14" aria-hidden="true"></svg>
-        </div>
+        <span class={`${bulat} bg-orange-600`}><Icon name="tabler:trophy" class="h-5 w-5" /></span>
         <p class="mt-3 text-xs font-medium">Hari tersibuk</p>
         <p class="mt-1 text-2xl font-bold leading-none tabular-nums" data-k="puncak">-</p>
-        <p class={subTile} data-k="s-puncak"></p>
+        <p class="mt-2 min-h-4 text-xs" data-k="s-puncak"></p>
       </div>
-    </div>
-
-    <div class="mt-3 grid gap-3 sm:mt-4 sm:gap-4 lg:grid-cols-3">
-      <div class={`${card} lg:col-span-2`}>
-        <div class={kepala}>
-          <div class="min-w-0">
-            <h3 class={judul}><Icon name="tabler:chart-area-line" class={ikonJudul} />Kunjungan harian</h3>
-            <p class="mt-0.5 text-xs text-muted" data-k="sub-harian">14 hari terakhir</p>
-          </div>
-          <div class="flex rounded-lg bg-slate-100 p-0.5 text-xs font-semibold">
-            <button type="button" data-r="7" class={tombol}>7</button>
-            <button type="button" data-r="14" class={tombol}>14</button>
-            <button type="button" data-r="30" class={tombol}>30</button>
-          </div>
-        </div>
-        <div class="p-4">
-          <div class="min-h-[200px] w-full" data-k="grafik-harian"></div>
-        </div>
+      <div class={`${tile} bg-violet-50 text-violet-900`}>
+        <span class={`${bulat} bg-violet-600`}><Icon name="tabler:calendar-stats" class="h-5 w-5" /></span>
+        <p class="mt-3 text-xs font-medium">Hari dengan kunjungan</p>
+        <p class="mt-1 text-2xl font-bold leading-none tabular-nums" data-k="r-aktif">-</p>
+        <p class="mt-2 min-h-4 text-xs" data-k="s-aktif"></p>
       </div>
-      <div class={card}>
-        <div class={kepala}>
-          <h3 class={judul}><Icon name="tabler:list-details" class={ikonJudul} />Ringkasan 30 hari</h3>
-        </div>
-        <dl class="divide-y divide-slate-100 text-sm">
-          <div class={baris}>
-            <dt class="text-muted">Total kunjungan</dt>
-            <dd class="font-semibold tabular-nums text-heading" data-k="r-total">-</dd>
-          </div>
-          <div class={baris}>
-            <dt class="text-muted">Hari tersibuk</dt>
-            <dd class="font-semibold tabular-nums text-heading" data-k="r-puncak">-</dd>
-          </div>
-          <div class={baris}>
-            <dt class="text-muted">7 hari terakhir</dt>
-            <dd class="flex items-center gap-2">
-              <span class="hidden" data-k="d-minggu2"></span>
-              <span class="font-semibold tabular-nums text-heading" data-k="r-minggu">-</span>
-            </dd>
-          </div>
-          <div class={baris}>
-            <dt class="text-muted">Hari dengan kunjungan</dt>
-            <dd class="font-semibold tabular-nums text-heading" data-k="r-aktif">-</dd>
-          </div>
-        </dl>
+      <div class={`${tile} bg-sky-50 text-sky-900`}>
+        <span class={`${bulat} bg-sky-600`}><Icon name="tabler:users" class="h-5 w-5" /></span>
+        <p class="mt-3 text-xs font-medium">Pengunjung kembali</p>
+        <p class="mt-1 text-2xl font-bold leading-none tabular-nums" data-k="kembali">-</p>
+        <p class="mt-2 min-h-4 text-xs" data-k="s-kembali"></p>
       </div>
     </div>
 
@@ -138,88 +106,73 @@ const subTile = 'mt-2 flex min-h-4 flex-wrap items-center gap-x-2 gap-y-1 text-x
       </div>
     </div>
 
-    <div class="mt-3 grid gap-3 sm:mt-4 sm:gap-4 lg:grid-cols-3">
-      <div class={card}>
-        <div class={kepala}>
-          <h3 class={judul}><Icon name="tabler:device-mobile" class={ikonJudul} />Perangkat</h3>
+    <div class={`${card} mt-3 sm:mt-4`}>
+      <div class={kepala}>
+        <h3 class={judul}><Icon name="tabler:clock" class={ikonJudul} />Jam dan hari tersibuk</h3>
+        <p class="text-xs text-muted" data-k="jam-puncak"></p>
+      </div>
+      <div class="p-4">
+        <div data-k="jam"></div>
+        <div class="mt-3 flex items-center justify-end gap-1.5 text-[11px] text-muted">
+          <span>Sepi</span>
+          <span class="h-3 w-3 rounded-[3px] bg-slate-100"></span>
+          <span class="h-3 w-3 rounded-[3px] bg-violet-600 opacity-25"></span>
+          <span class="h-3 w-3 rounded-[3px] bg-violet-600 opacity-50"></span>
+          <span class="h-3 w-3 rounded-[3px] bg-violet-600 opacity-75"></span>
+          <span class="h-3 w-3 rounded-[3px] bg-violet-600"></span>
+          <span>Ramai</span>
         </div>
+      </div>
+    </div>
+
+    <div class="mt-3 grid grid-cols-2 gap-3 sm:mt-4 sm:gap-4 lg:grid-cols-4">
+      <div class={card}>
+        <div class={kepala}><h3 class={judul}><Icon name="tabler:device-mobile" class={ikonJudul} />Perangkat</h3></div>
         <div class="p-4" data-k="d-dev"></div>
       </div>
       <div class={card}>
-        <div class={kepala}>
-          <h3 class={judul}><Icon name="tabler:browser" class={ikonJudul} />Browser</h3>
-        </div>
+        <div class={kepala}><h3 class={judul}><Icon name="tabler:browser" class={ikonJudul} />Browser</h3></div>
         <div class="p-4" data-k="d-br"></div>
       </div>
       <div class={card}>
-        <div class={kepala}>
-          <h3 class={judul}><Icon name="tabler:users" class={ikonJudul} />Pengunjung</h3>
-        </div>
+        <div class={kepala}><h3 class={judul}><Icon name="tabler:cpu" class={ikonJudul} />Sistem operasi</h3></div>
+        <div class="p-4" data-k="d-os"></div>
+      </div>
+      <div class={card}>
+        <div class={kepala}><h3 class={judul}><Icon name="tabler:users" class={ikonJudul} />Pengunjung</h3></div>
         <div class="p-4" data-k="d-jn"></div>
       </div>
     </div>
 
     <div class="mt-3 grid gap-3 sm:mt-4 sm:gap-4 lg:grid-cols-3">
       <div class={card}>
-        <div class={kepala}>
-          <h3 class={judul}><Icon name="tabler:world" class={ikonJudul} />Negara</h3>
-        </div>
+        <div class={kepala}><h3 class={judul}><Icon name="tabler:map-pin" class={ikonJudul} />Provinsi asal</h3></div>
+        <div class="p-4" data-k="l-prov"></div>
+      </div>
+      <div class={card}>
+        <div class={kepala}><h3 class={judul}><Icon name="tabler:device-mobile" class={ikonJudul} />Model HP</h3></div>
+        <div class="p-4" data-k="l-model"></div>
+      </div>
+      <div class={card}>
+        <div class={kepala}><h3 class={judul}><Icon name="tabler:world" class={ikonJudul} />Negara</h3></div>
         <div class="p-4" data-k="l-neg"></div>
       </div>
       <div class={card}>
-        <div class={kepala}>
-          <h3 class={judul}><Icon name="tabler:link" class={ikonJudul} />Sumber kunjungan</h3>
-        </div>
+        <div class={kepala}><h3 class={judul}><Icon name="tabler:link" class={ikonJudul} />Sumber kunjungan</h3></div>
         <div class="p-4" data-k="l-src"></div>
       </div>
       <div class={card}>
-        <div class={kepala}>
-          <h3 class={judul}><Icon name="tabler:file-text" class={ikonJudul} />Halaman masuk</h3>
-        </div>
+        <div class={kepala}><h3 class={judul}><Icon name="tabler:file-text" class={ikonJudul} />Halaman masuk</h3></div>
         <div class="p-4" data-k="l-pg"></div>
       </div>
     </div>
 
-    <div class="mt-3 grid gap-3 sm:mt-4 sm:gap-4 lg:grid-cols-3" data-k="g-baru">
-      <div class={`${card} hidden`} data-k="w-model">
-        <div class={kepala}>
-          <h3 class={judul}><Icon name="tabler:device-mobile" class={ikonJudul} />Model HP</h3>
-        </div>
-        <div class="p-4" data-k="l-model"></div>
-      </div>
-      <div class={`${card} hidden`} data-k="w-prov">
-        <div class={kepala}>
-          <h3 class={judul}><Icon name="tabler:map-pin" class={ikonJudul} />Provinsi asal</h3>
-        </div>
-        <div class="p-4" data-k="l-prov"></div>
-      </div>
-      <div class={`${card} hidden`} data-k="w-os">
-        <div class={kepala}>
-          <h3 class={judul}><Icon name="tabler:cpu" class={ikonJudul} />Sistem operasi</h3>
-        </div>
-        <div class="p-4" data-k="d-os"></div>
-      </div>
-    </div>
-
-    <div class={`${card} mt-3 hidden sm:mt-4`} data-k="w-baru">
+    <div class={`${card} mt-3 sm:mt-4`}>
       <div class={kepala}>
-        <h3 class={judul}><Icon name="tabler:clock" class={ikonJudul} />Pengunjung terbaru</h3>
+        <h3 class={judul}><Icon name="tabler:users" class={ikonJudul} />Pengunjung terbaru</h3>
         <p class="text-xs text-muted">IP disamarkan</p>
       </div>
-      <div class="overflow-x-auto">
-        <table class="w-full min-w-[480px] text-left text-xs">
-          <thead>
-            <tr class="border-b border-slate-100 text-muted">
-              <th class="px-4 py-2 font-medium">Waktu</th>
-              <th class="px-2 py-2 font-medium">IP</th>
-              <th class="px-2 py-2 font-medium">Perangkat</th>
-              <th class="px-2 py-2 font-medium">Provinsi</th>
-              <th class="px-4 py-2 font-medium">Halaman</th>
-            </tr>
-          </thead>
-          <tbody data-k="t-baru"></tbody>
-        </table>
-      </div>
+      <div data-k="t-baru"></div>
     </div>
 
     <p class="mt-4 text-xs text-muted" data-k="sumber"></p>
@@ -230,15 +183,6 @@ const subTile = 'mt-2 flex min-h-4 flex-wrap items-center gap-x-2 gap-y-1 text-x
   @media (prefers-reduced-motion: no-preference) {
     .sp-in {
       animation: sp-naik 0.5s ease-out both;
-    }
-    .sp-in:nth-child(2) {
-      animation-delay: 0.05s;
-    }
-    .sp-in:nth-child(3) {
-      animation-delay: 0.1s;
-    }
-    .sp-in:nth-child(4) {
-      animation-delay: 0.15s;
     }
     @keyframes sp-naik {
       from {
@@ -258,8 +202,26 @@ const subTile = 'mt-2 flex min-h-4 flex-wrap items-center gap-x-2 gap-y-1 text-x
   type Hitung = { k: string; n: number };
 
   const BLN = ['Jan', 'Feb', 'Mar', 'Apr', 'Mei', 'Jun', 'Jul', 'Agu', 'Sep', 'Okt', 'Nov', 'Des'];
+  const HARI = ['Sen', 'Sel', 'Rab', 'Kam', 'Jum', 'Sab', 'Min'];
+  const HARI_PENUH = ['Senin', 'Selasa', 'Rabu', 'Kamis', 'Jumat', 'Sabtu', 'Minggu'];
   const PALET = ['#2a78d6', '#6250d6', '#1baf7a', '#eb6834', '#e87ba4', '#0B2545'];
   const warna = (i: number) => PALET[i] || '#94a3b8';
+  const MODEL_NAMA: Record<string, string> = {
+    'Samsung SM-A155F': 'Samsung Galaxy A15',
+    'Samsung SM-A156B': 'Samsung Galaxy A15 5G',
+    'Samsung SM-A055F': 'Samsung Galaxy A05',
+    'Samsung SM-A057F': 'Samsung Galaxy A05s',
+    'Samsung SM-A145F': 'Samsung Galaxy A14',
+    'Samsung SM-A135F': 'Samsung Galaxy A13',
+    'Samsung SM-A045F': 'Samsung Galaxy A04',
+    'Samsung SM-A047F': 'Samsung Galaxy A04s',
+    'Samsung SM-A245F': 'Samsung Galaxy A24',
+    'Samsung SM-A346E': 'Samsung Galaxy A34 5G',
+    'Samsung SM-A546E': 'Samsung Galaxy A54 5G',
+    'Samsung SM-A125F': 'Samsung Galaxy A12',
+    'Samsung SM-A325F': 'Samsung Galaxy A32',
+  };
+  const namaHp = (s: string) => MODEL_NAMA[s] || s;
   const fmt = (n: number) => n.toLocaleString('id-ID');
   const naik = (m: number) => Math.max(4, Math.ceil(m / 4) * 4);
   const jml = (a: Titik[]) => a.reduce((s, x) => s + x.n, 0);
@@ -284,6 +246,7 @@ const subTile = 'mt-2 flex min-h-4 flex-wrap items-center gap-x-2 gap-y-1 text-x
   const esc = (s: string) => String(s).replace(/[&<>"']/g, (c) => '&#' + c.charCodeAt(0) + ';');
   const topeng = (ip: string) => {
     const s = String(ip || '');
+    if (!s) return '-';
     if (s.includes(':')) {
       const p = s.split(':');
       return `${p[0] || '0'}:${p[1] || '0'}:xxxx`;
@@ -291,13 +254,17 @@ const subTile = 'mt-2 flex min-h-4 flex-wrap items-center gap-x-2 gap-y-1 text-x
     const p = s.split('.');
     return p.length === 4 ? `${p[0]}.${p[1]}.xx.xx` : '-';
   };
-  const kosongHtml = '<p class="text-sm text-muted">Belum ada data.</p>';
+  const kosongDaftar =
+    '<div class="space-y-3" aria-hidden="true">' +
+    [72, 48, 28].map((w) => `<div class="h-2 rounded-full bg-slate-100" style="width:${w}%"></div>`).join('') +
+    '</div><p class="mt-3 text-sm text-muted">Belum ada data.</p>';
   const cincinKosong =
-    '<div class="flex items-center gap-4"><svg viewBox="0 0 120 120" class="h-28 w-28 shrink-0" aria-hidden="true"><circle cx="60" cy="60" r="42" fill="none" stroke="#e2e8f0" stroke-width="16" /></svg><p class="text-sm text-muted">Belum ada data.</p></div>';
+    '<div class="flex flex-col items-center gap-3"><svg viewBox="0 0 120 120" class="h-28 w-28" aria-hidden="true"><circle cx="60" cy="60" r="42" fill="none" stroke="#e2e8f0" stroke-width="16" /></svg><p class="text-sm text-muted">Belum ada data.</p></div>';
 
   let terakhir: any = null;
   let rentang = 14;
   let tampilTotal = 0;
+  const demoAktif = () => new URLSearchParams(location.search).has('demo');
 
   function hitungNaik(el: HTMLElement, ke: number) {
     const dari = tampilTotal;
@@ -316,29 +283,16 @@ const subTile = 'mt-2 flex min-h-4 flex-wrap items-center gap-x-2 gap-y-1 text-x
     requestAnimationFrame(langkah);
   }
 
-  function spark(nilai: number[], w: number, h: number, warnaGaris: string, area: boolean) {
-    const n = nilai.length;
-    if (n < 2) return '';
-    const m = Math.max(1, ...nilai);
-    const x = (i: number) => (i * w) / (n - 1);
-    const y = (v: number) => h - 2 - (v / m) * (h - 4);
-    const p = nilai.map((v, i) => `${i ? 'L' : 'M'}${x(i).toFixed(1)} ${y(v).toFixed(1)}`).join(' ');
-    return (
-      (area ? `<path d="${p} L${w} ${h} L0 ${h} Z" fill="${warnaGaris}" fill-opacity="0.18" />` : '') +
-      `<path d="${p}" fill="none" stroke="${warnaGaris}" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" vector-effect="non-scaling-stroke" />`
-    );
-  }
-
-  function kisi(W: number, H: number, l: number, r: number, t: number, b: number, yMax: number) {
+  function kisi(W: number, H: number, l: number, r: number, t: number, b: number, yMax: number, gelap: boolean) {
     let garis = '';
     let angka = '';
     for (let k = 0; k <= 4; k++) {
       const v = (yMax * k) / 4;
       const yy = t + (H - t - b) * (1 - v / yMax);
       garis += `<line x1="${l}" x2="${W - r}" y1="${yy}" y2="${yy}" stroke="currentColor" stroke-dasharray="${k ? '3 3' : '0'}" />`;
-      angka += `<text x="${l - 6}" y="${yy + 4}" text-anchor="end" class="fill-slate-500 text-[11px]">${fmt(v)}</text>`;
+      angka += `<text x="${l - 6}" y="${yy + 4}" text-anchor="end" class="${gelap ? 'fill-slate-400' : 'fill-slate-500'} text-[11px]">${fmt(v)}</text>`;
     }
-    return `<g class="text-slate-200">${garis}</g>${angka}`;
+    return `<g class="${gelap ? 'text-white/15' : 'text-slate-200'}">${garis}</g>${angka}`;
   }
 
   function gambarHarian(semua: Titik[]) {
@@ -347,7 +301,7 @@ const subTile = 'mt-2 flex min-h-4 flex-wrap items-center gap-x-2 gap-y-1 text-x
     const seri = semua.slice(-rentang);
     const n = seri.length;
     const W = Math.max(el.clientWidth, 240);
-    const H = 200, l = 30, r = 10, t = 12, b = 24;
+    const H = 190, l = 30, r = 8, t = 10, b = 24;
     const yMax = naik(Math.max(...seri.map((s) => s.n)));
     const x = (i: number) => l + (i * (W - l - r)) / (n - 1);
     const y = (v: number) => t + (H - t - b) * (1 - v / yMax);
@@ -359,21 +313,21 @@ const subTile = 'mt-2 flex min-h-4 flex-wrap items-center gap-x-2 gap-y-1 text-x
     let label = '';
     seri.forEach((s, i) => {
       if (n <= 14) {
-        titik += `<circle cx="${x(i).toFixed(1)}" cy="${y(s.n).toFixed(1)}" r="3" fill="white" stroke="currentColor" stroke-width="1.5" />`;
+        titik += `<circle cx="${x(i).toFixed(1)}" cy="${y(s.n).toFixed(1)}" r="3" fill="#0B2545" stroke="currentColor" stroke-width="1.8" />`;
       }
       if ((n - 1 - i) % langkah === 0) {
-        label += `<text x="${x(i).toFixed(1)}" y="${H - 6}" text-anchor="${i === n - 1 ? 'end' : 'middle'}" class="fill-slate-500 text-[11px]">${tglPendek(s.t)}</text>`;
+        label += `<text x="${x(i).toFixed(1)}" y="${H - 6}" text-anchor="${i === n - 1 ? 'end' : 'middle'}" class="fill-slate-400 text-[11px]">${tglPendek(s.t)}</text>`;
       }
     });
     el.innerHTML =
-      `<svg width="${W}" height="${H}" viewBox="0 0 ${W} ${H}" class="block text-sky-600" style="touch-action:pan-y" role="img" aria-label="Grafik kunjungan harian">` +
-      `<defs><linearGradient id="gHarian" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="currentColor" stop-opacity="0.28" /><stop offset="1" stop-color="currentColor" stop-opacity="0" /></linearGradient></defs>` +
-      kisi(W, H, l, r, t, b, yMax) +
+      `<svg width="${W}" height="${H}" viewBox="0 0 ${W} ${H}" class="block text-sky-300" style="touch-action:pan-y" role="img" aria-label="Grafik kunjungan harian">` +
+      `<defs><linearGradient id="gHarian" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="currentColor" stop-opacity="0.35" /><stop offset="1" stop-color="currentColor" stop-opacity="0" /></linearGradient></defs>` +
+      kisi(W, H, l, r, t, b, yMax, true) +
       `<path d="${area}" fill="url(#gHarian)" />` +
       `<path d="${garis}" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linejoin="round" stroke-linecap="round" />` +
       titik +
       label +
-      `<g data-m visibility="hidden"><line y1="${t}" y2="${H - b}" stroke="currentColor" stroke-opacity="0.35" stroke-dasharray="3 3" /><circle r="5" fill="currentColor" stroke="white" stroke-width="2" /></g>` +
+      `<g data-m visibility="hidden"><line y1="${t}" y2="${H - b}" stroke="white" stroke-opacity="0.35" stroke-dasharray="3 3" /><circle r="5" fill="white" stroke="currentColor" stroke-width="2.5" /></g>` +
       `</svg>`;
     isiTeks('sub-harian', awal);
 
@@ -390,7 +344,7 @@ const subTile = 'mt-2 flex min-h-4 flex-wrap items-center gap-x-2 gap-y-1 text-x
       mc.setAttribute('cx', String(x(i)));
       mc.setAttribute('cy', String(y(seri[i].n)));
       m.setAttribute('visibility', 'visible');
-      isiTeks('sub-harian', `${tglPendek(seri[i].t)}: ${fmt(seri[i].n)}`);
+      isiTeks('sub-harian', `${tglPendek(seri[i].t)}: ${fmt(seri[i].n)} kunjungan`);
     };
     svg.addEventListener('pointermove', geser);
     svg.addEventListener('pointerdown', geser);
@@ -421,7 +375,7 @@ const subTile = 'mt-2 flex min-h-4 flex-wrap items-center gap-x-2 gap-y-1 text-x
     });
     el.innerHTML =
       `<svg width="${W}" height="${H}" viewBox="0 0 ${W} ${H}" class="block text-violet-600" role="img" aria-label="Grafik kunjungan bulanan">` +
-      kisi(W, H, l, r, t, b, yMax) +
+      kisi(W, H, l, r, t, b, yMax, false) +
       batang +
       `</svg>`;
   }
@@ -437,6 +391,27 @@ const subTile = 'mt-2 flex min-h-4 flex-wrap items-center gap-x-2 gap-y-1 text-x
         return `<div class="aspect-square rounded ${kelas}" style="${gaya}" title="${tglPendek(s.t)}: ${fmt(s.n)}"></div>`;
       })
       .join('');
+  }
+
+  function gambarJam(heat: any) {
+    const el = q('jam');
+    if (!el) return;
+    const ok = Array.isArray(heat) && heat.length === 168;
+    const maks = ok ? Math.max(...(heat as number[])) : 0;
+    let html = '<div class="grid gap-[3px]" style="grid-template-columns:28px repeat(24,minmax(0,1fr))"><div></div>';
+    for (let j = 0; j < 24; j++) html += `<div class="text-center text-[10px] text-slate-400">${j % 6 === 0 ? j : ''}</div>`;
+    let pI = -1;
+    for (let r = 0; r < 7; r++) {
+      html += `<div class="flex items-center text-[10px] text-slate-500">${HARI[r]}</div>`;
+      for (let j = 0; j < 24; j++) {
+        const n = ok ? heat[r * 24 + j] : 0;
+        if (n > 0 && (pI < 0 || n > heat[pI])) pI = r * 24 + j;
+        const gaya = n > 0 ? `background:#6250d6;opacity:${(0.2 + (0.8 * n) / maks).toFixed(2)}` : '';
+        html += `<div class="aspect-square rounded-[3px] ${n > 0 ? '' : 'bg-slate-100'}" style="${gaya}" title="${HARI_PENUH[r]} ${j}.00: ${fmt(n)}"></div>`;
+      }
+    }
+    el.innerHTML = html + '</div>';
+    isiTeks('jam-puncak', pI >= 0 ? `Paling ramai: ${HARI_PENUH[Math.floor(pI / 24)]}, ${pI % 24}.00` : 'Belum ada data');
   }
 
   function donat(id: string, arr: Hitung[] | undefined) {
@@ -457,11 +432,11 @@ const subTile = 'mt-2 flex min-h-4 flex-wrap items-center gap-x-2 gap-y-1 text-x
       const len = Math.max(f * C - 1.5, 0.5);
       seg += `<circle data-i="${i}" cx="60" cy="60" r="${R}" fill="none" stroke="${warna(i)}" stroke-width="16" stroke-dasharray="${len.toFixed(2)} ${(C - len).toFixed(2)}" stroke-dashoffset="${(-pos * C).toFixed(2)}" transform="rotate(-90 60 60)" style="cursor:pointer" />`;
       pos += f;
-      leg += `<li class="flex items-center justify-between gap-3"><span class="flex min-w-0 items-center gap-2"><span class="h-2.5 w-2.5 shrink-0 rounded-sm" style="background:${warna(i)}"></span><span class="truncate text-muted">${esc(x.k)}</span></span><span class="font-semibold tabular-nums text-heading">${Math.round(f * 100)}%</span></li>`;
+      leg += `<li class="flex items-center justify-between gap-2"><span class="flex min-w-0 items-center gap-1.5"><span class="h-2.5 w-2.5 shrink-0 rounded-sm" style="background:${warna(i)}"></span><span class="truncate text-muted">${esc(x.k)}</span></span><span class="font-semibold tabular-nums text-heading">${Math.round(f * 100)}%</span></li>`;
     });
     el.innerHTML =
-      `<div class="flex items-center gap-4"><svg viewBox="0 0 120 120" class="h-28 w-28 shrink-0" role="img" aria-label="Diagram lingkaran"><circle cx="60" cy="60" r="${R}" fill="none" stroke="#f1f5f9" stroke-width="16" />${seg}<text data-c1 x="60" y="62" text-anchor="middle" class="fill-slate-800 text-[18px] font-bold">${fmt(tot)}</text><text data-c2 x="60" y="77" text-anchor="middle" class="fill-slate-500 text-[10px]">kunjungan</text></svg>` +
-      `<ul class="min-w-0 flex-1 space-y-2 text-sm">${leg}</ul></div>`;
+      `<div class="flex flex-col items-center gap-3"><svg viewBox="0 0 120 120" class="h-28 w-28" role="img" aria-label="Diagram lingkaran"><circle cx="60" cy="60" r="${R}" fill="none" stroke="#f1f5f9" stroke-width="16" />${seg}<text data-c1 x="60" y="62" text-anchor="middle" class="fill-slate-800 text-[18px] font-bold">${fmt(tot)}</text><text data-c2 x="60" y="77" text-anchor="middle" class="fill-slate-500 text-[10px]">kunjungan</text></svg>` +
+      `<ul class="w-full space-y-1.5 text-xs">${leg}</ul></div>`;
     const c1 = el.querySelector('[data-c1]') as SVGTextElement;
     const c2 = el.querySelector('[data-c2]') as SVGTextElement;
     const reset = () => {
@@ -480,12 +455,12 @@ const subTile = 'mt-2 flex min-h-4 flex-wrap items-center gap-x-2 gap-y-1 text-x
     });
   }
 
-  function daftar(id: string, arr: Hitung[] | undefined, w: string) {
+  function daftar(id: string, arr: Hitung[] | undefined, w: string, ubah?: (s: string) => string) {
     const el = q(id);
     if (!el) return;
     const tot = arr ? arr.reduce((s, x) => s + x.n, 0) : 0;
     if (!arr || tot === 0) {
-      el.innerHTML = kosongHtml;
+      el.innerHTML = kosongDaftar;
       return;
     }
     const maks = Math.max(...arr.map((x) => x.n));
@@ -494,59 +469,56 @@ const subTile = 'mt-2 flex min-h-4 flex-wrap items-center gap-x-2 gap-y-1 text-x
       arr
         .map(
           (x) =>
-            `<li><div class="flex items-center justify-between gap-3"><span class="truncate text-muted">${esc(x.k)}</span><span class="font-semibold tabular-nums text-heading">${fmt(x.n)}</span></div><div class="mt-1.5 h-2 rounded-full bg-slate-100"><div class="h-2 rounded-full" style="width:${Math.max(4, Math.round((x.n / maks) * 100))}%;background:${w}"></div></div></li>`
+            `<li><div class="flex items-center justify-between gap-3"><span class="truncate text-muted">${esc(ubah ? ubah(x.k) : x.k)}</span><span class="shrink-0 font-semibold tabular-nums text-heading">${fmt(x.n)} <span class="font-normal text-muted">${Math.round((x.n / tot) * 100)}%</span></span></div><div class="mt-1.5 h-2 rounded-full bg-slate-100"><div class="h-2 rounded-full" style="width:${Math.max(4, Math.round((x.n / maks) * 100))}%;background:${w}"></div></div></li>`
         )
         .join('') +
       '</ul>';
   }
 
-  function tampil(k: string, ada: boolean) {
-    const el = q(k);
-    if (el) el.classList.toggle('hidden', !ada);
-  }
-
   function pengunjungBaru(arr: any) {
-    const ada = Array.isArray(arr) && arr.length > 0;
-    tampil('w-baru', ada);
-    const tb = q('t-baru');
-    if (!tb || !ada) return;
-    tb.innerHTML = arr
-      .slice(0, 10)
-      .map(
-        (v: any) =>
-          `<tr class="border-b border-slate-50"><td class="whitespace-nowrap px-4 py-2 text-muted">${esc(waktuPendek(v.w))}</td><td class="px-2 py-2 tabular-nums text-muted">${esc(topeng(v.ip))}</td><td class="px-2 py-2 text-heading">${esc(v.hp || v.dev || '-')}</td><td class="px-2 py-2">${v.prov ? `<span class="rounded-full bg-sky-50 px-2 py-0.5 font-medium text-sky-800">${esc(v.prov)}</span>` : '-'}</td><td class="px-4 py-2 text-muted">${esc(v.pg || '/')}</td></tr>`
-      )
-      .join('');
+    const el = q('t-baru');
+    if (!el) return;
+    if (!Array.isArray(arr) || arr.length === 0) {
+      el.innerHTML = '<p class="px-4 py-4 text-sm text-muted">Belum ada data.</p>';
+      return;
+    }
+    el.innerHTML =
+      '<ul class="divide-y divide-slate-100">' +
+      arr
+        .slice(0, 8)
+        .map((v: any, i: number) => {
+          const nama = namaHp(String(v.hp || v.dev || '-'));
+          const awal = (nama.trim().charAt(0) || '?').toUpperCase();
+          return `<li class="flex items-center gap-3 px-4 py-3"><span class="flex h-9 w-9 shrink-0 items-center justify-center rounded-full text-sm font-bold text-white" style="background:${warna(i % 5)}">${esc(awal)}</span><div class="min-w-0 flex-1"><p class="truncate text-sm font-semibold text-heading">${esc(nama)}</p><p class="flex gap-3 truncate text-xs text-muted"><span class="tabular-nums">${esc(topeng(v.ip))}</span><span class="truncate">${esc(v.pg || '/')}</span></p></div><div class="shrink-0 text-right"><p class="text-xs font-medium text-heading">${esc(v.prov || '-')}</p><p class="text-xs text-muted">${esc(waktuPendek(v.w))}</p></div></li>`;
+        })
+        .join('') +
+      '</ul>';
   }
 
   function pesanGrafik(teks: string) {
-    ['grafik-harian', 'grafik-bulanan', 'heat', 'l-neg', 'l-src', 'l-pg'].forEach((k) => {
+    ['grafik-harian', 'grafik-bulanan', 'heat'].forEach((k) => {
       const el = q(k);
-      if (el) el.innerHTML = `<p class="col-span-10 text-sm text-muted">${teks}</p>`;
+      if (el) el.innerHTML = `<p class="col-span-10 text-sm text-slate-400">${teks}</p>`;
     });
-    ['d-dev', 'd-br', 'd-jn'].forEach((k) => {
+    ['d-dev', 'd-br', 'd-os', 'd-jn'].forEach((k) => {
       const el = q(k);
       if (el) el.innerHTML = cincinKosong;
     });
+    ['l-prov', 'l-model', 'l-neg', 'l-src', 'l-pg'].forEach((k) => {
+      const el = q(k);
+      if (el) el.innerHTML = kosongDaftar;
+    });
+    gambarJam(null);
+    pengunjungBaru(null);
   }
 
-  function chip(k: string, kini: number, lalu: number, gelap: boolean) {
+  function chip(k: string, kini: number, lalu: number) {
     const el = q(k);
     if (!el) return;
     if (lalu > 0) {
       const p = Math.round(((kini - lalu) / lalu) * 100);
-      const w = gelap
-        ? p > 0
-          ? 'bg-white/15 text-emerald-200'
-          : p < 0
-            ? 'bg-white/15 text-rose-200'
-            : 'bg-white/15 text-slate-200'
-        : p > 0
-          ? 'bg-emerald-50 text-emerald-700'
-          : p < 0
-            ? 'bg-rose-50 text-rose-700'
-            : 'bg-slate-100 text-slate-600';
-      el.className = `rounded px-1.5 py-0.5 text-xs font-semibold ${w}`;
+      const w = p > 0 ? 'bg-white/15 text-emerald-200' : p < 0 ? 'bg-white/15 text-rose-200' : 'bg-white/15 text-slate-200';
+      el.className = `rounded px-1.5 py-0.5 text-[11px] font-semibold ${w}`;
       el.textContent = p > 0 ? `naik ${p}%` : p < 0 ? `turun ${Math.abs(p)}%` : 'tetap';
     } else {
       el.className = 'hidden';
@@ -557,26 +529,76 @@ const subTile = 'mt-2 flex min-h-4 flex-wrap items-center gap-x-2 gap-y-1 text-x
   function tandai() {
     document.querySelectorAll<HTMLElement>('[data-r]').forEach((b) => {
       const aktif = Number(b.dataset.r) === rentang;
-      b.className = 'rounded-md px-2.5 py-1 transition ' + (aktif ? 'bg-primary text-white' : 'text-muted hover:text-heading');
+      b.className = 'rounded-md px-2.5 py-1 transition ' + (aktif ? 'bg-white text-primary' : 'text-slate-300 hover:text-white');
       b.setAttribute('aria-pressed', String(aktif));
     });
   }
 
-  function gambarSpark(h: Titik[]) {
-    const nilai = h.map((s) => s.n);
-    const taruh = (k: string, isi: string) => {
-      const el = q(k);
-      if (el) el.innerHTML = isi;
+  function contoh() {
+    let s = 11;
+    const r = () => {
+      s = (s * 9301 + 49297) % 233280;
+      return s / 233280;
     };
-    taruh('sp-total', spark(nilai, 300, 56, '#85B7EB', true));
-    taruh('sp-hari', spark(nilai.slice(-10), 60, 26, '#2a78d6', false));
-    taruh('sp-bulan', spark(nilai.slice(-20), 60, 26, '#6250d6', false));
-    taruh('sp-rata', spark(nilai, 60, 26, '#1baf7a', false));
-    taruh('sp-puncak', spark(nilai.slice(-14), 60, 26, '#eb6834', false));
+    const tgl = (m: number) => new Date(Date.now() - m * 86400000).toLocaleDateString('sv-SE');
+    const harian: Titik[] = [];
+    for (let i = 29; i >= 0; i--) {
+      const hr = new Date(Date.now() - i * 86400000).getDay();
+      harian.push({ t: tgl(i), n: Math.round(38 + (29 - i) * 2.1 + r() * 34 - (hr === 1 ? 12 : 0) + (hr === 0 || hr === 6 ? 10 : 0)) });
+    }
+    const bulanan: Titik[] = [];
+    const nilaiBln = [210, 290, 380, 450, 560, jml(harian)];
+    for (let k = 5; k >= 0; k--) {
+      const d = new Date();
+      d.setMonth(d.getMonth() - k, 1);
+      bulanan.push({ t: d.toLocaleDateString('sv-SE'), n: nilaiBln[5 - k] });
+    }
+    const heat: number[] = [];
+    for (let rr = 0; rr < 7; rr++) {
+      for (let j = 0; j < 24; j++) {
+        const dasar = j >= 19 && j <= 22 ? 9 : j >= 7 && j <= 18 ? 4 : 1;
+        heat.push(Math.round(dasar * (0.4 + r() * 1.1) * (rr >= 5 ? 1.3 : 1)));
+      }
+    }
+    const mulai = (a: [string, number][]) => a.map(([k, n]) => ({ k, n }));
+    const sekarang = new Date().toLocaleString('sv-SE').slice(0, 16);
+    return {
+      total: 1284,
+      hari: harian[29].n,
+      bulan: bulanan[5].n,
+      kemarin: harian[28].n,
+      bulanLalu: bulanan[4].n,
+      harian,
+      bulanan,
+      waktu: sekarang,
+      heat,
+      dim: {
+        dev: mulai([['Ponsel', 68], ['Komputer', 26], ['Tablet', 6]]),
+        br: mulai([['Chrome', 58], ['Aplikasi sosial', 17], ['Safari', 14], ['Edge', 7], ['Lainnya', 4]]),
+        os: mulai([['Android 15', 31], ['Android 14', 22], ['iOS', 17], ['Windows 11', 14], ['Lainnya', 8]]),
+        jn: mulai([['Baru', 64], ['Kembali', 36]]),
+        prov: mulai([['Jambi', 120], ['Sumatera Selatan', 88], ['DKI Jakarta', 64], ['Jawa Barat', 41], ['Riau', 28], ['Jawa Timur', 22], ['Lampung', 14], ['Lainnya', 9]]),
+        model: mulai([['Oppo CPH2591', 74], ['Samsung SM-A155F', 52], ['Xiaomi 23129RAA4G', 41], ['iPhone', 33], ['vivo V2312', 24], ['Lainnya', 18]]),
+        neg: mulai([['Indonesia', 372], ['Malaysia', 14], ['Singapura', 7]]),
+        src: mulai([['Langsung', 190], ['instagram.com', 96], ['tiktok.com', 58], ['google.com', 41], ['wa.me', 22], ['Lainnya', 9]]),
+        pg: mulai([['/', 240], ['/proyek', 120], ['/layanan', 70], ['/produk', 44], ['/kontak', 26], ['/perjalanan', 12]]),
+      },
+      terbaru: [
+        { w: sekarang, ip: '36.79.xx.xx', hp: 'Samsung SM-A155F', dev: 'Ponsel', prov: 'Jambi', pg: '/' },
+        { w: sekarang, ip: '114.122.xx.xx', hp: 'Oppo CPH2591', dev: 'Ponsel', prov: 'Sumatera Selatan', pg: '/proyek' },
+        { w: sekarang, ip: '180.254.xx.xx', hp: 'Windows 11', dev: 'Komputer', prov: 'DKI Jakarta', pg: '/layanan' },
+        { w: sekarang, ip: '112.215.xx.xx', hp: 'iPhone', dev: 'Ponsel', prov: 'Jawa Barat', pg: '/produk' },
+        { w: sekarang, ip: '125.160.xx.xx', hp: 'Xiaomi 23129RAA4G', dev: 'Ponsel', prov: 'Riau', pg: '/' },
+      ],
+    };
   }
 
-  function render(d: any) {
+  function render(dAsli: any) {
+    const demo = demoAktif();
+    const d = demo ? contoh() : dAsli;
     terakhir = d;
+    const info = q('demo');
+    if (info) info.classList.toggle('hidden', !demo);
     tandai();
     const angka = (v: unknown) => (typeof v === 'number' ? fmt(v) : '-');
     const elTotal = q('total');
@@ -589,11 +611,9 @@ const subTile = 'mt-2 flex min-h-4 flex-wrap items-center gap-x-2 gap-y-1 text-x
 
     const ada = d && Array.isArray(d.harian) && d.harian.length >= 14 && Array.isArray(d.bulanan);
     if (!ada) {
-      ['rata', 'puncak', 's-rata', 's-hari', 's-bulan', 's-puncak', 's-total', 'r-total', 'r-puncak', 'r-minggu', 'r-aktif'].forEach((k) =>
-        isiTeks(k, k.startsWith('r-') || k === 'rata' || k === 'puncak' ? '-' : '')
-      );
-      chip('d-minggu', 0, 0, true);
-      chip('d-minggu2', 0, 0, false);
+      ['rata', 'puncak', 'kembali', 'r-aktif', 'r-minggu'].forEach((k) => isiTeks(k, '-'));
+      ['s-rata', 's-hari', 's-bulan', 's-puncak', 's-total', 's-aktif', 's-kembali'].forEach((k) => isiTeks(k, ''));
+      chip('d-minggu', 0, 0);
       pesanGrafik('Data grafik tidak tersedia.');
       isiTeks('sumber', d ? 'Data grafik belum tersedia dari sumber.' : 'Data tidak dapat dimuat. Muat ulang halaman untuk mencoba lagi.');
       return;
@@ -604,51 +624,48 @@ const subTile = 'mt-2 flex min-h-4 flex-wrap items-center gap-x-2 gap-y-1 text-x
     const puncak = h.reduce((a, s) => (s.n > a.n ? s : a), h[0]);
     const minggu = jml(h.slice(-7));
     const mingguLalu = jml(h.slice(-14, -7));
+    const aktif = h.filter((s) => s.n > 0).length;
+    const dm = d.dim || {};
+    const jn: Hitung[] = Array.isArray(dm.jn) ? dm.jn : [];
+    const totJn = jn.reduce((s, x) => s + x.n, 0);
+    const kembali = jn.find((x) => x.k === 'Kembali');
+
+    isiTeks('s-total', `${h.length} hari terakhir: ${fmt(jumlah)} kunjungan`);
+    isiTeks('s-hari', typeof d.kemarin === 'number' ? `Kemarin ${fmt(d.kemarin)}` : '');
+    isiTeks('s-bulan', typeof d.bulanLalu === 'number' ? `Bulan lalu ${fmt(d.bulanLalu)}` : '');
+    isiTeks('r-minggu', fmt(minggu));
+    chip('d-minggu', minggu, mingguLalu);
     isiTeks('rata', (jumlah / h.length).toLocaleString('id-ID', { maximumFractionDigits: 1 }));
     isiTeks('s-rata', `${h.length} hari terakhir`);
     isiTeks('puncak', puncak.n > 0 ? fmt(puncak.n) : '-');
     isiTeks('s-puncak', puncak.n > 0 ? tglPendek(puncak.t) : '');
-    isiTeks('s-hari', typeof d.kemarin === 'number' ? `Kemarin ${fmt(d.kemarin)}` : '');
-    isiTeks('s-bulan', typeof d.bulanLalu === 'number' ? `Bulan lalu ${fmt(d.bulanLalu)}` : '');
-    isiTeks('s-total', mingguLalu > 0 ? '7 hari terakhir dibanding 7 hari sebelumnya' : '');
-    isiTeks('r-total', fmt(jumlah));
-    isiTeks('r-puncak', puncak.n > 0 ? `${tglPendek(puncak.t)} (${fmt(puncak.n)})` : '-');
-    isiTeks('r-minggu', fmt(minggu));
-    chip('d-minggu', minggu, mingguLalu, true);
-    chip('d-minggu2', minggu, mingguLalu, false);
-    isiTeks('r-aktif', `${h.filter((s) => s.n > 0).length} dari ${h.length}`);
+    isiTeks('r-aktif', `${aktif} dari ${h.length}`);
+    isiTeks('s-aktif', 'hari');
+    isiTeks('kembali', totJn > 0 ? `${Math.round(((kembali ? kembali.n : 0) / totJn) * 100)}%` : '-');
+    isiTeks('s-kembali', totJn > 0 ? `dari ${fmt(totJn)} kunjungan` : '');
     const w = waktuFmt(d.waktu);
-    isiTeks('sumber', `Sumber: penghitung kunjungan situs, satu hitungan per perangkat per hari.${w ? ' Diperbarui ' + w + '.' : ''}`);
+    isiTeks('sumber', demo ? 'Contoh tampilan.' : `Sumber: penghitung kunjungan situs, satu hitungan per perangkat per hari.${w ? ' Diperbarui ' + w + '.' : ''}`);
 
-    gambarSpark(h);
     gambarHarian(h);
     gambarBulanan(d.bulanan);
     gambarHeat(h);
-    const dm = d.dim || {};
+    gambarJam(d.heat);
     donat('d-dev', dm.dev);
     donat('d-br', dm.br);
+    donat('d-os', dm.os);
     donat('d-jn', dm.jn);
+    daftar('l-prov', dm.prov, '#eb6834');
+    daftar('l-model', dm.model, '#6250d6', namaHp);
     daftar('l-neg', dm.neg, '#1baf7a');
     daftar('l-src', dm.src, '#e87ba4');
     daftar('l-pg', dm.pg, '#2a78d6');
-
-    const adaModel = Array.isArray(dm.model) && dm.model.length > 0;
-    const adaProv = Array.isArray(dm.prov) && dm.prov.length > 0;
-    const adaOs = Array.isArray(dm.os) && dm.os.length > 0;
-    tampil('w-model', adaModel);
-    tampil('w-prov', adaProv);
-    tampil('w-os', adaOs);
-    tampil('g-baru', adaModel || adaProv || adaOs);
-    if (adaModel) daftar('l-model', dm.model, '#6250d6');
-    if (adaProv) daftar('l-prov', dm.prov, '#eb6834');
-    if (adaOs) donat('d-os', dm.os);
     pengunjungBaru(d.terbaru);
   }
 
   document.addEventListener('statistik:data', (e) => render((e as CustomEvent).detail));
   document.addEventListener('astro:page-load', () => {
     const w = window as any;
-    if (w.__statistik !== undefined) render(w.__statistik);
+    if (w.__statistik !== undefined || demoAktif()) render(w.__statistik);
     else tandai();
   });
   document.addEventListener('click', (e) => {
@@ -668,6 +685,6 @@ const subTile = 'mt-2 flex min-h-4 flex-wrap items-center gap-x-2 gap-y-1 text-x
   });
 
   const awalData = (window as any).__statistik;
-  if (awalData !== undefined) render(awalData);
+  if (awalData !== undefined || demoAktif()) render(awalData);
   else tandai();
 </script>
