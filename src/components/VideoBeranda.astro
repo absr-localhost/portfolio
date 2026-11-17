@@ -1,9 +1,13 @@
 ---
+import { Icon } from 'astro-icon/components';
 import { wrap } from '~/data/profil';
 ---
 
 <section id="vb" class="bg-slate-50 py-10 sm:py-12" hidden>
   <div class={wrap}>
+    <h2 class="mb-4 flex items-center gap-2 text-xl font-bold text-heading">
+      <Icon name="tabler:player-play" class="h-5 w-5 text-primary" />Video
+    </h2>
     <div id="vb-row" class="flex snap-x gap-3 overflow-x-auto pb-2 sm:gap-4"></div>
   </div>
 
