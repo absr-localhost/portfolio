@@ -10,9 +10,11 @@ const metadata = {
   title: 'Beranda',
 };
 
-const card = 'rounded-lg border border-slate-200 bg-white shadow-sm';
+// Kartu datar: garis tipis, tanpa bayangan, sudut kecil
+const card = 'rounded-md border border-slate-200 bg-white';
+const judulBlok = 'text-sm font-bold text-heading sm:text-base';
+const garis = 'mt-1 block h-0.5 w-8 bg-accent';
 
-// Ikon sosial media (nama harus sama dengan di data/profil)
 const ikonSosial: Record<string, string> = {
   Telegram: 'tabler:brand-telegram',
   LinkedIn: 'tabler:brand-linkedin',
@@ -35,25 +37,23 @@ const ikonSosial: Record<string, string> = {
     />
     <div class="absolute inset-0 -z-10 bg-primary/80"></div>
 
-    <div class={`${wrap} grid items-end gap-6 pt-12 md:grid-cols-2 md:pt-20`}>
-      <div class="pb-8 md:pb-20">
-        <p class="mb-4 flex flex-wrap items-center gap-3 text-sm uppercase tracking-widest">
+    <div class={`${wrap} grid items-end gap-4 pt-8 md:grid-cols-2 md:gap-6 md:pt-16`}>
+      <div class="pb-2 md:pb-16">
+        <p class="mb-3 flex flex-wrap items-center gap-x-3 gap-y-1 text-xs uppercase tracking-wider sm:text-sm">
           <b class="text-accent">IT Specialist</b>
           <span class="text-slate-300">Full-Stack Developer</span>
         </p>
-        <h1 class="text-4xl font-bold leading-tight tracking-tight sm:text-5xl">
-          AGUS BUDIONO, S.Pd.
-        </h1>
-        <p class="mt-4 max-w-xl text-slate-200">
+        <h1 class="text-2xl font-bold leading-tight sm:text-4xl lg:text-5xl">AGUS BUDIONO, S.Pd.</h1>
+        <p class="mt-3 max-w-xl text-sm text-slate-200 sm:text-base">
           Profesional teknologi informasi dari Sumatera Selatan. Membangun aplikasi, mengelola sistem, dan
           menjaga keamanan digital.
         </p>
-        <p class="mt-4 inline-block rounded-sm border border-white/40 px-3 py-1 text-xs uppercase tracking-widest">
+        <p class="mt-3 inline-block rounded-sm border border-white/40 px-2.5 py-1 text-[11px] uppercase tracking-wider sm:text-xs">
           Tersedia untuk proyek
         </p>
-        <div class="mt-6 flex flex-wrap gap-3">
-          <a href="/proyek" class="rounded-md bg-accent px-5 py-3 text-sm font-semibold text-primary transition hover:brightness-95">Lihat portofolio</a>
-          <a href={`mailto:${EMAIL}`} class="rounded-md border border-white px-5 py-3 text-sm font-semibold transition hover:bg-white/10">Hubungi saya</a>
+        <div class="mt-4 flex flex-wrap gap-2 sm:mt-6 sm:gap-3">
+          <a href="/proyek" class="rounded bg-accent px-4 py-2 text-xs font-semibold text-primary sm:px-5 sm:py-2.5 sm:text-sm">Lihat portofolio</a>
+          <a href={`mailto:${EMAIL}`} class="rounded border border-white px-4 py-2 text-xs font-semibold hover:bg-white/10 sm:px-5 sm:py-2.5 sm:text-sm">Hubungi saya</a>
         </div>
       </div>
 
@@ -61,7 +61,7 @@ const ikonSosial: Record<string, string> = {
         <img
           src="/pk-3.webp"
           alt="Foto profil AGUS BUDIONO, S.Pd."
-          class="max-h-[420px] w-auto object-contain md:max-h-[560px]"
+          class="max-h-[240px] w-auto object-contain sm:max-h-[320px] md:max-h-[460px]"
           width="860"
           height="851"
           fetchpriority="high"
@@ -70,14 +70,14 @@ const ikonSosial: Record<string, string> = {
     </div>
   </section>
 
-  <!-- 2. ANGKA RINGKAS -->
-  <section class={`${wrap} py-10 sm:py-14`}>
-    <div class="grid gap-3 sm:grid-cols-3 sm:gap-4">
+  <!-- 2. ANGKA RINGKAS: tetap 3 kolom di HP -->
+  <section class={`${wrap} pb-3 pt-5 sm:pb-4 sm:pt-8`}>
+    <div class="grid grid-cols-3 gap-2 sm:gap-3">
       {
         stats.map((s) => (
-          <div class={`${card} p-5 sm:p-6`}>
-            <p class="text-3xl font-bold text-heading sm:text-4xl">{s.n}</p>
-            <p class="mt-2 text-sm text-muted">{s.t}</p>
+          <div class={`${card} p-3 sm:p-5`}>
+            <p class="text-xl font-bold leading-none text-heading sm:text-3xl">{s.n}</p>
+            <p class="mt-1.5 text-[11px] leading-snug text-muted sm:mt-2 sm:text-sm">{s.t}</p>
           </div>
         ))
       }
@@ -87,34 +87,37 @@ const ikonSosial: Record<string, string> = {
   <!-- 3. VIDEO -->
   <VideoBeranda />
 
-  <!-- 4. TENTANG SAYA (tengah) + SIDEBAR -->
-  <section class={`${wrap} py-10 sm:py-14`}>
-    <!-- Tentang saya: foto kecil di pojok kiri atas, teks mengalir di sampingnya -->
-    <div id="tp" class={`${card} flow-root p-5 sm:p-8`}>
-      <div
-        class="float-left mb-2 mr-4 h-20 w-20 overflow-hidden rounded-xl bg-primary sm:mr-6 sm:h-28 sm:w-28 lg:h-32 lg:w-32"
-      >
-        <img
-          src="/pk-3.webp"
-          alt="Foto profil AGUS BUDIONO, S.Pd."
-          class="h-full w-full object-cover object-top"
-          width="128"
-          height="128"
-          loading="lazy"
-        />
-      </div>
-      <h2 class="mb-3 text-xl font-bold text-heading sm:text-2xl">Tentang saya</h2>
-      <div class="space-y-3 text-sm leading-relaxed text-muted sm:space-y-4 sm:text-base">
-        {about.map((p) => <p>{p}</p>)}
-      </div>
-    </div>
+  <!--
+    4. TATA LETAK 3 KOLOM
+    Desktop (1024px+): [Sosial media] [Tentang saya di tengah] [Artikel]
+    HP/tablet: Tentang saya di atas, lalu Sosial media (kiri) dan Artikel (kanan) berdampingan.
+  -->
+  <section class={`${wrap} pb-2 pt-4 sm:pb-4 sm:pt-6`}>
+    <div id="tata" class="tata">
+      <!-- Tengah: Tentang saya -->
+      <article id="tp" class={`t-tp ${card} flow-root p-3.5 sm:p-5`}>
+        <div
+          class="float-left mb-1 mr-3 h-16 w-16 overflow-hidden rounded bg-primary sm:mr-4 sm:h-24 sm:w-24 lg:h-28 lg:w-28"
+        >
+          <img
+            src="/pk-3.webp"
+            alt="Foto profil AGUS BUDIONO, S.Pd."
+            class="h-full w-full object-cover object-top"
+            width="112"
+            height="112"
+            loading="lazy"
+          />
+        </div>
+        <h2 class={judulBlok}>Tentang saya<span class={garis}></span></h2>
+        <div class="mt-3 space-y-2.5 text-[13px] leading-relaxed text-muted sm:space-y-3 sm:text-sm">
+          {about.map((p) => <p>{p}</p>)}
+        </div>
+      </article>
 
-    <!-- Sidebar: HP ditumpuk, desktop 2 kolom (kiri sosial media, kanan artikel) -->
-    <div class="mt-4 grid gap-4 sm:mt-6 sm:gap-6 lg:grid-cols-5">
       <!-- Kiri: sosial media -->
-      <aside id="sos" class={`${card} p-5 sm:p-6 lg:col-span-5`}>
-        <h2 class="mb-3 text-lg font-bold text-heading sm:text-xl">Sosial media</h2>
-        <ul class="grid grid-cols-1 gap-1 sm:grid-cols-2 lg:grid-cols-1">
+      <aside id="sos" class={`t-sos ${card} p-2 sm:p-4`}>
+        <h2 class={`${judulBlok} px-1 pb-2`}>Sosial media<span class={garis}></span></h2>
+        <ul class="space-y-0.5">
           {
             socials.map(([nama, url]) => (
               <li>
@@ -122,12 +125,12 @@ const ikonSosial: Record<string, string> = {
                   href={url}
                   target="_blank"
                   rel="noopener noreferrer"
-                  class="flex items-center gap-3 rounded-md p-2.5 text-sm text-muted transition hover:bg-slate-100 hover:text-heading"
+                  class="flex items-center gap-1.5 rounded p-1 text-muted hover:bg-slate-50 hover:text-heading sm:gap-2.5 sm:p-1.5"
                 >
-                  <span class="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-primary text-white">
-                    <Icon name={ikonSosial[nama] || 'tabler:link'} class="h-5 w-5" />
+                  <span class="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-primary text-white sm:h-8 sm:w-8">
+                    <Icon name={ikonSosial[nama] || 'tabler:link'} class="h-4 w-4" />
                   </span>
-                  <span class="min-w-0 truncate font-medium">{nama}</span>
+                  <span class="min-w-0 truncate text-xs font-medium sm:text-sm">{nama}</span>
                 </a>
               </li>
             ))
@@ -135,25 +138,31 @@ const ikonSosial: Record<string, string> = {
           <li>
             <a
               href={`mailto:${EMAIL}`}
-              class="flex items-center gap-3 rounded-md p-2.5 text-sm text-muted transition hover:bg-slate-100 hover:text-heading"
+              class="flex items-center gap-1.5 rounded p-1 text-muted hover:bg-slate-50 hover:text-heading sm:gap-2.5 sm:p-1.5"
             >
-              <span class="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-primary text-white">
-                <Icon name="tabler:mail" class="h-5 w-5" />
+              <span class="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-primary text-white sm:h-8 sm:w-8">
+                <Icon name="tabler:mail" class="h-4 w-4" />
               </span>
-              <span class="min-w-0 truncate font-medium">Email</span>
+              <span class="min-w-0 truncate text-xs font-medium sm:text-sm">Email</span>
             </a>
           </li>
         </ul>
       </aside>
 
-      <!-- Kanan: daftar artikel (tersembunyi sampai data berhasil dimuat) -->
-      <div id="ab" class={`${card} p-5 sm:p-6 lg:col-span-3`} hidden>
-        <div class="mb-3 flex items-baseline justify-between gap-3">
-          <h2 class="text-lg font-bold text-heading sm:text-xl">Artikel</h2>
-          <a href="/artikel" class="shrink-0 text-sm font-semibold text-link hover:underline">Semua artikel</a>
+      <!-- Kanan: artikel (kerangka abu-abu tampil dulu, diisi saat data masuk) -->
+      <aside id="ab" class={`t-ab ${card} p-2.5 sm:p-4`}>
+        <div class="mb-2 flex items-start justify-between gap-2 sm:mb-3">
+          <h2 class={judulBlok}>Artikel<span class={garis}></span></h2>
+          <a href="/artikel" class="shrink-0 text-xs font-semibold text-link hover:underline">Semua</a>
         </div>
-        <div id="ab-list"></div>
-      </div>
+        <div id="ab-list">
+          <div class="space-y-2" aria-hidden="true">
+            <div class="h-12 rounded bg-slate-100 sm:h-14"></div>
+            <div class="h-12 rounded bg-slate-100 sm:h-14"></div>
+            <div class="h-12 rounded bg-slate-100 sm:h-14"></div>
+          </div>
+        </div>
+      </aside>
     </div>
   </section>
 
@@ -171,10 +180,10 @@ const ikonSosial: Record<string, string> = {
         return e;
       }
 
-      // Tanpa artikel: sosial media memakai lebar penuh
-      function lebar(sos) {
-        sos.classList.remove('lg:col-span-2');
-        sos.classList.add('lg:col-span-5');
+      // Artikel tidak tersedia: sembunyikan kolom artikel, tata letak menyesuaikan
+      function tanpaArtikel(grid, box) {
+        grid.setAttribute('data-sepi', '');
+        box.hidden = true;
       }
 
       function ambil(url, ms) {
@@ -209,8 +218,8 @@ const ikonSosial: Record<string, string> = {
       function siap() {
         var box = document.getElementById('ab');
         var list = document.getElementById('ab-list');
-        var sos = document.getElementById('sos');
-        if (!box || !list || !sos || box.dataset.siap) return;
+        var grid = document.getElementById('tata');
+        if (!box || !list || !grid || box.dataset.siap) return;
         box.dataset.siap = '1';
 
         coba(0, box)
@@ -218,49 +227,50 @@ const ikonSosial: Record<string, string> = {
             if (!box.isConnected) return;
             var arr = d && d.artikel ? d.artikel.slice(0, 5) : [];
             if (!arr.length) {
-              lebar(sos);
+              tanpaArtikel(grid, box);
               return;
             }
             list.textContent = '';
             arr.forEach(function (it) {
-              var a = el('a', 'group flex gap-3 border-t border-slate-200 py-3 first:border-t-0 first:pt-0');
+              var a = el('a', 'group flex gap-2 border-t border-slate-200 py-2 first:border-t-0 first:pt-0 sm:gap-3 sm:py-3');
               a.href = '/artikel/' + it.slug;
 
               var th;
               if (it.foto) {
-                th = el('img', 'h-16 w-24 shrink-0 rounded-md bg-slate-200 object-cover sm:h-20 sm:w-28');
+                th = el('img', 'h-12 w-16 shrink-0 rounded bg-slate-200 object-cover sm:h-14 sm:w-20');
                 th.src = it.foto;
                 th.alt = '';
                 th.loading = 'lazy';
-                th.width = 112;
-                th.height = 80;
+                th.width = 80;
+                th.height = 56;
               } else {
-                th = el('div', 'h-16 w-24 shrink-0 rounded-md bg-slate-200 sm:h-20 sm:w-28');
+                th = el('div', 'h-12 w-16 shrink-0 rounded bg-slate-200 sm:h-14 sm:w-20');
               }
 
               var tx = el('div', 'min-w-0');
-              var meta = el('p', 'text-xs text-muted');
-              if (it.kategori) meta.appendChild(el('span', 'mr-2 font-semibold text-primary', it.kategori));
+              var meta = el('p', 'text-[10px] leading-tight text-muted sm:text-xs');
+              if (it.kategori) meta.appendChild(el('span', 'mr-1.5 font-semibold text-primary', it.kategori));
               meta.appendChild(el('span', '', it.tanggal));
               tx.appendChild(meta);
               tx.appendChild(
-                el('p', 'mt-0.5 text-sm font-semibold leading-snug text-heading group-hover:underline', it.judul)
+                el('p', 'mt-0.5 text-xs font-semibold leading-snug text-heading group-hover:underline sm:text-sm', it.judul)
               );
 
-              // Deskripsi singkat (dipakai jika API mengirim salah satu field ini)
+              // Deskripsi singkat: hanya tampil di layar sedang ke atas
               var desk = it.ringkas || it.deskripsi || it.ringkasan || it.excerpt;
-              if (desk) tx.appendChild(el('p', 'mt-1 line-clamp-2 text-xs text-muted sm:text-sm', desk));
+              if (desk) {
+                var w = el('div', 'hidden sm:block');
+                w.appendChild(el('p', 'mt-0.5 line-clamp-2 text-xs text-muted', desk));
+                tx.appendChild(w);
+              }
 
               a.appendChild(th);
               a.appendChild(tx);
               list.appendChild(a);
             });
-            sos.classList.remove('lg:col-span-5');
-            sos.classList.add('lg:col-span-2');
-            box.hidden = false;
           })
           .catch(function () {
-            if (box.isConnected) lebar(sos);
+            if (box.isConnected) tanpaArtikel(grid, box);
           });
       }
 
@@ -275,13 +285,67 @@ const ikonSosial: Record<string, string> = {
   <Ulasan />
 
   <!-- 7. AJAKAN -->
-  <section class="bg-primary py-14 text-white sm:py-16">
-    <div class={`${wrap} flex flex-col items-start gap-6 md:flex-row md:items-center md:justify-between`}>
+  <section class="bg-primary py-8 text-white sm:py-12">
+    <div class={`${wrap} flex flex-col items-start gap-4 md:flex-row md:items-center md:justify-between`}>
       <div>
-        <h2 class="text-2xl font-bold sm:text-3xl">Punya proyek atau kebutuhan IT?</h2>
-        <p class="mt-2 max-w-xl text-slate-300">Ceritakan kebutuhan Anda lewat email.</p>
+        <h2 class="text-lg font-bold sm:text-2xl">Punya proyek atau kebutuhan IT?</h2>
+        <p class="mt-1 max-w-xl text-sm text-slate-300 sm:text-base">Ceritakan kebutuhan Anda lewat email.</p>
       </div>
-      <a href={`mailto:${EMAIL}`} class="rounded-md bg-accent px-6 py-3 text-sm font-semibold text-primary transition hover:brightness-95">Hubungi saya</a>
+      <a href={`mailto:${EMAIL}`} class="rounded bg-accent px-4 py-2 text-xs font-semibold text-primary sm:px-5 sm:py-2.5 sm:text-sm">Hubungi saya</a>
     </div>
   </section>
 </Layout>
+
+<style>
+  /* HP: Tentang saya penuh di atas; Sosial (kiri) dan Artikel (kanan) berdampingan */
+  .tata {
+    display: grid;
+    align-items: start;
+    gap: 0.625rem;
+    grid-template-columns: 6.75rem minmax(0, 1fr);
+  }
+  .tata > .t-tp {
+    grid-column: 1 / -1;
+  }
+
+  @media (min-width: 640px) {
+    .tata {
+      gap: 1rem;
+      grid-template-columns: 11rem minmax(0, 1fr);
+    }
+  }
+
+  /* Desktop: 3 kolom, Tentang saya di tengah */
+  @media (min-width: 1024px) {
+    .tata {
+      gap: 1.5rem;
+      grid-template-columns: 13rem minmax(0, 1fr) 19rem;
+    }
+    .tata > .t-sos {
+      order: 1;
+    }
+    .tata > .t-tp {
+      order: 2;
+      grid-column: auto;
+    }
+    .tata > .t-ab {
+      order: 3;
+    }
+  }
+
+  /* Jika artikel gagal dimuat */
+  .tata[data-sepi] {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .tata[data-sepi] > .t-sos {
+    grid-column: 1 / -1;
+  }
+  @media (min-width: 1024px) {
+    .tata[data-sepi] {
+      grid-template-columns: 13rem minmax(0, 1fr);
+    }
+    .tata[data-sepi] > .t-sos {
+      grid-column: auto;
+    }
+  }
+</style>
