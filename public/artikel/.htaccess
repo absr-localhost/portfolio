@@ -1,0 +1,5 @@
+DirectoryIndex halaman.php
+RewriteEngine On
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule ^([a-z0-9-]{1,80})/?$ halaman.php?s=$1 [L,QSA]
