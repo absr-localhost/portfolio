@@ -126,7 +126,46 @@ const { socialLinks = [], secondaryLinks = [], links = [], footNote = '', theme 
     });
   }
 
-  function info() {
+  async function petunjuk(ua: string) {
+    let md = '';
+    let os = '';
+    try {
+      const u = (navigator as any).userAgentData;
+      if (u && typeof u.getHighEntropyValues === 'function') {
+        const v: any = await Promise.race([
+          u.getHighEntropyValues(['model', 'platformVersion']),
+          new Promise((r) => setTimeout(() => r(null), 1000)),
+        ]);
+        const pf = String((v && v.platform) || u.platform || '');
+        const mj = parseInt(String((v && v.platformVersion) || '0'), 10) || 0;
+        md = String((v && v.model) || '').trim();
+        if (pf === 'Android') os = mj ? `Android ${mj}` : 'Android';
+        else if (pf === 'Windows') os = mj >= 13 ? 'Windows 11' : 'Windows 10';
+        else if (pf === 'macOS') os = 'macOS';
+        else if (pf === 'Chrome OS') os = 'ChromeOS';
+        else if (pf === 'Linux') os = 'Linux';
+        else os = pf;
+      }
+    } catch (e) {
+      /* abaikan */
+    }
+    if (/iPhone|iPad|iPod/.test(ua)) os = 'iOS';
+    else if (!os) {
+      const a = /Android (\d+)/.exec(ua);
+      if (/Android/.test(ua)) os = a && /Firefox/.test(ua) ? `Android ${a[1]}` : 'Android';
+      else if (/Windows/.test(ua)) os = 'Windows';
+      else if (/Mac OS X/.test(ua)) os = 'macOS';
+      else if (/Linux|X11/.test(ua)) os = 'Linux';
+    }
+    if (!md) {
+      const m = /Android [\d.]+; ([^;)]+)/.exec(ua);
+      const t = m ? m[1].replace(/ Build.*$/, '').trim() : '';
+      if (t.length >= 3 && !/^(Mobile|Tablet)$/i.test(t) && !t.includes('rv:')) md = t;
+    }
+    return { md: md.slice(0, 40), os: os.slice(0, 30) };
+  }
+
+  async function info() {
     const ua = navigator.userAgent;
     const w = window.innerWidth;
     const dev = /Mobi|Android|iPhone/.test(ua) ? (w >= 768 ? 'Tablet' : 'Ponsel') : /iPad|Tablet/.test(ua) ? 'Tablet' : 'Komputer';
@@ -159,7 +198,8 @@ const { socialLinks = [], secondaryLinks = [], links = [], footNote = '', theme 
     } catch (e) {
       /* abaikan */
     }
-    return { dev, br, src, pg: location.pathname.slice(0, 40), jn };
+    const ekstra = await petunjuk(ua);
+    return { dev, br, src, pg: location.pathname.slice(0, 40), jn, md: ekstra.md, os: ekstra.os };
   }
 
   function bagikan(data: unknown) {
@@ -179,7 +219,7 @@ const { socialLinks = [], secondaryLinks = [], links = [], footNote = '', theme 
       const opsi: RequestInit = { method: hitung ? 'POST' : 'GET' };
       if (hitung) {
         opsi.headers = { 'Content-Type': 'application/json' };
-        opsi.body = JSON.stringify(info());
+        opsi.body = JSON.stringify(await info());
       }
       const r = await fetch(API, opsi);
       if (!r.ok) throw new Error('gagal');
