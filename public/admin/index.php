@@ -537,101 +537,106 @@ foreach ($semuaArt as $x) {
 <title>Admin<?= $masuk ? ' · ' . h($judulM[$m]) : '' ?></title>
 <style>
 *{box-sizing:border-box}
-:root{--p:#0B2545;--s:#071930;--t:#1f2937;--mu:#64748b;--ln:#e5e9f0;--bg:#f4f6fa;--sh:0 1px 2px rgba(15,23,42,.04),0 4px 14px rgba(15,23,42,.05);--r:12px}
+:root{--p:#2457c5;--ph:#1c46a3;--t:#1d2433;--mu:#667085;--ln:#e0e4ea;--bg:#f5f6f8;--r:8px}
 html{-webkit-text-size-adjust:100%}
-body{margin:0;font:14px/1.55 Inter,system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;background:var(--bg);color:var(--t)}
+body{margin:0;font:14px/1.5 system-ui,-apple-system,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;background:var(--bg);color:var(--t)}
 .ik{flex:none;display:block}
 a{color:inherit}
 [hidden]{display:none!important}
-label{font-size:13px;color:var(--mu);font-weight:500}
-input[type=text],input[type=search],input[type=password],input[type=file],input[type=datetime-local],select,textarea{width:100%;padding:10px 12px;border:1px solid #d5dbe5;border-radius:10px;font:inherit;margin:4px 0 12px;background:#fff;color:var(--t);transition:border-color .15s,box-shadow .15s}
-input:focus,textarea:focus,select:focus{outline:0;border-color:#5b7db3;box-shadow:0 0 0 3px rgba(11,37,69,.12)}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+label{display:block;font-size:13px;color:#344054;font-weight:600}
+input[type=text],input[type=search],input[type=password],input[type=file],input[type=datetime-local],select,textarea{width:100%;padding:8px 10px;border:1px solid #cdd3dc;border-radius:6px;font:inherit;margin:4px 0 14px;background:#fff;color:var(--t)}
+input:focus,textarea:focus,select:focus,#ed:focus{outline:0;border-color:var(--p);box-shadow:0 0 0 3px rgba(36,87,197,.15)}
+:focus-visible{outline:2px solid var(--p);outline-offset:2px}
 button{font:inherit}
-.bt{display:inline-flex;align-items:center;gap:7px;background:var(--p);color:#fff;border:1px solid var(--p);border-radius:10px;padding:9px 16px;font-weight:600;cursor:pointer;text-decoration:none;transition:transform .12s,box-shadow .15s,background .15s}
-.bt:hover{background:#12335f;box-shadow:0 4px 12px rgba(11,37,69,.22)}
-.bt:active{transform:scale(.97)}
-.bt:disabled{opacity:.45;cursor:default;box-shadow:none;transform:none}
-.bt.o{background:#fff;color:var(--p);border-color:#d5dbe5}
-.bt.o:hover{background:#f8fafc;box-shadow:none}
-.bt.x{background:#fff;color:#b91c1c;border-color:#fecaca}
-.bt.x:hover{background:#fef2f2;box-shadow:none}
-.bt.w{background:#fff;color:var(--p);border-color:#fff}
-.bt.w:hover{background:#eef3fb}
-.bt.g{background:rgba(255,255,255,.12);border-color:rgba(255,255,255,.28);color:#fff}
-.bt.g:hover{background:rgba(255,255,255,.2)}
-.ib{display:inline-flex;align-items:center;justify-content:center;width:38px;height:38px;border-radius:10px;border:1px solid var(--ln);background:#fff;color:var(--p);cursor:pointer;padding:0;text-decoration:none;transition:background .15s,transform .12s}
-.ib.x{color:#b91c1c}
-.ib:hover{background:#f1f5f9}
-.ib:active{transform:scale(.94)}
-.e{background:#fef2f2;color:#991b1b;border:1px solid #fecaca;border-radius:10px;padding:10px 14px;margin-bottom:14px}
-.f{background:#ecfdf5;color:#065f46;border:1px solid #a7f3d0;border-radius:10px;padding:10px 14px;margin-bottom:14px}
-.c{background:#fff;border:1px solid var(--ln);border-radius:var(--r);padding:16px;margin-bottom:14px;box-shadow:var(--sh)}
-.c h2{margin:0 0 10px;font-size:15px;font-weight:700}
+.bt{display:inline-flex;align-items:center;justify-content:center;gap:6px;background:var(--p);color:#fff;border:1px solid var(--p);border-radius:6px;padding:7px 14px;font-weight:600;cursor:pointer;text-decoration:none;line-height:1.4}
+.bt:hover{background:var(--ph);border-color:var(--ph)}
+.bt:disabled{opacity:.5;cursor:default}
+.bt.o{background:#fff;color:var(--t);border-color:#cdd3dc}
+.bt.o:hover{background:#f5f6f8;border-color:#b9c1cd}
+.bt.x{background:#fff;color:#b42318;border-color:#f0c4bf}
+.bt.x:hover{background:#fef3f2}
+.ib{display:inline-flex;align-items:center;justify-content:center;width:32px;height:32px;border-radius:6px;border:1px solid transparent;background:transparent;color:var(--mu);cursor:pointer;padding:0;text-decoration:none}
+.ib:hover{background:#eceff3;color:var(--t)}
+.ib.x:hover{background:#fef3f2;color:#b42318}
+.e{background:#fef3f2;color:#912018;border:1px solid #f0c4bf;border-radius:6px;padding:10px 14px;margin-bottom:14px}
+.f{background:#ecfdf3;color:#05603a;border:1px solid #abefc6;border-radius:6px;padding:10px 14px;margin-bottom:14px}
+.c{background:#fff;border:1px solid var(--ln);border-radius:var(--r);padding:16px 18px;margin-bottom:16px}
+.c.p0{padding:0;overflow:hidden}
+.c h2{margin:0 0 12px;font-size:15px;font-weight:600}
 .m{color:var(--mu);font-size:13px;margin:0 0 8px}
 .row{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
 .sp{margin-left:auto}
-.av{display:inline-flex;align-items:center;justify-content:center;border-radius:50%;background:#1d4478;color:#fff;font-weight:700;overflow:hidden;flex:none;line-height:1}
+.av{display:inline-flex;align-items:center;justify-content:center;border-radius:50%;background:#3b4a66;color:#fff;font-weight:700;overflow:hidden;flex:none;line-height:1}
 .av img{width:100%;height:100%;object-fit:cover;display:block}
 .av.s32{width:32px;height:32px;font-size:12px}
-.av.s44{width:44px;height:44px;font-size:15px}
+.av.s44{width:40px;height:40px;font-size:14px}
 .av.s56{width:56px;height:56px;font-size:19px}
 .av.s96{width:96px;height:96px;font-size:30px}
 .tx{min-width:0}
-.side{position:fixed;left:0;top:0;bottom:0;width:248px;background:linear-gradient(180deg,#0B2545 0%,#071930 100%);color:#fff;display:flex;flex-direction:column;padding:18px 14px;z-index:6}
-.pf{display:flex;align-items:center;gap:12px;padding:10px;border-radius:12px;background:rgba(255,255,255,.07);margin-bottom:18px;text-decoration:none;color:#fff;transition:background .15s}
-.pf:hover{background:rgba(255,255,255,.12)}
+.side{position:fixed;left:0;top:0;bottom:0;width:232px;background:#151c2b;color:#fff;display:flex;flex-direction:column;padding:14px 12px;z-index:6}
+.pf{display:flex;align-items:center;gap:10px;padding:6px 8px 14px;margin-bottom:10px;border-bottom:1px solid rgba(255,255,255,.1);text-decoration:none;color:#fff}
 .pf b{display:block;font-size:14px;line-height:1.3;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-.pf small{display:flex;align-items:center;gap:6px;color:#9fb3cf;font-size:12px}
-.pf small:before{content:"";width:7px;height:7px;border-radius:50%;background:#34d399}
-.side nav{display:flex;flex-direction:column;gap:3px;flex:1}
-.side nav a,.sb2 a,.sb2 button{display:flex;align-items:center;gap:12px;padding:11px 12px;border-radius:10px;color:#b6c4da;text-decoration:none;background:none;border:0;cursor:pointer;text-align:left;width:100%;position:relative;transition:background .15s,color .15s}
-.side nav a:hover,.sb2 a:hover,.sb2 button:hover{background:rgba(255,255,255,.08);color:#fff}
-.side nav a.on{background:rgba(255,255,255,.12);color:#fff;font-weight:600}
-.side nav a.on:before{content:"";position:absolute;left:-14px;top:9px;bottom:9px;width:4px;border-radius:0 4px 4px 0;background:#fff}
-.sb2{border-top:1px solid rgba(255,255,255,.1);padding-top:10px;display:flex;flex-direction:column;gap:2px}
+.pf small{display:block;color:#98a2b3;font-size:12px}
+.side nav{display:flex;flex-direction:column;gap:2px;flex:1}
+.side nav a,.sb2 a,.sb2 button{display:flex;align-items:center;gap:10px;padding:9px 10px;border-radius:6px;color:#b4bdcc;text-decoration:none;background:none;border:0;cursor:pointer;text-align:left;width:100%}
+.side nav a:hover,.sb2 a:hover,.sb2 button:hover{background:rgba(255,255,255,.07);color:#fff}
+.side nav a.on{background:#24304a;color:#fff;font-weight:600}
+.sb2{border-top:1px solid rgba(255,255,255,.1);padding-top:8px;display:flex;flex-direction:column;gap:2px}
 .sb2 form{margin:0}
-.top{margin-left:248px;position:sticky;top:0;z-index:5;display:flex;align-items:center;gap:10px;background:rgba(255,255,255,.9);-webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px);border-bottom:1px solid var(--ln);padding:10px 28px;min-height:62px}
-.top h1{margin:0;font-size:18px;font-weight:700}
+.top{margin-left:232px;position:sticky;top:0;z-index:5;display:flex;align-items:center;gap:10px;background:#fff;border-bottom:1px solid var(--ln);padding:8px 24px;min-height:56px}
+.top h1{margin:0;font-size:17px;font-weight:600}
 .um{position:relative}
-.um>button{display:flex;align-items:center;gap:8px;padding:4px 10px 4px 4px;border:1px solid var(--ln);background:#fff;border-radius:99px;cursor:pointer;color:var(--t);transition:background .15s}
-.um>button:hover{background:#f8fafc}
-.um .un{max-width:150px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-weight:600;font-size:13px}
-.um .ik{transition:transform .2s}
-.um.open>button .ik{transform:rotate(180deg)}
-.dd{position:absolute;right:0;top:calc(100% + 8px);width:264px;background:#fff;border:1px solid var(--ln);border-radius:14px;box-shadow:0 14px 36px rgba(15,23,42,.16);padding:8px;opacity:0;transform:translateY(-6px) scale(.98);transform-origin:top right;pointer-events:none;transition:opacity .16s,transform .16s}
-.um.open .dd{opacity:1;transform:none;pointer-events:auto}
-.dh{display:flex;align-items:center;gap:10px;padding:8px 8px 12px;border-bottom:1px solid var(--ln);margin-bottom:6px}
+.um>button{display:flex;align-items:center;gap:8px;padding:3px 8px 3px 3px;border:1px solid var(--ln);background:#fff;border-radius:99px;cursor:pointer;color:var(--t)}
+.um>button:hover{background:#f5f6f8}
+.um .un{max-width:150px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-weight:500;font-size:13px}
+.dd{position:absolute;right:0;top:calc(100% + 6px);width:248px;background:#fff;border:1px solid var(--ln);border-radius:8px;box-shadow:0 8px 24px rgba(16,24,40,.12);padding:6px;opacity:0;pointer-events:none;transition:opacity .12s}
+.um.open .dd{opacity:1;pointer-events:auto}
+.dh{display:flex;align-items:center;gap:10px;padding:8px 8px 10px;border-bottom:1px solid var(--ln);margin-bottom:4px}
 .dh b{display:block;font-size:14px;line-height:1.3}
 .dh small{color:var(--mu);font-size:12px}
-.dd a,.dd button{display:flex;align-items:center;gap:10px;width:100%;padding:10px;border-radius:8px;border:0;background:none;color:var(--t);text-decoration:none;cursor:pointer;text-align:left}
-.dd a:hover,.dd button:hover{background:#f1f5f9}
+.dd a,.dd button{display:flex;align-items:center;gap:10px;width:100%;padding:8px 10px;border-radius:6px;border:0;background:none;color:var(--t);text-decoration:none;cursor:pointer;text-align:left}
+.dd a:hover,.dd button:hover{background:#f2f4f7}
 .dd form{margin:0}
-main{margin-left:248px;padding:24px 28px 40px;max-width:1100px;animation:fu .28s ease}
-@keyframes fu{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
-@keyframes ti{from{opacity:0;transform:translateY(-8px)}to{opacity:1;transform:none}}
-.ts{position:fixed;right:24px;top:74px;z-index:20;display:flex;align-items:center;gap:8px;background:#0f2a4d;color:#fff;padding:11px 16px;border-radius:12px;box-shadow:0 10px 30px rgba(7,25,48,.3);animation:ti .3s ease;transition:opacity .35s,transform .35s}
-.ts.h{opacity:0;transform:translateY(-8px)}
+main{margin-left:232px;padding:20px 24px 40px;max-width:1180px}
+.ts{position:fixed;right:20px;top:66px;z-index:20;display:flex;align-items:center;gap:8px;background:#1d2433;color:#fff;padding:10px 14px;border-radius:6px;box-shadow:0 6px 20px rgba(16,24,40,.25);transition:opacity .3s}
+.ts.h{opacity:0}
 .bar{display:none}
-.hero{display:flex;align-items:center;gap:16px;flex-wrap:wrap;background:linear-gradient(135deg,#0B2545 0%,#17407a 100%);color:#fff;border-radius:16px;padding:20px;margin-bottom:16px;box-shadow:0 10px 28px rgba(11,37,69,.18)}
-.hero .av{border:2px solid rgba(255,255,255,.4)}
-.hero h2{margin:0;font-size:20px;line-height:1.3}
-.hero p{margin:2px 0 0;color:#b6c4da;font-size:13px}
-.kt{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:14px}
-.k{display:flex;align-items:center;gap:12px;background:#fff;border:1px solid var(--ln);border-radius:var(--r);padding:14px;box-shadow:var(--sh);transition:transform .15s,box-shadow .15s}
-.k:hover{transform:translateY(-2px);box-shadow:0 8px 20px rgba(15,23,42,.08)}
-.k i{width:42px;height:42px;border-radius:11px;background:#eef3fb;color:var(--p);display:flex;align-items:center;justify-content:center;flex:none}
-.k b{display:block;font-size:21px;color:var(--p);line-height:1.2}
+.pg{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:16px}
+.pg p{margin:0}
+.kt{display:grid;grid-template-columns:repeat(6,1fr);gap:12px;margin-bottom:16px}
+.k{background:#fff;border:1px solid var(--ln);border-radius:var(--r);padding:12px 14px}
+.k i{display:none}
+.k b{display:block;font-size:22px;font-weight:700;line-height:1.25}
 .k span{font-size:12px;color:var(--mu)}
-.g3{display:grid;grid-template-columns:1.5fr 1fr;gap:14px;align-items:start}
+.g3{display:grid;grid-template-columns:1.5fr 1fr;gap:16px;align-items:start}
+.g3>*{min-width:0}
 .v{display:flex;gap:12px;align-items:center;padding:10px 0;border-top:1px solid var(--ln)}
 .v:first-of-type{border-top:0}
-.v img,.v .nt{width:64px;height:64px;object-fit:cover;border-radius:10px;background:#0f172a;flex:none}
+.v img,.v .nt{width:56px;height:56px;object-fit:cover;border-radius:4px;background:#e5e8ee;flex:none}
 .v .bd{min-width:0;flex:1}
-.v .bd b{display:block;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.v .bd b{display:block;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-weight:600}
 .v .bd small{color:var(--mu);font-size:12px}
-.tg{display:inline-block;font-size:11px;padding:1px 8px;border-radius:99px;border:1px solid var(--ln);color:var(--mu);margin-right:6px}
-.tg.on{background:#eff6ff;border-color:#bfdbfe;color:var(--p)}
-.ac{display:flex;gap:6px;flex-wrap:wrap}
+.tg{display:inline-block;font-size:12px;line-height:1.5;padding:0 8px;border-radius:4px;background:#f2f4f7;color:#475467;margin-right:6px}
+.tg.on{background:#ecfdf3;color:#05603a}
+.tg.jd{background:#fffaeb;color:#93370d}
+.ac{display:flex;gap:2px;flex-wrap:wrap;align-items:center}
+.ac form{margin:0}
+.tbl{width:100%;border-collapse:collapse}
+.tbl th{text-align:left;font-size:12px;font-weight:600;color:var(--mu);background:#f9fafb;padding:9px 14px;border-bottom:1px solid var(--ln)}
+.tbl td{padding:10px 14px;border-top:1px solid var(--ln);vertical-align:middle}
+.tbl tbody tr:first-child td{border-top:0}
+.tbl tbody tr:hover{background:#fafbfc}
+.tbl td.t-j{width:46%;max-width:0}
+.tbl td.t-a{width:1%;white-space:nowrap}
+.tbl .ac{justify-content:flex-end;flex-wrap:nowrap}
+.tj{display:flex;align-items:center;gap:12px;min-width:0}
+.tj img,.tj .nt{width:40px;height:40px;object-fit:cover;border-radius:4px;background:#e5e8ee;flex:none}
+.tj .nt{display:flex;align-items:center;justify-content:center;color:#98a2b3}
+.tj .bd{min-width:0;flex:1}
+.tj .bd b{display:block;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-weight:600}
+.tj .mo{display:none}
+.tf{margin:0;padding:10px 14px;border-top:1px solid var(--ln);font-size:13px;color:var(--mu)}
 details.ed>summary{list-style:none;cursor:pointer}
 details.ed>summary::-webkit-details-marker{display:none}
 details.ed{margin:0}
@@ -644,51 +649,63 @@ progress{width:100%;height:8px}
 .g2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
 @media (max-width:520px){.g2{grid-template-columns:1fr}}
 .tb{display:flex;gap:4px;overflow-x:auto;padding:0 0 8px;margin:0 -2px}
-.tb button{flex:none;width:38px;height:38px;border:1px solid var(--ln);background:#fff;color:var(--p);border-radius:8px;display:flex;align-items:center;justify-content:center;padding:0;cursor:pointer}
-.tb button:active{background:#e2e8f0}
-#ed{min-height:280px;border:1px solid #d5dbe5;border-radius:10px;padding:12px;background:#fff;outline:none}
-#ed:focus{border-color:#5b7db3;box-shadow:0 0 0 3px rgba(11,37,69,.12)}
+.tb button{flex:none;width:36px;height:36px;border:1px solid #cdd3dc;background:#fff;color:var(--t);border-radius:6px;display:flex;align-items:center;justify-content:center;padding:0;cursor:pointer}
+.tb button:hover{background:#f5f6f8}
+.tb button:active{background:#e5e8ee}
+#ed{min-height:280px;border:1px solid #cdd3dc;border-radius:6px;padding:12px;background:#fff;outline:none}
 .fp{display:flex;gap:10px;align-items:center;margin-bottom:8px}
-.fp img{width:120px;height:80px;object-fit:cover;border-radius:10px;background:#e2e8f0}
+.fp img{width:120px;height:80px;object-fit:cover;border-radius:6px;background:#e5e8ee}
 .st2{font-size:12px;color:var(--mu)}
-.fl{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:12px}
+.fl{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:14px;align-items:center}
 .fl input[type=search]{flex:1 1 180px;margin:0}
 .fl select{flex:0 1 150px;width:auto;margin:0}
+.fl .ib{width:36px;height:36px;border-color:#cdd3dc;background:#fff;color:var(--t)}
 .pfc{display:flex;gap:18px;align-items:center;flex-wrap:wrap}
 .cam{position:relative}
-.cam .cb{position:absolute;right:-2px;bottom:-2px;width:34px;height:34px;border-radius:50%;background:var(--p);color:#fff;border:3px solid #fff;display:flex;align-items:center;justify-content:center;cursor:pointer;padding:0;transition:transform .15s}
-.cam .cb:hover{transform:scale(1.08)}
-.pv{display:flex;gap:12px;align-items:center;padding:14px;border-radius:12px;background:var(--p);color:#fff}
+.cam .cb{position:absolute;right:-2px;bottom:-2px;width:32px;height:32px;border-radius:50%;background:var(--p);color:#fff;border:3px solid #fff;display:flex;align-items:center;justify-content:center;cursor:pointer;padding:0}
+.pv{display:flex;gap:12px;align-items:center;padding:14px;border-radius:8px;background:#151c2b;color:#fff}
 .pv b{display:block;font-size:14px}
 .pv small{color:#cbd5e1;font-size:12px}
-canvas{display:block;max-width:100%;max-height:280px;margin:0 auto 10px;border-radius:8px;background:#000}
+canvas{display:block;max-width:100%;max-height:280px;margin:0 auto 10px;border-radius:6px;background:#000}
 input[type=range]{width:100%;margin:0 0 10px}
-.cen{max-width:400px;margin:9vh auto 0;padding:0 16px}
-.cen .lg0{display:flex;flex-direction:column;align-items:center;gap:10px;margin-bottom:18px}
-.cen .br{font-weight:700;font-size:18px;color:var(--p)}
-.cen .c{padding:22px;border-radius:16px}
+.cen{max-width:380px;margin:12vh auto 0;padding:0 16px}
+.cen .lg0{margin-bottom:16px}
+.cen .br{font-weight:700;font-size:20px}
+.cen .lg0 .m{margin:2px 0 0}
+.cen .c{padding:22px}
+.cen .bt{width:100%}
 @media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+@media (max-width:1100px){.kt{grid-template-columns:repeat(3,1fr)}}
 @media (max-width:767px){
 .side{display:none}
-.top{margin-left:0;padding:10px 14px}
+.top{margin-left:0;padding:8px 14px}
 .top h1{font-size:16px}
 .um .un{display:none}
 .um>button{padding:3px}
 .um>button .ik{display:none}
-main{margin-left:0;padding:16px 14px 104px}
-.kt{grid-template-columns:repeat(2,1fr)}
-.g3{grid-template-columns:1fr}
-.ts{left:12px;right:12px;top:70px}
-.bar{display:flex;position:fixed;left:10px;right:10px;bottom:calc(10px + env(safe-area-inset-bottom));background:#0B2545;border-radius:18px;padding:6px;box-shadow:0 10px 28px rgba(7,25,48,.4);z-index:6;gap:2px}
-.bar a{flex:1;display:flex;flex-direction:column;align-items:center;gap:2px;color:#9fb3cf;text-decoration:none;font-size:11px;padding:7px 0;border-radius:13px;transition:background .15s,color .15s}
-.bar a.on{color:#fff;background:rgba(255,255,255,.14)}
+main{margin-left:0;padding:14px 14px 84px}
+.kt{grid-template-columns:repeat(2,1fr);gap:10px}
+.g3{grid-template-columns:minmax(0,1fr)}
+.ts{left:12px;right:12px;top:62px}
+.tbl thead{display:none}
+.tbl,.tbl tbody{display:block}
+.tbl tr{display:flex;align-items:center;gap:8px;padding:10px 14px;border-top:1px solid var(--ln)}
+.tbl tbody tr:first-child{border-top:0}
+.tbl td{padding:0;border:0}
+.tbl td.t-j{flex:1;width:auto;max-width:none;min-width:0}
+.tbl td.t-k,.tbl td.t-s,.tbl td.t-d{display:none}
+.tbl td.t-a{width:auto;flex:none}
+.tj .mo{display:block;color:var(--mu);font-size:12px}
+.bar{display:flex;position:fixed;left:0;right:0;bottom:0;background:#fff;border-top:1px solid var(--ln);padding:4px 4px calc(4px + env(safe-area-inset-bottom));z-index:6}
+.bar a{flex:1;display:flex;flex-direction:column;align-items:center;gap:2px;color:var(--mu);text-decoration:none;font-size:11px;padding:6px 0;border-radius:6px}
+.bar a.on{color:var(--p);font-weight:600}
 }
 </style>
 </head>
 <body>
 <?php if (!$masuk): ?>
 <div class="cen">
-<div class="lg0"><?= art_avatar($prof, 's56') ?><div class="br">Admin</div></div>
+<div class="lg0"><div class="br">Admin</div><p class="m"><?= h((string)parse_url(SITE_URL, PHP_URL_HOST)) ?></p></div>
 <?php if ($err !== ''): ?><div class="e"><?= h($err) ?></div><?php endif; ?>
 <?php if ($belumAtur): ?>
 <div class="c">
@@ -705,7 +722,7 @@ main{margin-left:0;padding:16px 14px 104px}
 </div>
 <?php else: ?>
 <div class="c">
-<h2>Masuk</h2>
+<h2>Masuk ke admin</h2>
 <form method="post">
 <input type="hidden" name="csrf" value="<?= h($csrf) ?>"><input type="hidden" name="action" value="login">
 <label>Kata sandi</label>
@@ -762,10 +779,9 @@ $hariIni = $hr[(int)date('w')] . ', ' . date('j') . ' ' . $bl[(int)date('n') - 1
 $namaDepan = (preg_split('/[\s,]+/u', trim($prof['nama'])) ?: [''])[0];
 $artBaru = array_slice($semuaArt, 0, 5);
 ?>
-<div class="hero">
-<?= art_avatar($prof, 's56') ?>
-<div class="tx"><h2><?= h($sapa) ?>, <?= h($namaDepan) ?></h2><p><?= h($hariIni) ?></p></div>
-<div class="sp ac"><a class="bt w" href="./?m=artikel&amp;e=baru"><?= ikon('tambah', 18) ?>Artikel baru</a><a class="bt g" href="./?m=video"><?= ikon('unggah', 18) ?>Video</a></div>
+<div class="pg">
+<p class="m"><?= h($hariIni) ?></p>
+<div class="sp ac"><a class="bt" href="./?m=artikel&amp;e=baru"><?= ikon('tambah', 18) ?>Artikel baru</a><a class="bt o" href="./?m=video"><?= ikon('unggah', 18) ?>Unggah video</a></div>
 </div>
 <div class="kt">
 <div class="k"><i><?= ikon('artikel', 20) ?></i><div><b><?= $nTerbit ?></b><span>Artikel terbit</span></div></div>
@@ -785,7 +801,7 @@ $artBaru = array_slice($semuaArt, 0, 5);
 <?php foreach ($artBaru as $x): $sx = art_status($x); $th = art_thumb((string)($x['foto'] ?? '')); ?>
 <a class="v" href="./?m=artikel&amp;e=<?= h($x['id']) ?>" style="text-decoration:none;color:inherit">
 <?php if ($th !== ''): ?><img src="<?= h($th) ?>" alt="" loading="lazy" width="64" height="64"><?php else: ?><span class="nt" style="display:flex;align-items:center;justify-content:center;color:#94a3b8"><?= ikon('artikel', 24) ?></span><?php endif; ?>
-<div class="bd"><b><?= h($x['judul']) ?></b><small><span class="tg<?= $sx === 'terbit' ? ' on' : '' ?>"><?= h(ucfirst($sx)) ?></span><?= h(art_tgl((string)$x['waktu'])) ?></small></div>
+<div class="bd"><b><?= h($x['judul']) ?></b><small><span class="tg<?= $sx === 'terbit' ? ' on' : ($sx === 'terjadwal' ? ' jd' : '') ?>"><?= h(ucfirst($sx)) ?></span><?= h(art_tgl((string)$x['waktu'])) ?></small></div>
 </a>
 <?php endforeach; ?>
 </div>
@@ -1138,25 +1154,33 @@ $tampilA = array_values(array_filter($semuaArt, function ($x) use ($q, $sf) {
 <button class="ib" type="submit" title="Cari" aria-label="Cari"><?= ikon('cari', 18) ?></button>
 <a class="bt sp" href="./?m=artikel&amp;e=baru"><?= ikon('tambah', 18) ?>Artikel baru</a>
 </form>
-<div class="c">
-<div class="row" style="margin-bottom:6px"><h2 style="margin:0">Daftar artikel</h2><span class="m sp" style="margin:0"><?= count($tampilA) ?> dari <?= count($semuaArt) ?></span></div>
+<div class="c p0">
 <?php if (!$tampilA): ?>
-<p class="m"><?= $semuaArt ? 'Tidak ada yang cocok.' : 'Belum ada artikel.' ?></p>
-<?php endif; ?>
-<?php foreach ($tampilA as $x): $sx = art_status($x); $th = art_thumb((string)($x['foto'] ?? '')); ?>
-<div class="v">
-<?php if ($th !== ''): ?><img src="<?= h($th) ?>" alt="" loading="lazy" width="64" height="64"><?php else: ?><span class="nt" style="display:flex;align-items:center;justify-content:center;color:#94a3b8;background:#e2e8f0"><?= ikon('artikel', 24) ?></span><?php endif; ?>
-<div class="bd">
-<b><?= h($x['judul']) ?></b>
-<small><span class="tg<?= $sx === 'terbit' ? ' on' : '' ?>"><?= h(ucfirst($sx)) ?></span><?= h(($x['kategori'] ?? '') !== '' ? $x['kategori'] . ', ' : '') ?><?= h(art_tgl((string)$x['waktu'])) ?></small>
-</div>
-<div class="ac">
+<p class="m" style="padding:18px;margin:0"><?= $semuaArt ? 'Tidak ada artikel yang cocok dengan pencarian.' : 'Belum ada artikel. Klik Artikel baru untuk mulai menulis.' ?></p>
+<?php else: ?>
+<table class="tbl">
+<thead><tr><th>Judul</th><th>Kategori</th><th>Status</th><th>Tanggal</th><th><span class="sr">Aksi</span></th></tr></thead>
+<tbody>
+<?php foreach ($tampilA as $x): $sx = art_status($x); $th = art_thumb((string)($x['foto'] ?? '')); $kt2 = (string)($x['kategori'] ?? ''); $tg2 = art_tgl((string)$x['waktu']); $kls = $sx === 'terbit' ? ' on' : ($sx === 'terjadwal' ? ' jd' : ''); ?>
+<tr>
+<td class="t-j"><div class="tj">
+<?php if ($th !== ''): ?><img src="<?= h($th) ?>" alt="" loading="lazy" width="40" height="40"><?php else: ?><span class="nt"><?= ikon('artikel', 20) ?></span><?php endif; ?>
+<div class="bd"><b><?= h($x['judul']) ?></b><small class="mo"><span class="tg<?= $kls ?>"><?= h(ucfirst($sx)) ?></span><?= h(($kt2 !== '' ? $kt2 . ', ' : '') . $tg2) ?></small></div>
+</div></td>
+<td class="t-k"><?= h($kt2 !== '' ? $kt2 : '-') ?></td>
+<td class="t-s"><span class="tg<?= $kls ?>"><?= h(ucfirst($sx)) ?></span></td>
+<td class="t-d"><?= h($tg2) ?></td>
+<td class="t-a"><div class="ac">
 <a class="ib" href="./?m=artikel&amp;e=<?= h($x['id']) ?>" title="Ubah" aria-label="Ubah"><?= ikon('ubah', 18) ?></a>
 <?php if ($sx === 'terbit'): ?><a class="ib" href="/artikel/<?= h($x['slug']) ?>" target="_blank" rel="noopener" title="Lihat di situs" aria-label="Lihat di situs"><?= ikon('lihat', 18) ?></a><?php else: ?><a class="ib" href="./?m=pratinjau&amp;id=<?= h($x['id']) ?>" target="_blank" rel="noopener" title="Pratinjau" aria-label="Pratinjau"><?= ikon('mata', 18) ?></a><?php endif; ?>
 <?= btn($csrf, 'artikel_hapus', $x['id'], 'hapus', 'Hapus', 'x', 'Hapus artikel ini?') ?>
-</div>
-</div>
+</div></td>
+</tr>
 <?php endforeach; ?>
+</tbody>
+</table>
+<?php endif; ?>
+<p class="tf"><?= count($tampilA) ?> dari <?= count($semuaArt) ?> artikel</p>
 </div>
 
 <?php elseif ($m === 'video'): ?>
