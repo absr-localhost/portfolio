@@ -1,6 +1,7 @@
 ---
+import { Icon } from 'astro-icon/components';
 import Layout from '~/layouts/PageLayout.astro';
-import { wrap, card } from '~/data/profil';
+import { wrap, EMAIL } from '~/data/profil';
 import { projects } from '~/data/proyek';
 
 const metadata = {
@@ -9,75 +10,120 @@ const metadata = {
 ---
 
 <Layout metadata={metadata}>
+  <!-- Judul halaman -->
   <section class="bg-primary py-12 text-white sm:py-16">
     <div class={wrap}>
-      <h1 class="text-2xl font-bold tracking-tight">Portofolio</h1>
+      <p class="text-xs font-semibold uppercase tracking-wider text-accent">Portofolio</p>
+      <h1 class="mt-2 text-2xl font-bold tracking-tight sm:text-4xl">Proyek dan hasil kerja</h1>
+      <p class="mt-3 max-w-2xl text-sm text-slate-300 sm:text-base">
+        Studi kasus singkat: masalah yang ada, solusi yang dibangun, dan hasil yang dirasakan.
+      </p>
     </div>
   </section>
 
-  <section class="bg-slate-50 py-8 sm:py-10">
-    <div class={`${wrap} space-y-6`}>
+  <section class="bg-slate-50 py-8 sm:py-12">
+    <div class={`${wrap} space-y-8`}>
       {
         projects.map((p) => (
-          <article class={`${card} p-5 sm:p-8`}>
-            <p class="text-xs text-muted">
-              {p.tahun} <span class="text-slate-300">/</span> Untuk {p.untuk}
-            </p>
-            <h2 class="mt-1 text-xl font-bold tracking-tight text-heading sm:text-2xl">{p.judul}</h2>
-            <p class="mt-3 text-base font-semibold text-heading sm:text-lg">{p.ringkasan}</p>
-
-            <div class="mt-5 grid gap-3 sm:grid-cols-2">
-              <div class="rounded-md border border-slate-200 bg-white p-4">
-                <p class="text-xs font-semibold uppercase tracking-wide text-muted">Sebelum</p>
-                <p class="mt-1 text-sm text-default">{p.sebelum}</p>
+          <article class="overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm">
+            <!-- Kepala studi kasus -->
+            <header class="border-b border-slate-200 p-5 sm:p-8">
+              <div class="flex flex-wrap items-center gap-2 text-xs font-medium">
+                <span class="inline-flex items-center gap-1.5 rounded-full bg-slate-100 px-3 py-1 text-heading">
+                  <Icon name="tabler:calendar-event" class="h-3.5 w-3.5" />
+                  {p.tahun}
+                </span>
+                <span class="inline-flex items-center gap-1.5 rounded-full bg-slate-100 px-3 py-1 text-heading">
+                  <Icon name="tabler:school" class="h-3.5 w-3.5" />
+                  Untuk {p.untuk}
+                </span>
               </div>
-              <div class="rounded-md bg-primary p-4">
-                <p class="text-xs font-semibold uppercase tracking-wide text-slate-300">Sekarang</p>
-                <p class="mt-1 text-sm text-white">{p.sekarang}</p>
+              <h2 class="mt-4 text-xl font-bold leading-tight tracking-tight text-heading sm:text-3xl">{p.judul}</h2>
+              <p class="mt-3 max-w-3xl text-base leading-relaxed text-muted sm:text-lg">{p.ringkasan}</p>
+            </header>
+
+            <div class="space-y-8 p-5 sm:space-y-10 sm:p-8">
+              <!-- Sebelum -> Sekarang -->
+              <div class="grid items-stretch gap-3 md:grid-cols-[1fr_auto_1fr]">
+                <div class="rounded-xl border border-slate-200 bg-slate-50 p-4 sm:p-5">
+                  <p class="text-xs font-semibold uppercase tracking-wider text-muted">Sebelum</p>
+                  <p class="mt-2 text-sm leading-relaxed text-default sm:text-base">{p.sebelum}</p>
+                </div>
+                <div class="flex items-center justify-center text-accent" aria-hidden="true">
+                  <Icon name="tabler:arrow-right" class="hidden h-6 w-6 md:block" />
+                  <Icon name="tabler:arrow-down" class="h-6 w-6 md:hidden" />
+                </div>
+                <div class="rounded-xl bg-primary p-4 sm:p-5">
+                  <p class="text-xs font-semibold uppercase tracking-wider text-accent">Sekarang</p>
+                  <p class="mt-2 text-sm leading-relaxed text-white sm:text-base">{p.sekarang}</p>
+                </div>
               </div>
-            </div>
 
-            <h3 class="mt-6 text-sm font-semibold text-heading">Hasil</h3>
-            <ul class="mt-2 divide-y divide-slate-200 border-y border-slate-200">
-              {p.hasil.map((h) => (
-                <li class="py-3 text-sm text-muted">
-                  <span class="font-semibold text-heading">{h.judul}.</span> {h.isi}
-                </li>
-              ))}
-            </ul>
+              <!-- Hasil -->
+              <div>
+                <h3 class="text-base font-bold text-heading sm:text-lg">Hasil</h3>
+                <ul class="mt-3 grid gap-3 sm:grid-cols-3">
+                  {p.hasil.map((h) => (
+                    <li class="flex gap-3 rounded-xl border border-slate-200 p-4">
+                      <span class="mt-0.5 flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-accent/20 text-primary">
+                        <Icon name="tabler:check" class="h-4 w-4" />
+                      </span>
+                      <span class="text-sm leading-snug text-muted">
+                        <strong class="block font-semibold text-heading">{h.judul}</strong>
+                        {h.isi}
+                      </span>
+                    </li>
+                  ))}
+                </ul>
+              </div>
 
-            {
-              p.alat && (
-                <>
-                  <h3 class="mt-6 text-sm font-semibold text-heading">Alat yang digunakan</h3>
-                  <div class="mt-3 grid grid-cols-2 gap-3 lg:grid-cols-4">
-                    {p.alat.map((a) => (
-                      <div class="overflow-hidden rounded-md border border-slate-200 bg-white">
-                        <img
-                          src={a.gambar}
-                          alt={a.nama}
-                          width="800"
-                          height="600"
-                          loading="lazy"
-                          class="aspect-[4/3] w-full border-b border-slate-200 bg-slate-50 object-contain"
-                        />
-                        <div class="p-3">
-                          <p class="text-sm font-semibold text-heading">{a.nama}</p>
-                          <p class="mt-1 text-xs text-muted">{a.fungsi}</p>
-                        </div>
-                      </div>
-                    ))}
+              <!-- Alat: urut sesuai alur kerja -->
+              {
+                p.alat && (
+                  <div>
+                    <h3 class="text-base font-bold text-heading sm:text-lg">Alat yang digunakan</h3>
+                    <ol class="mt-3 grid grid-cols-2 gap-3 lg:grid-cols-4">
+                      {p.alat.map((a, n) => (
+                        <li class="group overflow-hidden rounded-xl border border-slate-200 bg-white transition hover:border-accent hover:shadow-md">
+                          <div class="relative border-b border-slate-200 bg-slate-50">
+                            <span class="absolute left-2 top-2 flex h-6 w-6 items-center justify-center rounded-full bg-primary text-xs font-bold text-white">
+                              {n + 1}
+                            </span>
+                            <img
+                              src={a.gambar}
+                              alt={a.nama}
+                              width="800"
+                              height="600"
+                              loading="lazy"
+                              decoding="async"
+                              class="aspect-[4/3] w-full object-contain p-2"
+                            />
+                          </div>
+                          <div class="p-3 sm:p-4">
+                            <p class="text-sm font-semibold leading-snug text-heading">{a.nama}</p>
+                            <p class="mt-1 text-xs leading-relaxed text-muted">{a.fungsi}</p>
+                          </div>
+                        </li>
+                      ))}
+                    </ol>
                   </div>
-                </>
-              )
-            }
-
-            <p class="mt-6 border-t border-slate-200 pt-4 text-xs text-muted">
-              <span class="font-semibold text-heading">Status</span> {p.status}
-            </p>
+                )
+              }
+            </div>
           </article>
         ))
       }
+
+      <!-- Ajakan -->
+      <div class="flex flex-col items-start gap-3 rounded-2xl bg-gradient-to-r from-primary to-secondary p-5 text-white sm:flex-row sm:items-center sm:justify-between sm:p-6">
+        <p class="text-sm sm:text-base">Butuh sistem serupa untuk sekolah atau organisasi Anda? Ceritakan kebutuhannya lewat email.</p>
+        <a
+          href={`mailto:${EMAIL}`}
+          class="inline-flex items-center gap-1.5 rounded-lg bg-accent px-4 py-2 text-xs font-semibold text-primary sm:text-sm"
+        >
+          <Icon name="tabler:mail" class="h-4 w-4" /> Hubungi saya
+        </a>
+      </div>
     </div>
   </section>
 </Layout>
