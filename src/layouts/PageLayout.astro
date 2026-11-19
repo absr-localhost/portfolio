@@ -16,6 +16,13 @@ export interface Props {
 
 const { metadata } = Astro.props;
 
+// Fallback slot ditulis eksplisit (bukan <slot>isi bawaan</slot>): Astro tetap
+// mengevaluasi isi bawaan walau halaman menimpanya, sehingga ikon di dalamnya
+// dianggap sudah dirender dan sprite SVG-nya hilang.
+const punyaHeader = Astro.slots.has('header');
+const punyaPengumuman = Astro.slots.has('announcement');
+const punyaFooter = Astro.slots.has('footer');
+
 // Menu sidebar diambil dari navigasi yang sudah ada (src/navigation.ts),
 // submenu "Lainnya" diratakan agar semua halaman tetap bisa dibuka.
 type Tautan = { text?: string; href?: string; links?: Tautan[] };
@@ -46,16 +53,7 @@ const aktif = (href?: string) => {
   <slot name="head" slot="head" />
 
   {
-    /*
-    Slot fallbacks are rendered explicitly. With `<slot name="x">fallback</slot>`
-    Astro still evaluates the fallback when the page overrides the slot, and
-    astro-icon then believes the icons inside it were already emitted, so their
-    SVG sprite symbol goes missing on that page.
-    */
-  }
-
-  {
-    Astro.slots.has('header') ? (
+    punyaHeader ? (
       <slot name="header" />
     ) : (
       <>
@@ -157,7 +155,7 @@ const aktif = (href?: string) => {
 
   <div class="flex min-w-0 flex-1 flex-col lg:pl-64">
     {
-      !Astro.slots.has('header') && (
+      punyaHeader ? null : (
         <div class="sticky top-0 z-20 flex items-center justify-between gap-3 border-b border-slate-200 bg-white px-4 py-2 lg:hidden">
           <a href="/" aria-label="Beranda">
             <img
@@ -182,11 +180,11 @@ const aktif = (href?: string) => {
       )
     }
 
-    {Astro.slots.has('announcement') ? <slot name="announcement" /> : <Announcement />}
+    {punyaPengumuman ? <slot name="announcement" /> : <Announcement />}
     <main class="flex-1">
       <slot />
     </main>
-    {Astro.slots.has('footer') ? <slot name="footer" /> : <Footer {...footerData} />}
+    {punyaFooter ? <slot name="footer" /> : <Footer {...footerData} />}
   </div>
   <Gerak />
 
