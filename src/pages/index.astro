@@ -96,6 +96,10 @@ const ikonSosial: Record<string, string> = {
 ---
 
 <Layout metadata={metadata}>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Archivo+Black&display=swap" rel="stylesheet" />
+
   <!-- 1. HERO: banner kartu -->
   <section class={`${wrap} pt-4 sm:pt-6`}>
     <div class="relative isolate overflow-hidden rounded-2xl bg-primary text-white shadow-lg">
@@ -447,14 +451,14 @@ const ikonSosial: Record<string, string> = {
 </Layout>
 
 <style>
-  /* Judul hero: putih, tegas, satu baris di HP */
+  /* Judul hero: Archivo Black (besar dan tebal), putih */
   .judul-hero {
-    font-family: Inter, 'Segoe UI', system-ui, -apple-system, sans-serif;
-    font-weight: 700;
-    line-height: 1.15;
-    letter-spacing: -0.02em;
+    font-family: 'Archivo Black', Impact, 'Arial Black', sans-serif;
+    font-weight: 400;
+    line-height: 1.1;
+    letter-spacing: 0;
     color: #ffffff;
-    font-size: clamp(1.4rem, 6.4vw, 2.75rem);
+    font-size: clamp(1.6rem, 7.2vw, 3.25rem);
     text-wrap: balance;
   }
 
