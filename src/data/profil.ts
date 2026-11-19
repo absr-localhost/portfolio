@@ -90,3 +90,12 @@ export const pages = [
   ['Produk', '/produk', 'Rekomendasi produk pilihan dari AGB STORE.'],
   ['Kontak', '/kontak', 'Email dan media sosial untuk berdiskusi.'],
 ];
+
+// Penanda tautan untuk tiap kategori proyek, mis. "Aplikasi Pendidikan" -> "aplikasi-pendidikan".
+// Dipakai di Beranda (tautan kartu) dan halaman Proyek (id bagian) agar keduanya selalu cocok.
+export const slugKategori = (judul: string) =>
+  judul
+    .toLowerCase()
+    .replace(/&/g, 'dan')
+    .replace(/[^a-z0-9]+/g, '-')
+    .replace(/^-+|-+$/g, '');
