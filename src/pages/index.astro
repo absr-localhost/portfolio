@@ -175,7 +175,7 @@ const ikonSosial: Record<string, string> = {
   <VideoBeranda />
 
   <!-- 3b. PORTOFOLIO PROYEK (dari data proyek yang sudah ada) -->
-  <section class={`${wrap} pt-5 sm:pt-8`}>
+  <section id="portofolio" class={`${wrap} scroll-mt-16 pt-5 sm:pt-8`}>
     <div class="mb-3 flex items-center justify-between gap-3">
       <h2 class="judul-seksi">Portofolio proyek</h2>
       <a href="/proyek" class="inline-flex items-center gap-1 text-xs font-semibold text-link hover:underline sm:text-sm">
@@ -185,7 +185,7 @@ const ikonSosial: Record<string, string> = {
     <div class="grid grid-cols-1 gap-2.5 sm:grid-cols-2 sm:gap-3 lg:grid-cols-3">
       {
         projects.slice(0, 6).map((pr, i) => (
-          <a href={`/proyek#${slugKategori(pr.title)}`} class={`${card} group flex gap-3 p-3 transition hover:border-accent sm:p-4`}>
+          <a href={`/proyek/${slugKategori(pr.title)}`} class={`${card} group flex gap-3 p-3 transition hover:border-accent sm:p-4`}>
             <span class="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-primary text-white">
               <Icon name={ikonProyek[i] || 'tabler:folder'} class="h-5 w-5" />
             </span>
