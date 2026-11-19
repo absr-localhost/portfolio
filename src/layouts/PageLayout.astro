@@ -66,19 +66,24 @@ const aktif = (href?: string) => {
         <aside
           id="sb"
           aria-label="Menu utama"
-          class="fixed inset-y-0 left-0 z-40 flex w-64 -translate-x-full flex-col overflow-y-auto bg-primary text-white transition-transform duration-200 motion-reduce:transition-none lg:translate-x-0"
+          class="fixed inset-y-0 left-0 z-40 flex w-72 -translate-x-full flex-col overflow-y-auto bg-primary text-white transition-transform duration-200 motion-reduce:transition-none lg:w-64 lg:translate-x-0"
         >
           <div class="flex items-center justify-between gap-2 px-4 pt-4">
-            <a href="/" class="block rounded-xl bg-white p-2" aria-label="Beranda">
+            <a href="/" class="flex min-w-0 items-center gap-3" aria-label="Beranda">
               <img
-                src="/logo-header.png"
-                alt="Agus Budiono - Technology Solutions"
-                class="block h-10 w-auto"
-                width="2878"
-                height="633"
+                src="/avatar-agus.webp"
+                alt="Foto Agus Budiono"
+                class="h-11 w-11 shrink-0 rounded-full object-cover ring-2 ring-accent"
+                width="44"
+                height="44"
               />
+              <span class="min-w-0 leading-tight">
+                <span class="block text-[13px] font-bold tracking-tight text-white">AGUS BUDIONO, S.Pd.</span>
+                <span class="mt-0.5 block text-[11px] font-medium text-accent">IT Specialist</span>
+                <span class="block text-[11px] text-slate-300">Full-Stack Developer</span>
+              </span>
             </a>
-            <button id="sb-x" type="button" class="rounded-lg p-2 hover:bg-white/10 lg:hidden" aria-label="Tutup menu">
+            <button id="sb-x" type="button" class="shrink-0 rounded-lg p-2 hover:bg-white/10 lg:hidden" aria-label="Tutup menu">
               <Icon name="tabler:x" class="h-5 w-5" />
             </button>
           </div>
