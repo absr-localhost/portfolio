@@ -18,7 +18,6 @@ export interface Proyek {
   sekarang: string;
   hasil: Hasil[];
   alat?: Alat[];
-  status: string;
 }
 
 export const projects: Proyek[] = [
@@ -58,6 +57,5 @@ export const projects: Proyek[] = [
         gambar: '/gambar/absensi-sheets.webp',
       },
     ],
-    status: 'Masih digunakan hingga sekarang.',
   },
 ];
