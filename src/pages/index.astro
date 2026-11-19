@@ -79,6 +79,49 @@ const logo: Record<string, string> = {
   'Google Meet': 'data:image/webp;base64,UklGRhwDAABXRUJQVlA4IBADAADwEgCdASpgAGAAPm0uk0akIiGhK5J8gIANiWYAzFCwUv+tb2F3y6AU7XWv+o9mvoA8RnpYeYD9mfVv/z3UAf27qTvQU6Vr9t/SAzVV9Aj8bblSK+11BzKLUtZ9Ify8M2+nAEnCt9uZ4Y7Z/Z1GKU5zUHUEc+7oMlxdC5O1fnXg1ry3ifikycIWFBtSKX5ui37swMmONxApRcUBngq6ndnAAP789AAAADz1P9w9fT7Sc0Dcgpl4b8M1p3lqWznw0API85eRvVpTNfJoHVnBbLBswuKiA0fPWkfyZa0SN9eQIc0w8qS0eSxnpNKr0n3ZspO6o1EC0852MfRf7Dr3uEdC7kSdZs5c0u4JIn71E8Bg1sZQilsPwMQR6VQ81UMs+UBjQerp3xyOwX1+8wdMrHeOJycDX/JlTGzzUMe1mLOObnBWkpQXRGMqN0+bufBoSmVKKPobb2RkuFIsJnWPLS2fv3sq3NPY+pfndytDGltPnUVPYEu6zFs6XmP+oeN8DXdwzJHnFOSsfJA8JoPqS2FE5X1/8qr6MvCf8QEAwn7nTf6LB+hSKCeXRvRnUPal1/uyOY5qOHGCyEGMt7sVVPSbOYxECgjuVAcgLv/S/xblmfc5cDpOTD3PrL2LzEUQis/NtpDc1wzhcILttFDu/oJDMrOf3HwgSZCKOZfgH/+YuR3RM5qk/Ijgqz1eoFznc10No4T1SQuisnyKmLXZV1dj/W3fgpPdBePlCH1VlVZJlO3lrZNFnCk/eAsfY/Tp0Ted3E/HZLGSjEvlExOZdhQyyolW/y4O5tiQcJcOK0dJB1hnVjb2+ufNxK+koQ1q3lM/0muG1dMmzn/4ffyi5uow1OeJUtDEyDYoGQEIZS/s3TGqVCjTlOU8uNVDaysTev1HpgSFi1uS/RX76iRTKOTexDYnxQmW1ia3RkOdOZqeSFjHl+VytsLibw730x3Ye63frBZd3rDV5NPHSEkcTTtUPd/WC4efEI20ymihA5u7Sn6TYqcQTAqn1LL6s/8DHy7/iru6cqtv+XF1fIpsCAAA',
 };
 
+// Tautan penjelasan tiap teknologi (Wikipedia, atau halaman resmi bila tidak ada artikelnya)
+const tautan: Record<string, string> = {
+  'HTML': 'https://en.wikipedia.org/wiki/HTML',
+  'CSS': 'https://en.wikipedia.org/wiki/CSS',
+  'JavaScript': 'https://en.wikipedia.org/wiki/JavaScript',
+  'PHP': 'https://en.wikipedia.org/wiki/PHP',
+  'Python': 'https://en.wikipedia.org/wiki/Python_(programming_language)',
+  'Java': 'https://en.wikipedia.org/wiki/Java_(programming_language)',
+  'C#': 'https://en.wikipedia.org/wiki/C_Sharp_(programming_language)',
+  'Dart': 'https://en.wikipedia.org/wiki/Dart_(programming_language)',
+  'Flutter': 'https://en.wikipedia.org/wiki/Flutter_(software)',
+  'Android': 'https://en.wikipedia.org/wiki/Android_(operating_system)',
+  'React': 'https://en.wikipedia.org/wiki/React_(software)',
+  'Laravel': 'https://en.wikipedia.org/wiki/Laravel',
+  'Astro': 'https://en.wikipedia.org/wiki/Astro_(web_framework)',
+  'Tailwind': 'https://en.wikipedia.org/wiki/Tailwind_CSS',
+  'SQL': 'https://en.wikipedia.org/wiki/SQL',
+  'MySQL': 'https://en.wikipedia.org/wiki/MySQL',
+  'GitHub': 'https://en.wikipedia.org/wiki/GitHub',
+  'Cloudflare': 'https://en.wikipedia.org/wiki/Cloudflare',
+  'Linux': 'https://en.wikipedia.org/wiki/Linux',
+  'Windows': 'https://en.wikipedia.org/wiki/Microsoft_Windows',
+  'Telegram': 'https://en.wikipedia.org/wiki/Telegram_(software)',
+  'Grok': 'https://en.wikipedia.org/wiki/Grok_(chatbot)',
+  'Excel': 'https://en.wikipedia.org/wiki/Microsoft_Excel',
+  'Word': 'https://en.wikipedia.org/wiki/Microsoft_Word',
+  'PowerPoint': 'https://en.wikipedia.org/wiki/Microsoft_PowerPoint',
+  'Power Automate': 'https://en.wikipedia.org/wiki/Microsoft_Power_Automate',
+  'Google Sheets': 'https://en.wikipedia.org/wiki/Google_Sheets',
+  'Google Drive': 'https://en.wikipedia.org/wiki/Google_Drive',
+  'OneDrive': 'https://en.wikipedia.org/wiki/OneDrive',
+  'Google Classroom': 'https://en.wikipedia.org/wiki/Google_Classroom',
+  'Photoshop': 'https://en.wikipedia.org/wiki/Adobe_Photoshop',
+  'Lightroom': 'https://en.wikipedia.org/wiki/Adobe_Lightroom',
+  'Premiere Pro': 'https://en.wikipedia.org/wiki/Adobe_Premiere_Pro',
+  'After Effects': 'https://en.wikipedia.org/wiki/Adobe_After_Effects',
+  'Canva': 'https://en.wikipedia.org/wiki/Canva',
+  'PixelLab': 'https://play.google.com/store/apps/details?id=com.imaginstudio.imagetools.pixellab',
+  'OBS Studio': 'https://en.wikipedia.org/wiki/OBS_Studio',
+  'Zoom': 'https://en.wikipedia.org/wiki/Zoom_(software)',
+  'Google Meet': 'https://en.wikipedia.org/wiki/Google_Meet',
+};
+
 const kelompok: [string, string[]][] = [
   ['Pemrograman, web dan server', ['HTML', 'CSS', 'JavaScript', 'PHP', 'Python', 'Java', 'C#', 'Dart', 'Flutter', 'Android', 'React', 'Laravel', 'Astro', 'Tailwind', 'SQL', 'MySQL', 'GitHub', 'Cloudflare', 'Linux', 'Windows', 'Telegram', 'Grok']],
   ['Perkantoran dan penyimpanan', ['Excel', 'Word', 'PowerPoint', 'Power Automate', 'Google Sheets', 'Google Drive', 'OneDrive', 'Google Classroom']],
@@ -213,10 +256,17 @@ const ikonSosial: Record<string, string> = {
           <p class="mb-2 text-xs font-semibold text-muted sm:text-sm">{judul}</p>
           <div class="grid grid-cols-4 gap-2 sm:grid-cols-5 sm:gap-3 lg:grid-cols-8 xl:grid-cols-10">
             {daftar.map((nama) => (
-              <div class={`${card} flex flex-col items-center gap-1.5 px-1 py-2.5 sm:py-3`}>
+              <a
+                href={tautan[nama]}
+                target="_blank"
+                rel="noopener noreferrer"
+                title={`Pelajari ${nama}`}
+                aria-label={`Pelajari ${nama} (buka di tab baru)`}
+                class={`${card} flex flex-col items-center gap-1.5 px-1 py-2.5 transition hover:-translate-y-0.5 hover:border-accent hover:shadow-md focus-visible:outline-2 focus-visible:outline-accent sm:py-3`}
+              >
                 <img src={logo[nama]} alt="" width="40" height="40" loading="lazy" decoding="async" class="h-9 w-9 object-contain sm:h-10 sm:w-10" />
                 <span class="text-center text-[11px] font-medium leading-tight text-heading sm:text-xs">{nama}</span>
-              </div>
+              </a>
             ))}
           </div>
         </div>
