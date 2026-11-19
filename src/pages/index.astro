@@ -4,7 +4,7 @@ import Ulasan from '~/components/Ulasan.astro';
 import VideoBeranda from '~/components/VideoBeranda.astro';
 import StatistikPanel from '~/components/StatistikPanel.astro';
 import { Icon } from 'astro-icon/components';
-import { wrap, stats, about, socials, services, projects, EMAIL } from '~/data/profil';
+import { wrap, stats, about, socials, services, projects, EMAIL, slugKategori } from '~/data/profil';
 
 const metadata = {
   title: 'Beranda',
@@ -185,7 +185,7 @@ const ikonSosial: Record<string, string> = {
     <div class="grid grid-cols-1 gap-2.5 sm:grid-cols-2 sm:gap-3 lg:grid-cols-3">
       {
         projects.slice(0, 6).map((pr, i) => (
-          <a href="/proyek" class={`${card} group flex gap-3 p-3 transition hover:border-accent sm:p-4`}>
+          <a href={`/proyek#${slugKategori(pr.title)}`} class={`${card} group flex gap-3 p-3 transition hover:border-accent sm:p-4`}>
             <span class="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-primary text-white">
               <Icon name={ikonProyek[i] || 'tabler:folder'} class="h-5 w-5" />
             </span>
