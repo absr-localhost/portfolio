@@ -10,6 +10,7 @@ const MAXN = 12;
 const MAXLOG = 100;
 
 require __DIR__ . '/lib-artikel.php';
+require __DIR__ . '/lib-portofolio.php';
 
 $deny = "<IfModule mod_authz_core.c>\nRequire all denied\n</IfModule>\n<IfModule !mod_authz_core.c>\nDeny from all\n</IfModule>\n";
 $noexec = "<FilesMatch \"\\.(php|phtml|phar|pl|py|cgi|sh)\$\">\n" . $deny . "</FilesMatch>\n";
@@ -477,11 +478,16 @@ if ($masuk && $act === 'keluar_semua') {
     exit;
 }
 
+if ($masuk && strpos($act, 'por_') === 0) {
+    por_aksi($act);
+}
+
 if ($masuk && $act === 'ekspor') {
     $paket = [
         'dibuat' => date('c'),
         'video' => baca_daftar(),
         'artikel' => art_semua(),
+        'portofolio' => por_semua(),
         'riwayat' => muat(DATA . '/log.php'),
     ];
     header('Content-Type: application/json; charset=utf-8');
@@ -491,7 +497,7 @@ if ($masuk && $act === 'ekspor') {
 }
 
 $m = (string)($_GET['m'] ?? 'ringkasan');
-if (!in_array($m, ['ringkasan', 'artikel', 'pratinjau', 'video', 'profil', 'pengaturan'], true)) {
+if (!in_array($m, ['ringkasan', 'artikel', 'pratinjau', 'portofolio', 'video', 'profil', 'pengaturan'], true)) {
     $m = 'ringkasan';
 }
 $flash = (string)($_SESSION['flash'] ?? '');
@@ -510,8 +516,8 @@ foreach ($daftar as $it) {
         $aktifN++;
     }
 }
-$judulM = ['ringkasan' => 'Ringkasan', 'artikel' => 'Artikel', 'pratinjau' => 'Pratinjau artikel', 'video' => 'Video beranda', 'profil' => 'Profil', 'pengaturan' => 'Pengaturan'];
-$menu = [['ringkasan', 'home', 'Ringkasan'], ['artikel', 'artikel', 'Artikel'], ['video', 'video', 'Video'], ['profil', 'user', 'Profil'], ['pengaturan', 'atur', 'Pengaturan']];
+$judulM = ['ringkasan' => 'Ringkasan', 'artikel' => 'Artikel', 'pratinjau' => 'Pratinjau artikel', 'portofolio' => 'Portofolio', 'video' => 'Video beranda', 'profil' => 'Profil', 'pengaturan' => 'Pengaturan'];
+$menu = [['ringkasan', 'home', 'Ringkasan'], ['artikel', 'artikel', 'Artikel'], ['portofolio', 'tas', 'Portofolio'], ['video', 'video', 'Video'], ['profil', 'user', 'Profil'], ['pengaturan', 'atur', 'Pengaturan']];
 $menuAktif = $m === 'pratinjau' ? 'artikel' : $m;
 $semuaArt = art_semua();
 $nTerbit = 0;
@@ -1183,6 +1189,8 @@ $tampilA = array_values(array_filter($semuaArt, function ($x) use ($q, $sf) {
 <p class="tf"><?= count($tampilA) ?> dari <?= count($semuaArt) ?> artikel</p>
 </div>
 
+<?php elseif ($m === 'portofolio'): ?>
+<?php include __DIR__ . '/tampil-portofolio.php'; ?>
 <?php elseif ($m === 'video'): ?>
 <div class="c">
 <div class="row" style="margin-bottom:6px"><h2 style="margin:0">Daftar video</h2><span class="m sp" style="margin:0"><?= count($daftar) ?> dari <?= MAXN ?>, <?= h(mb_fmt($total)) ?> MB</span></div>
