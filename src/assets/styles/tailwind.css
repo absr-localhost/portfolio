@@ -152,10 +152,18 @@
 }
 
 @layer base {
+  /* Seluruh situs memakai Inter (diatur di astro.config.ts dan CustomStyles.astro) */
+  body {
+    font-family: var(--font-sans);
+    font-weight: 400;
+  }
+
+  /* Judul: Bold (700), jarak huruf sedikit rapat */
   h1,
   h2,
   h3,
   h4 {
+    font-weight: 700;
     letter-spacing: -0.02em;
   }
 }
