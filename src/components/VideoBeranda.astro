@@ -69,16 +69,13 @@ import { wrap } from '~/data/profil';
   .vb-row { scrollbar-width: none; scroll-padding-inline: 1rem; }
   .vb-row::-webkit-scrollbar { display: none; }
   .vb-kartu {
-    background-color: #070b25;
-    box-shadow: 0 10px 24px -12px rgb(7 11 37 / 0.55), 0 2px 6px rgb(7 11 37 / 0.18);
+    background: linear-gradient(165deg, #12205e 0%, #0a1138 45%, #060a22 100%);
+    box-shadow: 0 14px 28px -14px rgb(7 11 37 / 0.7), 0 2px 6px rgb(7 11 37 / 0.2), inset 0 1px 0 rgb(255 255 255 / 0.08);
     transition: transform 0.25s ease, box-shadow 0.25s ease;
-  }
-  .vb-grad {
-    background: linear-gradient(to top, rgb(2 6 24 / 0.94) 0%, rgb(2 6 24 / 0.55) 32%, rgb(2 6 24 / 0) 62%);
   }
   .vb-img { transition: transform 0.5s ease; }
   @media (hover: hover) {
-    .vb-item:hover .vb-kartu { transform: translateY(-3px); box-shadow: 0 16px 30px -12px rgb(7 11 37 / 0.65), 0 2px 6px rgb(7 11 37 / 0.2); }
+    .vb-item:hover .vb-kartu { transform: translateY(-3px); box-shadow: 0 20px 34px -14px rgb(7 11 37 / 0.8), 0 2px 6px rgb(7 11 37 / 0.2), inset 0 1px 0 rgb(255 255 255 / 0.1); }
     .vb-item:hover .vb-img { transform: scale(1.06); }
   }
   .vb-item:focus-visible .vb-kartu { outline: 2px solid rgb(200 162 74); outline-offset: 2px; }
@@ -262,34 +259,32 @@ import { wrap } from '~/data/profil';
     function kartu(it, i, tegak) {
       var b = document.createElement('button');
       b.type = 'button';
-      b.className = 'vb-item shrink-0 snap-start text-left ' + (tegak ? 'w-[158px] sm:w-[200px]' : 'w-[270px] sm:w-[330px]');
+      b.className = 'vb-item shrink-0 snap-start text-left ' + (tegak ? 'w-[172px] sm:w-[210px]' : 'w-[280px] sm:w-[340px]');
       b.setAttribute('aria-label', (it.judul || 'Video') + ', putar');
 
-      var th = document.createElement('div');
-      th.className = 'vb-kartu relative overflow-hidden rounded-2xl border border-white/10';
-      th.style.aspectRatio = tegak ? '9 / 16' : '16 / 9';
+      var k = document.createElement('div');
+      k.className = 'vb-kartu flex h-full flex-col rounded-3xl border border-white/10 p-2';
 
+      // gambar sampul di dalam bingkai
+      var th = document.createElement('div');
+      th.className = 'relative overflow-hidden rounded-2xl bg-black';
+      th.style.aspectRatio = tegak ? '3 / 4' : '16 / 9';
       var im = document.createElement('img');
       im.className = 'vb-img absolute inset-0 h-full w-full object-cover';
       im.alt = '';
       im.loading = 'lazy';
       im.decoding = 'async';
       im.src = BASE + it.sampul;
-
-      var gr = document.createElement('div');
-      gr.className = 'vb-grad absolute inset-0';
-      gr.setAttribute('aria-hidden', 'true');
-
       var du = document.createElement('span');
-      du.className = 'absolute right-2 top-2 rounded-full bg-black/40 px-2 py-0.5 text-[11px] font-semibold text-white ring-1 ring-white/20 backdrop-blur-sm';
-      du.textContent = fmt(Number(it.durasi) || 0);
+      du.className = 'absolute right-2 top-2 flex items-center gap-1 rounded-full bg-black/45 py-0.5 pl-1.5 pr-2 text-[11px] font-semibold text-white ring-1 ring-white/20 backdrop-blur-sm';
+      du.innerHTML = ic('play', 'h-3 w-3') + '<span>' + fmt(Number(it.durasi) || 0) + '</span>';
+      th.appendChild(im);
+      th.appendChild(du);
+      k.appendChild(th);
 
-      var pl = document.createElement('span');
-      pl.className = 'absolute left-1/2 top-1/2 flex h-12 w-12 -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-full bg-white/20 text-white ring-1 ring-white/40 backdrop-blur-md' + (i === 0 ? ' vb-pulse' : '');
-      pl.innerHTML = ic('play', 'ml-0.5 h-5 w-5');
-
+      // isi kartu
       var tx = document.createElement('div');
-      tx.className = 'absolute inset-x-0 bottom-0 p-3';
+      tx.className = 'flex flex-1 flex-col px-1.5 pb-1 pt-2.5';
       if (it.judul) {
         var t = document.createElement('p');
         t.className = 'line-clamp-2 text-sm font-bold leading-snug text-white';
@@ -299,18 +294,27 @@ import { wrap } from '~/data/profil';
       var tg = tgl(it.waktu, true);
       if (tg) {
         var d = document.createElement('p');
-        d.className = 'mt-1 flex items-center gap-1 text-[11px] text-white/70';
+        d.className = 'mt-1 flex items-center gap-1 text-[11px] text-white/60';
         d.innerHTML = ic('cal', 'h-3 w-3');
         d.appendChild(document.createTextNode(tg));
         tx.appendChild(d);
       }
+      if (it.deskripsi) {
+        var ds = document.createElement('p');
+        ds.className = 'mt-1.5 line-clamp-2 text-xs leading-snug text-white/70';
+        ds.textContent = it.deskripsi;
+        tx.appendChild(ds);
+      }
+      var bt = document.createElement('span');
+      bt.className = 'mt-3 flex items-center justify-center gap-1.5 rounded-full bg-white py-2 text-xs font-bold text-primary' + (i === 0 ? ' vb-pulse' : '');
+      bt.innerHTML = ic('play', 'h-3.5 w-3.5') + '<span>Tonton video</span>';
+      var sp = document.createElement('span');
+      sp.className = 'flex-1';
+      tx.appendChild(sp);
+      tx.appendChild(bt);
+      k.appendChild(tx);
 
-      th.appendChild(im);
-      th.appendChild(gr);
-      th.appendChild(du);
-      th.appendChild(pl);
-      th.appendChild(tx);
-      b.appendChild(th);
+      b.appendChild(k);
       b.addEventListener('click', function () { openV(it, b); });
       return b;
     }
