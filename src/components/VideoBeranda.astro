@@ -1,14 +1,11 @@
 ---
-import { Icon } from 'astro-icon/components';
 import { wrap } from '~/data/profil';
 ---
 
 <section id="vb" class="bg-slate-50 py-10 sm:py-12" hidden>
   <div class={wrap}>
-    <h2 class="mb-4 flex items-center gap-2 text-xl font-bold text-heading">
-      <Icon name="tabler:player-play" class="h-5 w-5 text-primary" />Video
-    </h2>
-    <div id="vb-row" class="flex snap-x gap-3 overflow-x-auto pb-2 sm:gap-4"></div>
+    <h2 class="vb-judul mb-4">Video</h2>
+    <div id="vb-row" class="vb-row -mx-4 flex snap-x gap-3 overflow-x-auto px-4 pb-4 pt-1 sm:-mx-6 sm:gap-4 sm:px-6"></div>
   </div>
 
   <div id="vb-modal" class="fixed inset-0 z-[9999] flex items-center justify-center bg-black/85 p-3" role="dialog" aria-modal="true" aria-label="Video" hidden>
@@ -58,6 +55,33 @@ import { wrap } from '~/data/profil';
     height: 100% !important;
     border-radius: 0 !important;
   }
+  .vb-judul {
+    border-left: 4px solid rgb(200 162 74);
+    padding-left: 0.625rem;
+    font-size: 1.0625rem;
+    font-weight: 700;
+    line-height: 1.2;
+    color: rgb(11 37 69);
+  }
+  @media (min-width: 640px) {
+    .vb-judul { font-size: 1.25rem; }
+  }
+  .vb-row { scrollbar-width: none; scroll-padding-inline: 1rem; }
+  .vb-row::-webkit-scrollbar { display: none; }
+  .vb-kartu {
+    background-color: #070b25;
+    box-shadow: 0 10px 24px -12px rgb(7 11 37 / 0.55), 0 2px 6px rgb(7 11 37 / 0.18);
+    transition: transform 0.25s ease, box-shadow 0.25s ease;
+  }
+  .vb-grad {
+    background: linear-gradient(to top, rgb(2 6 24 / 0.94) 0%, rgb(2 6 24 / 0.55) 32%, rgb(2 6 24 / 0) 62%);
+  }
+  .vb-img { transition: transform 0.5s ease; }
+  @media (hover: hover) {
+    .vb-item:hover .vb-kartu { transform: translateY(-3px); box-shadow: 0 16px 30px -12px rgb(7 11 37 / 0.65), 0 2px 6px rgb(7 11 37 / 0.2); }
+    .vb-item:hover .vb-img { transform: scale(1.06); }
+  }
+  .vb-item:focus-visible .vb-kartu { outline: 2px solid rgb(200 162 74); outline-offset: 2px; }
   @keyframes vbp {
     0% { box-shadow: 0 0 0 0 rgb(255 255 255 / 0.55); }
     70%, 100% { box-shadow: 0 0 0 10px rgb(255 255 255 / 0); }
@@ -84,6 +108,7 @@ import { wrap } from '~/data/profil';
       mute: '<path d="M4 9v6h4l5 4V5L8 9z" fill="currentColor" stroke="none"/><path d="M16 9l5 6M21 9l-5 6"/>',
       fs: '<path d="M4 8V6a2 2 0 0 1 2-2h2M4 16v2a2 2 0 0 0 2 2h2M16 4h2a2 2 0 0 1 2 2v2M16 20h2a2 2 0 0 0 2-2v-2"/>',
       fsx: '<path d="M8 4v2a2 2 0 0 1-2 2H4M4 16h2a2 2 0 0 1 2 2v2M16 4v2a2 2 0 0 0 2 2h2M20 16h-2a2 2 0 0 0-2 2v2"/>',
+      cal: '<rect x="4" y="5" width="16" height="16" rx="2"/><path d="M16 3v4M8 3v4M4 11h16"/>',
       x: '<path d="M6 6l12 12M18 6L6 18"/>'
     };
     function ic(n, c) {
@@ -237,38 +262,55 @@ import { wrap } from '~/data/profil';
     function kartu(it, i, tegak) {
       var b = document.createElement('button');
       b.type = 'button';
-      b.className = 'shrink-0 snap-start text-left ' + (tegak ? 'w-[140px] sm:w-[170px]' : 'w-[240px] sm:w-[280px]');
+      b.className = 'vb-item shrink-0 snap-start text-left ' + (tegak ? 'w-[158px] sm:w-[200px]' : 'w-[270px] sm:w-[330px]');
       b.setAttribute('aria-label', (it.judul || 'Video') + ', putar');
 
       var th = document.createElement('div');
-      th.className = 'relative overflow-hidden rounded-xl border border-slate-200 bg-black shadow-sm';
+      th.className = 'vb-kartu relative overflow-hidden rounded-2xl border border-white/10';
       th.style.aspectRatio = tegak ? '9 / 16' : '16 / 9';
+
       var im = document.createElement('img');
-      im.className = 'absolute inset-0 h-full w-full object-cover';
+      im.className = 'vb-img absolute inset-0 h-full w-full object-cover';
       im.alt = '';
       im.loading = 'lazy';
       im.decoding = 'async';
       im.src = BASE + it.sampul;
-      var pl = document.createElement('span');
-      pl.className = 'absolute bottom-2 left-2 flex items-center gap-1 rounded-full bg-primary/90 py-1 pl-2 pr-2.5 text-xs text-white' + (i === 0 ? ' vb-pulse' : '');
-      pl.innerHTML = ic('play', 'h-4 w-4') + '<span>' + fmt(Number(it.durasi) || 0) + '</span>';
-      th.appendChild(im);
-      th.appendChild(pl);
-      b.appendChild(th);
 
+      var gr = document.createElement('div');
+      gr.className = 'vb-grad absolute inset-0';
+      gr.setAttribute('aria-hidden', 'true');
+
+      var du = document.createElement('span');
+      du.className = 'absolute right-2 top-2 rounded-full bg-black/40 px-2 py-0.5 text-[11px] font-semibold text-white ring-1 ring-white/20 backdrop-blur-sm';
+      du.textContent = fmt(Number(it.durasi) || 0);
+
+      var pl = document.createElement('span');
+      pl.className = 'absolute left-1/2 top-1/2 flex h-12 w-12 -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-full bg-white/20 text-white ring-1 ring-white/40 backdrop-blur-md' + (i === 0 ? ' vb-pulse' : '');
+      pl.innerHTML = ic('play', 'ml-0.5 h-5 w-5');
+
+      var tx = document.createElement('div');
+      tx.className = 'absolute inset-x-0 bottom-0 p-3';
       if (it.judul) {
         var t = document.createElement('p');
-        t.className = 'mt-2 line-clamp-2 text-sm font-semibold text-heading';
+        t.className = 'line-clamp-2 text-sm font-bold leading-snug text-white';
         t.textContent = it.judul;
-        b.appendChild(t);
+        tx.appendChild(t);
       }
       var tg = tgl(it.waktu, true);
       if (tg) {
         var d = document.createElement('p');
-        d.className = 'mt-0.5 text-xs text-muted';
-        d.textContent = tg;
-        b.appendChild(d);
+        d.className = 'mt-1 flex items-center gap-1 text-[11px] text-white/70';
+        d.innerHTML = ic('cal', 'h-3 w-3');
+        d.appendChild(document.createTextNode(tg));
+        tx.appendChild(d);
       }
+
+      th.appendChild(im);
+      th.appendChild(gr);
+      th.appendChild(du);
+      th.appendChild(pl);
+      th.appendChild(tx);
+      b.appendChild(th);
       b.addEventListener('click', function () { openV(it, b); });
       return b;
     }
