@@ -324,18 +324,46 @@ import { wrap } from '~/data/profil';
       return b;
     }
 
-    fetch('/admin/video/video.json?t=' + Date.now(), { cache: 'no-store' })
-      .then(function (r) { return r.ok ? r.json() : null; })
-      .then(function (d) {
-        if (!d) return;
-        var arr = Array.isArray(d.daftar) ? d.daftar : (d.video ? [d] : []);
-        arr = arr.filter(function (it) { return it && it.aktif && it.video && it.sampul; });
-        if (!arr.length) return;
-        var tegak = (Number(arr[0].tinggi) || 16) > (Number(arr[0].lebar) || 9);
-        arr.forEach(function (it, i) { row.appendChild(kartu(it, i, tegak)); });
-        setPP(); setMu(); syncFS();
-        sec.hidden = false;
-      })
-      .catch(function () {});
+    var KUNCI = 'vb-cache-v1';
+    function tampilkan(d) {
+      var arr = Array.isArray(d.daftar) ? d.daftar : (d.video ? [d] : []);
+      arr = arr.filter(function (it) { return it && it.aktif && it.video && it.sampul; });
+      if (!arr.length) return false;
+      var tegak = (Number(arr[0].tinggi) || 16) > (Number(arr[0].lebar) || 9);
+      row.innerHTML = '';
+      arr.forEach(function (it, i) { row.appendChild(kartu(it, i, tegak)); });
+      setPP(); setMu(); syncFS();
+      sec.hidden = false;
+      return true;
+    }
+
+    // Hosting gratis kadang menolak atau lambat pada permintaan pertama.
+    // Jadi dicoba sampai 4 kali, dan data terakhir yang berhasil disimpan di browser sebagai cadangan.
+    var sudahTampil = false;
+    try {
+      var cad = localStorage.getItem(KUNCI);
+      if (cad) sudahTampil = tampilkan(JSON.parse(cad));
+    } catch (e) {}
+
+    function muat(percobaan) {
+      fetch('/admin/video/video.json?t=' + Date.now(), { cache: 'no-store' })
+        .then(function (r) { if (!r.ok) throw new Error('status'); return r.text(); })
+        .then(function (t) {
+          var d = JSON.parse(t);
+          try { localStorage.setItem(KUNCI, t); } catch (e) {}
+          if (tampilkan(d)) {
+            sudahTampil = true;
+          } else {
+            // Daftar benar-benar kosong atau semua disembunyikan: hapus cadangan lama.
+            sudahTampil = false;
+            sec.hidden = true;
+            try { localStorage.removeItem(KUNCI); } catch (e) {}
+          }
+        })
+        .catch(function () {
+          if (percobaan < 4) setTimeout(function () { muat(percobaan + 1); }, 800 * percobaan);
+        });
+    }
+    muat(1);
   })();
 </script>
