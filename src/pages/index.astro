@@ -2,6 +2,7 @@
 import Layout from '~/layouts/PageLayout.astro';
 import Ulasan from '~/components/Ulasan.astro';
 import VideoBeranda from '~/components/VideoBeranda.astro';
+import KaryaBeranda from '~/components/KaryaBeranda.astro';
 import StatistikPanel from '~/components/StatistikPanel.astro';
 import { Icon } from 'astro-icon/components';
 import { wrap, stats, about, socials, services, projects, EMAIL, slugKategori } from '~/data/profil';
@@ -216,6 +217,9 @@ const ikonSosial: Record<string, string> = {
       }
     </div>
   </section>
+
+  <!-- 2b. KARYA (kartu dari admin, kategori Karya) -->
+  <KaryaBeranda />
 
   <!-- 3. VIDEO -->
   <VideoBeranda />
