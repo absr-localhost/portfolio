@@ -299,6 +299,41 @@ if ($act === 'upload') {
     json_out(['ok' => true]);
 }
 
+if ($act === 'sampul') {
+    if (!$masuk) {
+        json_out(['err' => 'Belum masuk.'], 401);
+    }
+    $id = (string)($_POST['id'] ?? '');
+    $dl = baca_daftar();
+    $i = preg_match('/^[a-f0-9]{16}$/', $id) ? cari($dl, $id) : -1;
+    if ($i < 0) {
+        json_out(['err' => 'Video tidak ditemukan.'], 404);
+    }
+    $c = $_FILES['sampul'] ?? null;
+    if (!$c || $c['error'] !== UPLOAD_ERR_OK || !is_uploaded_file($c['tmp_name']) || $c['size'] > 1500000) {
+        json_out(['err' => 'Gambar sampul tidak valid atau lebih dari 1,5 MB.'], 400);
+    }
+    $gi = @getimagesize($c['tmp_name']);
+    if (!$gi || $gi[2] !== IMAGETYPE_JPEG) {
+        json_out(['err' => 'Sampul harus JPEG.'], 400);
+    }
+    $lama = (string)($dl[$i]['sampul'] ?? '');
+    $nc = 'c_' . bin2hex(random_bytes(8)) . '.jpg';
+    if (!move_uploaded_file($c['tmp_name'], VID . '/' . $nc)) {
+        json_out(['err' => 'Gagal menyimpan berkas di server.'], 500);
+    }
+    $dl[$i]['sampul'] = $nc;
+    $dl[$i]['diperbarui'] = date('Y-m-d H:i');
+    tulis_daftar($dl);
+    if ($lama !== '' && preg_match('/^c_[a-f0-9]{16}\.jpg$/', $lama)) {
+        @unlink(VID . '/' . $lama);
+    }
+    $nm = (($dl[$i]['judul'] ?? '') !== '') ? $dl[$i]['judul'] : 'tanpa judul';
+    catat('Sampul video diganti: ' . $nm);
+    $_SESSION['flash'] = 'Sampul diganti.';
+    json_out(['ok' => true]);
+}
+
 if ($masuk && in_array($act, ['toggle', 'info', 'hapus', 'naik', 'turun'], true)) {
     $id = (string)($_POST['id'] ?? '');
     $dl = baca_daftar();
@@ -1222,10 +1257,68 @@ $tampilA = array_values(array_filter($semuaArt, function ($x) use ($q, $sf) {
 <input type="datetime-local" name="waktu" value="<?= h($it['waktu'] ?? date('Y-m-d\TH:i')) ?>">
 <button class="bt o" type="submit"><?= ikon('simpan', 18) ?>Simpan</button>
 </form>
+<div class="edf gs" data-id="<?= h($it['id']) ?>">
+<label>Ganti gambar sampul (JPG, PNG, atau WebP)</label>
+<input type="file" class="gs-f" accept="image/jpeg,image/png,image/webp">
+<p class="m gs-p"></p>
+<button class="bt o gs-b" type="button" disabled><?= ikon('unggah', 18) ?>Pakai gambar ini</button>
+</div>
 </details>
 </div>
 <?php endforeach; ?>
 </div>
+
+<script>
+(function () {
+  var CSRF = <?= json_encode($csrf) ?>;
+  window.keJpeg = function (file, cb) {
+    var u = URL.createObjectURL(file), im = new Image();
+    im.onerror = function () { URL.revokeObjectURL(u); cb(null, 'Gambar tidak bisa dibaca browser.'); };
+    im.onload = function () {
+      URL.revokeObjectURL(u);
+      var w = Math.min(720, im.naturalWidth), h = Math.round(im.naturalHeight * w / im.naturalWidth);
+      var c = document.createElement('canvas'); c.width = w; c.height = h;
+      var g = c.getContext('2d'); g.fillStyle = '#fff'; g.fillRect(0, 0, w, h); g.drawImage(im, 0, 0, w, h);
+      var q = 0.88;
+      (function t() {
+        c.toBlob(function (bl) {
+          if (!bl) { cb(null, 'Gagal memproses gambar.'); return; }
+          if (bl.size > 1400000 && q > 0.4) { q -= 0.12; t(); return; }
+          cb(bl, '', c);
+        }, 'image/jpeg', q);
+      })();
+    };
+    im.src = u;
+  };
+  Array.prototype.forEach.call(document.querySelectorAll('.gs'), function (box) {
+    var f = box.querySelector('.gs-f'), b = box.querySelector('.gs-b'), p = box.querySelector('.gs-p'), blob = null;
+    f.addEventListener('change', function () {
+      blob = null; b.disabled = true; p.textContent = '';
+      if (!f.files[0]) return;
+      p.textContent = 'Memproses gambar...';
+      window.keJpeg(f.files[0], function (bl, err) {
+        if (!bl) { p.textContent = err; return; }
+        blob = bl; b.disabled = false; p.textContent = 'Siap (' + (bl.size / 1024).toFixed(0) + ' KB).';
+      });
+    });
+    b.addEventListener('click', function () {
+      if (!blob) return;
+      b.disabled = true; p.textContent = 'Mengunggah...';
+      var fd = new FormData();
+      fd.append('action', 'sampul'); fd.append('csrf', CSRF); fd.append('id', box.getAttribute('data-id')); fd.append('sampul', blob, 'sampul.jpg');
+      var x = new XMLHttpRequest();
+      x.open('POST', 'index.php');
+      x.onload = function () {
+        var r = {};
+        try { r = JSON.parse(x.responseText); } catch (e) { r = { err: 'Balasan server tidak dikenali (kode ' + x.status + ').' }; }
+        if (r.ok) { location.href = './?m=video'; } else { p.textContent = r.err || 'Gagal.'; b.disabled = false; }
+      };
+      x.onerror = function () { p.textContent = 'Koneksi terputus.'; b.disabled = false; };
+      x.send(fd);
+    });
+  });
+})();
+</script>
 
 <div class="c">
 <h2>Tambah video</h2>
@@ -1240,6 +1333,8 @@ $tampilA = array_values(array_filter($semuaArt, function ($x) use ($q, $sf) {
 <input type="datetime-local" id="wk" value="<?= h(date('Y-m-d\TH:i')) ?>">
 <p class="m">MP4, 30 detik atau kurang, maksimal 19 MB. Setelah dipilih, geser untuk menentukan bingkai sampul.</p>
 <input type="file" id="f" accept="video/mp4">
+<label>Atau pakai gambar sendiri sebagai sampul (opsional)</label>
+<input type="file" id="fs" accept="image/jpeg,image/png,image/webp">
 <canvas id="cvs" hidden></canvas>
 <input type="range" id="sl" min="0" max="1000" value="0" hidden>
 <p class="m" id="pesan"></p>
@@ -1255,7 +1350,7 @@ $tampilA = array_values(array_filter($semuaArt, function ($x) use ($q, $sf) {
   var LIM = <?= MAXB ?>, MAXD = <?= MAXD ?>;
   var $ = function (i) { return document.getElementById(i); };
   var f = $('f'), p = $('pesan'), b = $('kirim'), pg = $('pg'), cv = $('cvs'), sl = $('sl');
-  var j = $('j'), ds = $('ds'), wk = $('wk');
+  var j = $('j'), ds = $('ds'), wk = $('wk'), fs = $('fs'), custom = null;
   var vid = null, url = null, meta = null, timer = null;
   function say(t) { p.textContent = t; }
   function fail() { say('Video tidak bisa diperiksa browser. Coba MP4 H.264.'); }
@@ -1294,8 +1389,23 @@ $tampilA = array_values(array_filter($semuaArt, function ($x) use ($q, $sf) {
     v.src = url;
   });
 
+  fs.addEventListener('change', function () {
+    custom = null;
+    if (!fs.files[0]) { if (meta) { draw(); } return; }
+    say('Memproses gambar sampul...');
+    window.keJpeg(fs.files[0], function (bl, err, c) {
+      if (!bl) { say(err); return; }
+      custom = bl;
+      cv.width = c.width; cv.height = c.height;
+      cv.getContext('2d').drawImage(c, 0, 0);
+      cv.hidden = false;
+      say('Gambar sendiri dipakai sebagai sampul. Geser slider untuk kembali memakai bingkai video.');
+    });
+  });
+
   sl.addEventListener('input', function () {
     if (!vid || !meta) return;
+    custom = null; fs.value = '';
     var t = Math.min(meta.d - 0.05, Number(sl.value) / 1000 * meta.d);
     vid.currentTime = Math.max(0, t);
   });
@@ -1303,7 +1413,7 @@ $tampilA = array_values(array_filter($semuaArt, function ($x) use ($q, $sf) {
   b.addEventListener('click', function () {
     if (!meta) return;
     b.disabled = true;
-    cv.toBlob(function (bl) {
+    var kirimSampul = function (bl) {
       if (!bl) { say('Gagal membuat gambar sampul.'); b.disabled = false; return; }
       var fd = new FormData();
       fd.append('action', 'upload');
@@ -1327,7 +1437,8 @@ $tampilA = array_values(array_filter($semuaArt, function ($x) use ($q, $sf) {
       };
       x.onerror = function () { say('Koneksi terputus.'); b.disabled = false; };
       x.send(fd);
-    }, 'image/jpeg', 0.82);
+    };
+    if (custom) { kirimSampul(custom); } else { cv.toBlob(kirimSampul, 'image/jpeg', 0.82); }
   });
 })();
 </script>
