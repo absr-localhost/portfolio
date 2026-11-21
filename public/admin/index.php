@@ -418,19 +418,21 @@ if ($masuk && $act === 'artikel_simpan') {
         }
         catat(($baru ? 'Artikel dibuat: ' : 'Artikel disimpan: ') . $a['judul'] . ' (' . art_status($a) . ')');
         $_SESSION['flash'] = $a['status'] === 'terbit' ? (art_publik($a) ? 'Artikel terbit.' : 'Artikel dijadwalkan terbit.') : 'Draf tersimpan.';
-        header('Location: ./?m=artikel');
+        header('Location: ./?m=' . (strcasecmp((string)$a['kategori'], 'Karya') === 0 ? 'karya' : 'artikel'));
         exit;
     }
 }
 
 if ($masuk && $act === 'artikel_hapus') {
     $a = art_baca((string)($_POST['id'] ?? ''));
+    $kembali = 'artikel';
     if ($a) {
+        $kembali = strcasecmp((string)($a['kategori'] ?? ''), 'Karya') === 0 ? 'karya' : 'artikel';
         art_hapus($a['id']);
         catat('Artikel dihapus: ' . $a['judul']);
         $_SESSION['flash'] = 'Artikel dihapus.';
     }
-    header('Location: ./?m=artikel');
+    header('Location: ./?m=' . $kembali);
     exit;
 }
 
@@ -532,7 +534,7 @@ if ($masuk && $act === 'ekspor') {
 }
 
 $m = (string)($_GET['m'] ?? 'ringkasan');
-if (!in_array($m, ['ringkasan', 'artikel', 'pratinjau', 'portofolio', 'video', 'profil', 'pengaturan'], true)) {
+if (!in_array($m, ['ringkasan', 'artikel', 'karya', 'pratinjau', 'portofolio', 'video', 'profil', 'pengaturan'], true)) {
     $m = 'ringkasan';
 }
 $flash = (string)($_SESSION['flash'] ?? '');
@@ -551,9 +553,15 @@ foreach ($daftar as $it) {
         $aktifN++;
     }
 }
-$judulM = ['ringkasan' => 'Ringkasan', 'artikel' => 'Artikel', 'pratinjau' => 'Pratinjau artikel', 'portofolio' => 'Portofolio', 'video' => 'Video beranda', 'profil' => 'Profil', 'pengaturan' => 'Pengaturan'];
-$menu = [['ringkasan', 'home', 'Ringkasan'], ['artikel', 'artikel', 'Artikel'], ['portofolio', 'tas', 'Portofolio'], ['video', 'video', 'Video'], ['profil', 'user', 'Profil'], ['pengaturan', 'atur', 'Pengaturan']];
+$judulM = ['ringkasan' => 'Ringkasan', 'artikel' => 'Artikel', 'karya' => 'Karya', 'pratinjau' => 'Pratinjau artikel', 'portofolio' => 'Portofolio', 'video' => 'Video beranda', 'profil' => 'Profil', 'pengaturan' => 'Pengaturan'];
+$menu = [['ringkasan', 'home', 'Ringkasan'], ['artikel', 'artikel', 'Artikel'], ['karya', 'gambar', 'Karya'], ['portofolio', 'tas', 'Portofolio'], ['video', 'video', 'Video'], ['profil', 'user', 'Profil'], ['pengaturan', 'atur', 'Pengaturan']];
 $menuAktif = $m === 'pratinjau' ? 'artikel' : $m;
+if ($m === 'artikel' && isset($_GET['e'])) {
+    $eKarya = art_baca((string)$_GET['e']);
+    if (strcasecmp((string)($eKarya['kategori'] ?? ''), 'Karya') === 0 || (string)($_GET['k'] ?? '') === 'Karya') {
+        $menuAktif = 'karya';
+    }
+}
 $semuaArt = art_semua();
 $nTerbit = 0;
 $nDraf = 0;
@@ -966,9 +974,13 @@ $artBaru = array_slice($semuaArt, 0, 5);
 $eid = (string)$_GET['e'];
 $ed = $editPost ?? ($eid !== 'baru' ? art_baca($eid) : null);
 $ed = array_merge(['id' => '', 'judul' => '', 'ringkasan' => '', 'kategori' => '', 'tag' => [], 'penulis' => 'Agus Budiono, S.Pd.', 'foto' => '', 'foto_ket' => '', 'isi' => '', 'status' => 'draf', 'waktu' => date('Y-m-d\TH:i')], $ed ?? []);
+if ($eid === 'baru' && $editPost === null && (string)($_GET['k'] ?? '') === 'Karya' && $ed['kategori'] === '') {
+    $ed['kategori'] = 'Karya';
+}
+$balikKe = strcasecmp((string)$ed['kategori'], 'Karya') === 0 ? 'karya' : 'artikel';
 $tersimpan = $ed['id'] !== '' ? art_baca($ed['id']) : null;
 $awalDraf = !$tersimpan || ($tersimpan['status'] ?? 'draf') === 'draf';
-$kats = [];
+$kats = ['Karya' => true];
 foreach ($semuaArt as $x) {
     if (($x['kategori'] ?? '') !== '') {
         $kats[$x['kategori']] = true;
@@ -984,7 +996,7 @@ foreach ($semuaArt as $x) {
 <label for="rg">Ringkasan</label>
 <textarea id="rg" name="ringkasan" maxlength="300" rows="3"><?= h($ed['ringkasan']) ?></textarea>
 <div class="g2">
-<div><label for="kt">Kategori</label><input type="text" id="kt" name="kategori" maxlength="40" list="dkat" value="<?= h($ed['kategori']) ?>"><datalist id="dkat"><?php foreach (array_keys($kats) as $kk): ?><option value="<?= h($kk) ?>"><?php endforeach; ?></datalist></div>
+<div><label for="kt">Kategori</label><input type="text" id="kt" name="kategori" maxlength="40" list="dkat" value="<?= h($ed['kategori']) ?>"><datalist id="dkat"><?php foreach (array_keys($kats) as $kk): ?><option value="<?= h($kk) ?>"><?php endforeach; ?></datalist><p class="m" style="margin:-8px 0 12px">Isi <b>Karya</b> agar tampil sebagai kartu di beranda (di atas Video).</p></div>
 <div><label for="pn">Penulis</label><input type="text" id="pn" name="penulis" maxlength="80" value="<?= h($ed['penulis']) ?>"></div>
 </div>
 <label for="tg">Tag (pisahkan dengan koma)</label>
@@ -993,6 +1005,7 @@ foreach ($semuaArt as $x) {
 
 <div class="c">
 <h2>Foto utama</h2>
+<p class="m" style="margin-top:0">Untuk kartu Karya, pakai gambar lebar dengan perbandingan 2:1 (misalnya 1200 x 600).</p>
 <input type="hidden" name="foto" id="foto" value="<?= h($ed['foto']) ?>">
 <div class="fp" id="fpb"<?= $ed['foto'] === '' ? ' hidden' : '' ?>><img id="fpi" src="<?= h($ed['foto']) ?>" alt=""><button type="button" class="ib x" id="fpx" title="Hapus foto" aria-label="Hapus foto"><?= ikon('hapus', 18) ?></button></div>
 <input type="file" id="ff" accept="image/*">
@@ -1031,7 +1044,7 @@ foreach ($semuaArt as $x) {
 <div class="row">
 <button class="bt" type="submit"><?= ikon('simpan', 18) ?>Simpan</button>
 <button class="bt o" type="button" id="pv"><?= ikon('lihat', 18) ?>Pratinjau</button>
-<a class="bt o" href="./?m=artikel">Batal</a>
+<a class="bt o" href="./?m=<?= $balikKe ?>">Batal</a>
 <span class="st2 sp" id="st"></span>
 </div>
 </div>
@@ -1173,11 +1186,13 @@ foreach ($semuaArt as $x) {
 })();
 </script>
 
-<?php elseif ($m === 'artikel'): ?>
+<?php elseif ($m === 'artikel' || $m === 'karya'): ?>
 <?php
+$kar = $m === 'karya';
 $q = trim((string)($_GET['q'] ?? ''));
 $sf = (string)($_GET['s'] ?? '');
-$tampilA = array_values(array_filter($semuaArt, function ($x) use ($q, $sf) {
+$basisA = $kar ? array_values(array_filter($semuaArt, fn($x) => strcasecmp((string)($x['kategori'] ?? ''), 'Karya') === 0)) : $semuaArt;
+$tampilA = array_values(array_filter($basisA, function ($x) use ($q, $sf) {
     if ($sf !== '' && art_status($x) !== $sf) {
         return false;
     }
@@ -1189,15 +1204,18 @@ $tampilA = array_values(array_filter($semuaArt, function ($x) use ($q, $sf) {
 }));
 ?>
 <form method="get" class="fl">
-<input type="hidden" name="m" value="artikel">
+<input type="hidden" name="m" value="<?= h($m) ?>">
 <input type="search" name="q" value="<?= h($q) ?>" placeholder="Cari judul, kategori, tag" aria-label="Cari">
 <select name="s" aria-label="Status"><option value="">Semua status</option><?php foreach (['terbit' => 'Terbit', 'terjadwal' => 'Terjadwal', 'draf' => 'Draf'] as $kv => $lb): ?><option value="<?= $kv ?>"<?= $sf === $kv ? ' selected' : '' ?>><?= $lb ?></option><?php endforeach; ?></select>
 <button class="ib" type="submit" title="Cari" aria-label="Cari"><?= ikon('cari', 18) ?></button>
-<a class="bt sp" href="./?m=artikel&amp;e=baru"><?= ikon('tambah', 18) ?>Artikel baru</a>
+<a class="bt sp" href="./?m=artikel&amp;e=baru<?= $kar ? '&amp;k=Karya' : '' ?>"><?= ikon('tambah', 18) ?><?= $kar ? 'Karya baru' : 'Artikel baru' ?></a>
 </form>
 <div class="c p0">
 <?php if (!$tampilA): ?>
-<p class="m" style="padding:18px;margin:0"><?= $semuaArt ? 'Tidak ada artikel yang cocok dengan pencarian.' : 'Belum ada artikel. Klik Artikel baru untuk mulai menulis.' ?></p>
+<p class="m" style="padding:18px;margin:0"><?= $basisA ? 'Tidak ada ' . ($kar ? 'karya' : 'artikel') . ' yang cocok dengan pencarian.' : ($kar ? 'Belum ada karya. Klik Karya baru untuk menambah kartu di beranda.' : 'Belum ada artikel. Klik Artikel baru untuk mulai menulis.') ?></p>
+<?php if ($kar && !$basisA && is_file(__DIR__ . '/seed-karya.php') && !is_file(DATA . '/karya-awal.done')): ?>
+<p class="m" style="padding:0 18px 18px;margin:0"><a class="bt" href="./seed-karya.php">Pasang 4 karya awal</a></p>
+<?php endif; ?>
 <?php else: ?>
 <table class="tbl">
 <thead><tr><th>Judul</th><th>Kategori</th><th>Status</th><th>Tanggal</th><th><span class="sr">Aksi</span></th></tr></thead>
@@ -1221,7 +1239,7 @@ $tampilA = array_values(array_filter($semuaArt, function ($x) use ($q, $sf) {
 </tbody>
 </table>
 <?php endif; ?>
-<p class="tf"><?= count($tampilA) ?> dari <?= count($semuaArt) ?> artikel</p>
+<p class="tf"><?= count($tampilA) ?> dari <?= count($basisA) ?> <?= $kar ? 'karya' : 'artikel' ?></p>
 </div>
 
 <?php elseif ($m === 'portofolio'): ?>
